@@ -1,1 +1,0 @@
-OpenSSL test with Swift and CocoaPods;OpenSSLSwiftCocoaPodsTest;<html><body>/OpenSSLSwiftCocoaPodsTest-OK</body></html>

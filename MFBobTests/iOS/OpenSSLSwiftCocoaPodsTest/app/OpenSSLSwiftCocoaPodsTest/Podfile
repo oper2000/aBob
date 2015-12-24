@@ -1,4 +1,0 @@
-use_frameworks!
-source 'https://github.com/CocoaPods/Specs.git'
-pod 'DemoOpensSSL', '0.1.16'
-pod 'Swifter'
