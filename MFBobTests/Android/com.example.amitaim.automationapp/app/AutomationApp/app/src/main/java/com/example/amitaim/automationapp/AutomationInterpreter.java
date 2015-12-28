@@ -2,6 +2,7 @@ package com.example.amitaim.automationapp;
 
 import com.example.amitaim.automationapp.Tests.AutomaticTest;
 import com.example.amitaim.automationapp.Tests.GetTokenTest;
+import com.example.amitaim.automationapp.Tests.PinningTest;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -18,6 +19,10 @@ public class AutomationInterpreter {
         switch (testName){
             case "GetToken":
                 return new GetTokenTest(session);
+            case "PinningFailure":
+                return new PinningTest(testName);
+            case "PinningSuccess":
+                return new PinningTest(testName);
             default:
                 return null;
         }
