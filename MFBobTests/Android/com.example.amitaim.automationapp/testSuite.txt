@@ -1,3 +1,5 @@
 GetToken test1;GetToken/;Success 
 GetToken test2;GetToken/?scope=usernamePassword&userName=a&password=a;Success 
 should fail test;GetRessources/?scope=usernamePassword&userName=a&password=b;Failure. Test doest not exist
+Pinning negative test;PinningFailure/;Success
+Pinning success test;PinningSuccess/;Success
