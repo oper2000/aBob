@@ -19,9 +19,9 @@ public class AutomationInterpreter {
         switch (testName){
             case "GetToken":
                 return new GetTokenTest(session);
-            case "PinningFailure":
+            case PinningTest.failureTest:
                 return new PinningTest(testName);
-            case "PinningSuccess":
+            case PinningTest.successTest:
                 return new PinningTest(testName);
             default:
                 return null;

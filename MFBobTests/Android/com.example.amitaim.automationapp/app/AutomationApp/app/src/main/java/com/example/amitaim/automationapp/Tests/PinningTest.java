@@ -15,6 +15,9 @@ import java.net.URI;
  */
 public class PinningTest extends AutomaticTest{
 
+    public static final String successTest = "PinningSuccess";
+    public static final String failureTest = "PinningFailure";
+
     private String testName;
     public PinningTest(String testName) {
         this.testName = testName;
@@ -51,9 +54,15 @@ public class PinningTest extends AutomaticTest{
 
         boolean testSucceeded = true;
         if (response instanceof WLFailResponse){
-            if (testName.equals("PinningSuccess")){
+            if (testName.equals(successTest)){
                 testSucceeded = false;
                 MainActivity.AutomationServer.result = "Failure " + ((WLFailResponse) response).getErrorMsg();
+                return;
+            }
+        }else{
+            if (testName.equals(failureTest)){
+                testSucceeded = false;
+                MainActivity.AutomationServer.result = "Failure: using not eligible certificate should result with failure - but it did not! ";
                 return;
             }
         }
