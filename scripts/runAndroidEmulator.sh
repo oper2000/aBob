@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #echo $1
 #echo $2
 #device=8e8997a0
@@ -6,7 +8,7 @@ AVD_NAME=$3
 
 source ~/.bash_profile
 
-wait-for-emulator-ready() {
+waitForEmulator() {
 	echo "start waiting for emulator"
 	seconds=0
 	MAX_WAIT_SECONDS=120
@@ -41,7 +43,7 @@ then
 	sleep 1
 	/Users/bob/Library/Android/sdk/tools/emulator -avd $AVD_NAME -netspeed full -netdelay none &
 	#sleep 120
-	wait-for-emulator-ready
+	waitForEmulator
 fi
 
 #adb shell getprop init.svc.bootanim
