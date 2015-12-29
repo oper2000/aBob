@@ -1,0 +1,84 @@
+  <project name="runtests" default="testng">
+  
+  	<property name="jdk.version" value="1.7" />
+	<property name="projectName" value="WebProject" />
+	<property name="src.dir" location="src" />
+	<property name="test.dir" location="src" />
+	<property name="report.dir" location="report/Android" />
+	<property name="target.dir" location="target" />
+	<property name="target.temp.dir" location="target/temp" />
+	<property name="lib.dir" value="lib" />
+	
+	<property name="deviceUrl" value="" />
+	<property name="testFile" value="" />
+	
+  
+  <taskdef name="testng" classname="org.testng.TestNGAntTask">
+	<classpath location="testng-6.8.jar" />
+  </taskdef>
+	
+  <target name="testng" depends="compile">
+  <echo file="/Users/bob/Documents/Developer/Quickbuild/Test.properties" append="false">
+   deviceUrl=${deviceUrl}
+   testFile=${testFile}
+  </echo>
+	<testng outputDir="${report.dir}" haltOnFailure="true">
+			
+		<classpath location="bin" />
+			
+		<!-- Tell Ant where is testng.xml -->
+		<xmlfileset dir="./" includes="testng.xml"/>
+			
+	</testng>
+  </target>
+  
+  	<target name="compile" description="compile source code">
+  	<path id="build.classpath">
+		<fileset dir="./" includes="**/*.jar" />
+		<fileset dir="${src.dir}/" includes="**/*.java" />
+	</path>
+		<mkdir dir="bin" />
+		<javac destdir="bin" debug="true" includeantruntime="false" classpathref="build.classpath">
+			<src path="src" />
+		</javac>
+	</target>
+	
+	<target name="replaceTestsName">
+	<echo message="replacing tests name in xml"/>
+	<path id="3rd-party-classpath">
+    <fileset dir=".">
+        <include name="**/*.jar" />
+    </fileset>
+	</path>
+	
+	<java classname="ReplaceXml">
+	 <classpath>
+        <pathelement location="bin/" />
+        <path refid="3rd-party-classpath" />
+      </classpath>
+     <arg value="${report.dir}/testng-results.xml"/>
+     <arg value="${report.dir}/testng-results.xml"/>
+    </java>
+    
+      <taskdef resource="net/sf/antcontrib/antlib.xml">
+       <classpath>
+    	<pathelement location="/usr/local/Cellar/ant-contrib/1.0b3/share/ant/ant-contrib-1.0b3.jar" />
+  		</classpath>
+	  </taskdef>
+    <if>
+        <available file="${report.dir}/testng-failed.xml"/>
+        <then>
+           <java classname="ReplaceXml">
+	 		<classpath>
+        		<pathelement location="bin/" />
+        	<path refid="3rd-party-classpath" />
+      		</classpath>
+     		<arg value="${report.dir}/testng-failed.xml"/>
+     		<arg value="${report.dir}/testng-failed.xml"/>
+    		</java>
+        </then>
+    </if>
+    
+  </target>
+  
+  </project>

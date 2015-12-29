@@ -1,0 +1,7 @@
+{
+  "applicationKey": {
+    "packageName": "packageNameTemplate",
+    "version": "VersionTemplate",
+    "clientPlatform": "android"
+  }
+} 

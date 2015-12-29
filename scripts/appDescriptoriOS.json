@@ -1,0 +1,8 @@
+{
+  "applicationKey": {
+    "bundleId": "com.ibm.mfp.OpenSSLSwiftManualTest",
+    "version": "1",
+    "clientPlatform":"ios"
+  },
+  "mandatoryScope": ""
+}
