@@ -9,18 +9,22 @@ import com.worklight.wlclient.api.WLResponseListener;
 
 import java.net.URI;
 
+import fi.iki.elonen.NanoHTTPD;
+
 /**
 
  * Created by SEitan on 12/28/15.
  */
 public class PinningTest extends AutomaticTest{
 
-    public static final String successTest = "PinningSuccess";
-    public static final String failureTest = "PinningFailure";
 
     private String testName;
-    public PinningTest(String testName) {
-        this.testName = testName;
+    private static final String successTest = "PinningSuccess";
+    private static final String failureTest = "PinningFailure";
+
+
+    public PinningTest(NanoHTTPD.IHTTPSession session) {
+        testName = session.getParms().get("testName");
     }
 
     @Override
@@ -68,19 +72,4 @@ public class PinningTest extends AutomaticTest{
         }
         MainActivity.AutomationServer.result = "Success ";
     }
-
-//    public class MyWLResourceRequestListener implements WLObtainAccessTokenListener {
-//
-//        @Override
-//        public void onSuccess(AccessToken accessToken) {
-//            MainActivity.AutomationServer.result = "Success ";
-//            return;
-//        }
-//
-//        @Override
-//        public void onFailure(WLFailResponse wlFailResponse) {
-//            MainActivity.AutomationServer.result = "Failure " + wlFailResponse.getErrorMsg();
-//            return;
-//        }
-//    }
 }

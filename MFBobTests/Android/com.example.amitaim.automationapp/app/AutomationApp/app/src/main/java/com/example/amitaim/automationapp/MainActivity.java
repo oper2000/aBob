@@ -1,33 +1,22 @@
 package com.example.amitaim.automationapp;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.logging.Logger;
-
-import android.app.Activity;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Handler;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.amitaim.automationapp.Tests.AutomaticTest;
 import com.worklight.common.WLConfig;
 import com.worklight.wlclient.api.WLClient;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
+
 import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.NanoHTTPD.Response;
 import fi.iki.elonen.util.ServerRunner;
 
 
@@ -40,27 +29,52 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         client = WLClient.createInstance(this);
         WLConfig.getInstance().writeWLPref("legacy_http", "false");// not sure this is still needed
+        if (server == null){
+            try {
+                server = new AutomationServer();
+                server.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        setContentView(R.layout.activity_main);
+        TableLayout layout1 = (TableLayout) findViewById(R.id.tableItemId);
+
+        int counter = 0;
+        Scanner read = null;
         try {
-            server = new AutomationServer();
-            server.start();
-        } catch (Exception e) {
+            InputStream input = getAssets().open("testSuite.txt");
+            read = new Scanner(input);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (server != null)
-            server.stop();
+        String testName, url, expectedResult;
+
+        while (read.hasNextLine())
+        {
+            String[] values = read.nextLine().split(";");
+            url = values[1];
+            expectedResult = values[2];
+            TableRow row= new TableRow(this);
+            TextView tv = new TextView(this);
+            tv.setText("http://127.0.0.1:10080/" + url  + "   "+expectedResult.split(" ")[0]);
+            tv.setAutoLinkMask(Linkify.ALL);
+            tv.setMovementMethod(LinkMovementMethod.getInstance());
+            row.addView(tv);
+            layout1.addView(row,counter++);
+        }
+
+//
+//
+//
+//
+//        for (TestUtils.Tests test: TestUtils.Tests.values()) {
+//
+//        }
     }
 
     public static class AutomationServer extends NanoHTTPD {
