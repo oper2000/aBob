@@ -3,11 +3,19 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:weightSum="1">
     <TextView
         android:id="@+id/hello"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Automation app"
-        />
+        android:text="The following tests were processed"
+        android:layout_weight="0.06" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/tableItemId">
+
+    </TableLayout>
 </LinearLayout>
