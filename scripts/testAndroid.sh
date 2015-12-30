@@ -21,8 +21,8 @@ for d in */ ; do
  
  cd app/
  for d2 in */ ; do
- yes |cp $(pwd)/../testSuite.txt $(pwd)/$d2
- /Users/bob/Documents/Developer/Quickbuild/scripts/compileAndroidApp.sh $(pwd)/$d2app/src/main/assets/testSuite.txt
+ yes |cp "$(pwd)/../testSuite.txt" "$(pwd)/${d2}app/src/main/assets/testSuite.txt"
+ /Users/bob/Documents/Developer/Quickbuild/scripts/compileAndroidApp.sh $(pwd)/$d2
  /Users/bob/Documents/Developer/Quickbuild/scripts/runAndroidEmulator.sh ${d%?} $(pwd)/$d2 $AVD_NAME
  ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/${d%?} -DtestFile $(pwd)/../testSuite.txt -DdeviceUrl $deviceURL
  ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/${d%?}
