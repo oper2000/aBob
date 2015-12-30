@@ -77,8 +77,10 @@ public class SyncTestNG {
 		        try {
 		        	reader = new BufferedReader(new FileReader(testFile));
 					while ((testData = reader.readLine()) != null) {
-					    tests.add(new MyTest(testData.split(";")));
-					}
+						if (testData != null && testData.contains(";") && !testData.startsWith("#")) {
+							tests.add(new MyTest(testData.split(";")));
+						}
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
