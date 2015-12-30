@@ -70,6 +70,6 @@ public class PinningTest extends AutomaticTest{
                 return;
             }
         }
-        MainActivity.AutomationServer.result = "Success ";
+        MainActivity.AutomationServer.result = "Success";
     }
 }

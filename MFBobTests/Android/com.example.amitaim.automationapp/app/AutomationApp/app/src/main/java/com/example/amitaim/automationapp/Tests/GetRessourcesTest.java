@@ -56,7 +56,7 @@ public class GetRessourcesTest extends AutomaticTest {
 
         @Override
         public void onSuccess(WLResponse response) {
-            MainActivity.AutomationServer.result = "Success ";
+            MainActivity.AutomationServer.result = "Success";
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;
         }

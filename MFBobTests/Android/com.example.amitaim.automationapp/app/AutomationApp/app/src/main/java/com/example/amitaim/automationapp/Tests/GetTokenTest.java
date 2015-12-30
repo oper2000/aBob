@@ -42,7 +42,7 @@ public class GetTokenTest extends AutomaticTest {
 
         @Override
         public void onSuccess(AccessToken accessToken) {
-            MainActivity.AutomationServer.result = "Success ";
+            MainActivity.AutomationServer.result = "Success";
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;
         }

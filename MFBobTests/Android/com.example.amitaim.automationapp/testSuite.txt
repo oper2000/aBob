@@ -1,7 +1,7 @@
-GetToken test with default scope;GetTokenTest/;Success 
-GetToken test with scope and user-pass;GetTokenTest/?scope=usernamePassword&userName=a&password=a;Success 
+GetToken test with default scope;GetTokenTest/;Success
+GetToken test with scope and user-pass;GetTokenTest/?scope=usernamePassword&userName=a&password=a;Success
 GetToken test with scope and invalid user-pass;GetTokenTest/?scope=usernamePassword&userName=aa&password=a;Failure {  "failures": {    "usernamePassword": {      "failure": "account blocked"    }  }}
-Get Ressource test with user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=a;Success 
+Get Ressource test with user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=a;Success
 Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=b;Failure {  "failures": {    "usernamePassword": {      "failure": "account blocked"    }  }}
 Pinning negative test;PinningTest/?testName=PinningFailure;Success
 Pinning success test;PinningTest/?testName=PinningSuccess;Success
