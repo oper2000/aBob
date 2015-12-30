@@ -1,5 +1,7 @@
 package com.example.amitaim.automationapp.Tests;
 
+import fi.iki.elonen.NanoHTTPD;
+
 /**
  * Created by amitaim on 07/12/15.
  */
@@ -10,4 +12,8 @@ package com.example.amitaim.automationapp.Tests;
 * */
 public abstract class AutomaticTest implements Runnable {
     public abstract void run();
+    public AutomaticTest(NanoHTTPD.IHTTPSession session){
+
+    }
+    public AutomaticTest(){}
 }
