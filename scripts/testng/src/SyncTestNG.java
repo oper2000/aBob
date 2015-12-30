@@ -80,7 +80,10 @@ public class SyncTestNG {
 						if (testData != null && testData.contains(";") && !testData.startsWith("#")) {
 							tests.add(new MyTest(testData.split(";")));
 						}
+<<<<<<< HEAD
 					}
+=======
+>>>>>>> 099cb1a8f1ff3b1af957f38fd7a4acedf1c4d449
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
