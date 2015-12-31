@@ -11,7 +11,7 @@ source ~/.bash_profile
 waitForEmulator() {
 	echo "start waiting for emulator"
 	seconds=0
-	MAX_WAIT_SECONDS=120
+	MAX_WAIT_SECONDS=240
 	res=""
 	while [ $seconds -lt ${MAX_WAIT_SECONDS} ]
 	do

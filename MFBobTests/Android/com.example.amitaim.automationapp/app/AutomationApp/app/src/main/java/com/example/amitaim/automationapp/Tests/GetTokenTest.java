@@ -4,8 +4,9 @@ package com.example.amitaim.automationapp.Tests;
 import com.example.amitaim.automationapp.AndroidChallengeHandler;
 import com.example.amitaim.automationapp.MainActivity;
 import com.worklight.common.WLConfig;
-import com.worklight.wlclient.AccessToken;
-import com.worklight.wlclient.WLAuthorizationManagerInternal;
+import com.worklight.wlclient.auth.AccessToken;
+import com.worklight.wlclient.HttpClientManager;
+import com.worklight.wlclient.auth.WLAuthorizationManagerInternal;
 import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLClient;
 import com.worklight.wlclient.api.WLFailResponse;
@@ -52,7 +53,7 @@ public class GetTokenTest extends AutomaticTest {
             String errorMsg=wlFailResponse.getErrorMsg();
             errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
             MainActivity.AutomationServer.result = "Failure " + errorMsg;
-            //WLAuthorizationManagerInternal.getInstance().clearRegistration();
+            WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;
         }
     }

@@ -3,8 +3,8 @@ package com.example.amitaim.automationapp.Tests;
 
 import com.example.amitaim.automationapp.AndroidChallengeHandler;
 import com.example.amitaim.automationapp.MainActivity;
-import com.worklight.wlclient.AccessToken;
-import com.worklight.wlclient.WLAuthorizationManagerInternal;
+import com.worklight.wlclient.auth.AccessToken;
+import com.worklight.wlclient.auth.WLAuthorizationManagerInternal;
 import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLFailResponse;
 import com.worklight.wlclient.api.WLResourceRequest;
@@ -66,7 +66,7 @@ public class GetRessourcesTest extends AutomaticTest {
             String errorMsg=response.getErrorMsg();
             errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
             MainActivity.AutomationServer.result = "Failure " + errorMsg;
-            //WLAuthorizationManagerInternal.getInstance().clearRegistration();
+            WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;
         }
     }
