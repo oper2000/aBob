@@ -3,6 +3,9 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 android {
@@ -23,6 +26,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -30,7 +39,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.android.support:design:23.0.0'
-    compile 'com.squareup.okhttp:okhttp:2.6.0'
+    //compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.2.0'
-    compile(name:'ibmmobilefirstplatformfoundation', ext:'aar')
+    //compile(name:'ibmmobilefirstplatformfoundation', ext:'aar')
+    compile 'com.ibm.mobile.foundation:ibmmobilefirstplatformfoundation:8.0.Beta1-SNAPSHOT'
 }
