@@ -1,6 +1,6 @@
 package com.example.amitaim.automationapp.Tests;
 
-import fi.iki.elonen.NanoHTTPD;
+import com.example.amitaim.automationapp.MainActivity;
 
 /**
  * Created by amitaim on 07/12/15.
