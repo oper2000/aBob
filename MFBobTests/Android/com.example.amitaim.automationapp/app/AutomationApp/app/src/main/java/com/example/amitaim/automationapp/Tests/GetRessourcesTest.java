@@ -64,7 +64,8 @@ public class GetRessourcesTest extends AutomaticTest {
         @Override
         public void onFailure(WLFailResponse response) {
             String errorMsg=response.getErrorMsg();
-            errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
+            if (errorMsg != null)
+                errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
             MainActivity.AutomationServer.result = "Failure " + errorMsg;
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;

@@ -51,7 +51,8 @@ public class GetTokenTest extends AutomaticTest {
         @Override
         public void onFailure(WLFailResponse wlFailResponse) {
             String errorMsg=wlFailResponse.getErrorMsg();
-            errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
+            if (errorMsg != null)
+                errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
             MainActivity.AutomationServer.result = "Failure " + errorMsg;
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
             return;
