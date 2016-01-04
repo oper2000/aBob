@@ -10,7 +10,7 @@ import com.example.amitaim.automationapp.MainActivity;
 * They are running on another thread.
 * They MUST update the MainActivity.AutomationServer.result when they finish.
 * */
-public  class AutomaticTest101 implements Runnable {
+public  class AutomaticTest101 extends AutomaticTest {
     public void run() {
         MainActivity.AutomationServer.result = "101";
     }
