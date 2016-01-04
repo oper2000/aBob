@@ -25,7 +25,7 @@ public class SendRequestsTest extends AutomaticTest {
     private String userName;
     private String password;
     private String realm = "usernamePassword";
-    private String type; //string; hash; json; byte
+    private String type; //string; hash; json; byte; error
     private String testString = "Testing this string";
     JSONObject testJson = new JSONObject();
     byte[] testBytes;
@@ -56,6 +56,9 @@ public class SendRequestsTest extends AutomaticTest {
                 case "byte":
                     adapterPath = new URI("/adapters/testSend/users/testRequestByte");
                     break;
+                case "error":
+                    adapterPath = new URI("/adapters/testSend/users/errorPath");
+                    break;
                 default:
                     MainActivity.AutomationServer.result = "Failure, no such type! ";
                     return;
@@ -63,6 +66,7 @@ public class SendRequestsTest extends AutomaticTest {
             WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, WLResourceRequest.POST) : new WLResourceRequest(adapterPath, WLResourceRequest.POST, scope);
             switch (type){
                 case "string":
+                case"error":
                     request.send(testString,new MyResponseListener());
                     break;
                 case "hash":
