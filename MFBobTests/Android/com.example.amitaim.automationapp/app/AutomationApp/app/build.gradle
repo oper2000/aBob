@@ -4,7 +4,8 @@ repositories {
         dirs 'libs'
     }
     maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
+        //url "https://oss.sonatype.org/content/repositories/snapshots/"
+         url "http://ibobs-Mac-mini.local:8081/nexus/content/repositories/snapshots/"
     }
 }
 
