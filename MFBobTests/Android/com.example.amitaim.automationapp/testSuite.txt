@@ -11,3 +11,4 @@ Send Hash test;SendRequestsTest/?type=hash&scope=usernamePassword&userName=a&pas
 Send JSON test;SendRequestsTest/?type=json&scope=usernamePassword&userName=a&password=a;Success
 Send byte array test;SendRequestsTest/?type=byte&scope=usernamePassword&userName=a&password=a;Success
 Send error test;SendRequestsTest/?type=error&scope=usernamePassword&userName=a&password=a;Failure null
+101Test;AutomaticTest101/;101
