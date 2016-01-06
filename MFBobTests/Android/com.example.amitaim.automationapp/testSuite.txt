@@ -10,5 +10,5 @@ Send String test;SendRequestsTest/?type=string&scope=usernamePassword&userName=a
 Send Hash test;SendRequestsTest/?type=hash&scope=usernamePassword&userName=a&password=a;Success
 Send JSON test;SendRequestsTest/?type=json&scope=usernamePassword&userName=a&password=a;Success
 Send byte array test;SendRequestsTest/?type=byte&scope=usernamePassword&userName=a&password=a;Success
-Send error test;SendRequestsTest/?type=error&scope=usernamePassword&userName=a&password=a;Failure null
+Send error test;SendRequestsTest/?type=error&scope=usernamePassword&userName=a&password=a;Failure Service not found
 101Test;AutomaticTest101/;101
