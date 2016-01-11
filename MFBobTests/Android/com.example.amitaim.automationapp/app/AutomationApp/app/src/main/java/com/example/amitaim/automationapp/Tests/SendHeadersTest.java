@@ -69,11 +69,11 @@ public class SendHeadersTest extends AutomaticTest {
                     Map<String, List<String>> headerMap =  request.getAllHeaders();
                     int count  = 0;
                     for (Map.Entry<String, List<String>> e : headerMap.entrySet()) {
-                        if (e.getKey().equals("Testheader1)")) count ++;
-                        if (e.getKey().equals("Testheader2)")) count ++;
+                        if (e.getKey().equals("Testheader1")) count ++;
+                        if (e.getKey().equals("Testheader2")) count ++;
                         for (String headerValue : e.getValue()) {
-                            if (headerValue.equals("header1)")) count ++;
-                            if (headerValue.equals("header2)")) count ++;
+                            if (headerValue.equals("header1")) count ++;
+                            if (headerValue.equals("header2")) count ++;
                         }
                     }
                     if (count == 4) {
@@ -90,8 +90,8 @@ public class SendHeadersTest extends AutomaticTest {
                     count  = 0;
                     for (int i = 0; i < headerList.size(); i++) {
                         String headerVal =  headerList.get(i);
-                        if (headerVal.equals("header1)")) count ++;
-                        if (headerVal.equals("header2)")) count ++;
+                        if (headerVal.equals("header1")) count ++;
+                        if (headerVal.equals("header2")) count ++;
 
                     }
                     if (count == 2) {
