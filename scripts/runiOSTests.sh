@@ -20,7 +20,9 @@ for d in */ ; do
  
  cd app/
  for d2 in */ ; do
- /Users/bob/Documents/Developer/Quickbuild/scripts/replaceiOSSDK.sh $(pwd)/$d2
+ if [ ! -f "../setup.sh" ]; then
+	/Users/bob/Documents/Developer/Quickbuild/scripts/replaceiOSSDK.sh $(pwd)/$d2
+ fi
  /Users/bob/Documents/Developer/Quickbuild/scripts/runiOSApp.sh $(pwd)/$d2 ${d2%?}
  sleep 5
  ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/${d%?} -DtestFile $(pwd)/../testSuite.txt -DdeviceUrl $deviceURL
