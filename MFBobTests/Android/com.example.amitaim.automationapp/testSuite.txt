@@ -1,4 +1,5 @@
-#Test Display Name;                Path(Test Class Name)/Parameters;            Expected Result   
+#Test Display Name;                Path(Test Class Name)/Parameters;            Expected Result
+101Test;AutomaticTest101/;101
 GetToken test with default scope;GetTokenTest/;Success
 GetToken test with scope and user-pass;GetTokenTest/?scope=usernamePassword&userName=a&password=a;Success
 GetToken test with scope and invalid user-pass;GetTokenTest/?scope=usernamePassword&userName=aa&password=a;Failure {  "failures": {    "usernamePassword": {      "failure": "account blocked"    }  }}
@@ -11,4 +12,9 @@ Send Hash test;SendRequestsTest/?type=hash&scope=usernamePassword&userName=a&pas
 Send JSON test;SendRequestsTest/?type=json&scope=usernamePassword&userName=a&password=a;Success
 Send byte array test;SendRequestsTest/?type=byte&scope=usernamePassword&userName=a&password=a;Success
 Send error test;SendRequestsTest/?type=error&scope=usernamePassword&userName=a&password=a;Failure Service not found
-101Test;AutomaticTest101/;101
+Send byte array test;SendRequestsTest/?type=byte&scope=usernamePassword&userName=a&password=a;Success
+Test Set Headers;SendHeadersTest/?type=setHeaders;Success
+Test Add Header;SendHeadersTest/?type=addHeader;Success
+Test Remove Headers;SendHeadersTest/?type=removeHeaders;Success
+Test Get All Headers Headers;SendHeadersTest/?type=getAllHeaders;Success
+Test Get Headers;SendHeadersTest/?type=getHeaders;Success
