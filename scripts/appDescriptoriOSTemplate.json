@@ -1,6 +1,6 @@
 {
   "applicationKey": {
-    "bundleId": "com.ibm.worklight.AppBundle",
+    "bundleId": "com.worklight.ibm.AppBundle",
     "version": "AppVersion",
     "clientPlatform":"ios"
   },
