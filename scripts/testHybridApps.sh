@@ -9,6 +9,9 @@ cd $SCRIPTS_PATH
 ./deployAndroidApp.sh io.cordova.hellocordova 1
 ./deployiOSApp.sh io.cordova.hellocordova 1
 
+cd $PROJ_NAME
+cordova emulate android 
+cordova emulate ios
 #./runAndroidEmulator.sh io.cordova.hellocordova ./$PROJ_NAME/platforms/android $AVD_NAME
 
 
