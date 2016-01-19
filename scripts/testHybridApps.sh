@@ -9,7 +9,7 @@ cd $SCRIPTS_PATH
 ./deployAndroidApp.sh io.cordova.hellocordova 1
 ./deployiOSApp.sh io.cordova.hellocordova 1
 
-./runAndroidEmulator.sh io.cordova.hellocordova ./$PROJ_NAME/platforms/android $AVD_NAME
+#./runAndroidEmulator.sh io.cordova.hellocordova ./$PROJ_NAME/platforms/android $AVD_NAME
 
 
 #TODO 
@@ -26,4 +26,7 @@ cd $SCRIPTS_PATH
 # Kill android emulator
 # 	ps -ef | grep emulator64-x86
 # 	killall emulator64-x86
-# cd -
+
+rm -fr ./$PROJ_NAME
+
+cd -
