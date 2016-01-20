@@ -1,7 +1,13 @@
 deviceURL=http://127.0.0.1:10081/
-AVD_NAME="Nexus_5_API_21"
 PROJ_NAME=hypridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
+TARGET_PARAM="--target=Nexus_5_API_21_hybrid"
+if [ ! -d $SCRIPTS_PATH ]
+then
+	SCRIPTS_PATH=.
+	TARGET_PARAM=""
+fi
+
 cd $SCRIPTS_PATH
 
 ./createHybridTestProj.sh $PROJ_NAME
@@ -10,15 +16,39 @@ cd $SCRIPTS_PATH
 ./deployiOSApp.sh io.cordova.hellocordova 1
 
 cd $PROJ_NAME
-cordova emulate android 
-cordova emulate ios
-#./runAndroidEmulator.sh io.cordova.hellocordova ./$PROJ_NAME/platforms/android $AVD_NAME
+echo "NoStatus" > ./status.txt
+
+cordova run android $TARGET_PARAM
+
+
+echo "getting status from simulator"
+testStatus="NoStatus"
+while [ "$testStatus" == "NoStatus" ]
+do
+	if [ `$ANDROID_HOME/platform-tools/adb shell "if [ -e /sdcard/Android/data/io.cordova.hellocordova/files/status.txt ]; then echo 1; fi"` ]; then 
+		$ANDROID_HOME/platform-tools/adb pull /sdcard/Android/data/io.cordova.hellocordova/files/status.txt .;
+		testStatus=`cat ./status.txt`;
+		echo $testStatus;
+	fi
+done
+
+TARGET_TEST_LOG=/Users/bob/Documents/Developer/Quickbuild/scripts/hypridProj/platforms/android/hybrid-android.html
+echo "<!DOCTYPE html><html><body><h1>Android Hybrid test</h1><p>" > $TARGET_TEST_LOG
+echo $testStatus >> $TARGET_TEST_LOG
+echo "</p></body></html>" >> $TARGET_TEST_LOG
+
+echo "NoStatus" > ./status.txt
+$ANDROID_HOME/platform-tools/adb push ./status.txt /sdcard/Android/data/io.cordova.hellocordova/files/status.txt
+
+# Kill android emulator
+ps -ef | grep emulator64-x86
+killall emulator64-x86
 
 
 #TODO 
 # 1. run ios app on emulator
 # 2. check test run results
-# 3. stop simulators
+# 3. stop simulator
 # 4. deploy results to ibob
 
 # Do we need the setup ???
@@ -26,10 +56,3 @@ cordova emulate ios
 #	./setup.sh
 # fi
 
-# Kill android emulator
-# 	ps -ef | grep emulator64-x86
-# 	killall emulator64-x86
-
-rm -fr ./$PROJ_NAME
-
-cd -

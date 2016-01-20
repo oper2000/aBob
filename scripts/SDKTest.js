@@ -62,11 +62,23 @@ function testEncrypt(){
 }
 
 function showTestsStatus(message){
+	var statusString = "";
 	if (message == "Success"){
-		alert("All tests succeeded");
+		statusString = "All tests succeeded";
 	}else{
-		alert(" Tests failed: "+ message)
+		statusString = " Tests failed: "+ message;
 	}
+	alert(statusString);
+	window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function(dir) {
+		dir.getFile("status.txt", {create:true}, function(file) {
+			logOb = file;
+			if(!logOb) return;
+			logOb.createWriter(function(fileWriter) {
+				fileWriter.seek(fileWriter.length);
+				fileWriter.write(statusString);
+			}, fail);
+		});
+	});
 }
 
 function testWLApp(){
