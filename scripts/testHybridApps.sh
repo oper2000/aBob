@@ -12,7 +12,7 @@ cd $SCRIPTS_PATH
 
 ./createHybridTestProj.sh $PROJ_NAME
 
-./deployAndroidApp.sh io.cordova.hellocordova 1
+./deployAndroidApp.sh io.cordova.hellocordova 0.0.1
 #./deployiOSApp.sh io.cordova.hellocordova 1
 
 cd $PROJ_NAME
