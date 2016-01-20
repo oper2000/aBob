@@ -1,5 +1,10 @@
 
 /////////////////////// Test SDK By Eitan //////////////////////
+
+function wlCommonInit(){
+			testSDK();
+}
+
 function testSDK(){
 	testBase64Encode();
 }
@@ -68,7 +73,6 @@ function showTestsStatus(message){
 	}else{
 		statusString = " Tests failed: "+ message;
 	}
-	alert(statusString);
 	window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function(dir) {
 		dir.getFile("status.txt", {create:true}, function(file) {
 			logOb = file;

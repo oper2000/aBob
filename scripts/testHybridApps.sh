@@ -23,12 +23,11 @@ cordova run android $TARGET_PARAM
 
 echo "getting status from simulator"
 testStatus="NoStatus"
-while [ "$testStatus" == "NoStatus" ]
+while [ "$testStatus" == "NoStatus" ] || [ "$testStatus" == "" ]
 do
 	if [ `$ANDROID_HOME/platform-tools/adb shell "if [ -e /sdcard/Android/data/io.cordova.hellocordova/files/status.txt ]; then echo 1; fi"` ]; then 
 		$ANDROID_HOME/platform-tools/adb pull /sdcard/Android/data/io.cordova.hellocordova/files/status.txt .;
 		testStatus=`cat ./status.txt`;
-		echo $testStatus;
 	fi
 done
 
@@ -40,7 +39,7 @@ echo $testStatus >> $TARGET_TEST_LOG
 echo "</p></body></html>" >> $TARGET_TEST_LOG
 
 echo "NoStatus" > ./status.txt
-$ANDROID_HOME/platform-tools/adb push ./status.txt /sdcard/Android/data/io.cordova.hellocordova/files/status.txt
+$ANDROID_HOME/platform-tools/adb push ./$PROJ_NAME/status.txt /sdcard/Android/data/io.cordova.hellocordova/files/status.txt
 
 # Kill android emulator
 ps -ef | grep emulator64-x86
