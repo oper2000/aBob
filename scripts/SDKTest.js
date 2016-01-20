@@ -10,7 +10,7 @@ function testBase64Encode(){
   			testBase64Decode();
 		},function(val){
 			console.log(val);
-			showTestsStatus(val.msg);
+// 			showTestsStatus(val.msg);
 		}).fail(function(){
 			  console.log("failure");
 			showTestsStatus("Failed calling WL.SecurityUtils.testBase64Decode");
@@ -26,7 +26,7 @@ function testBase64Decode(){
   				testEncrypt();
   			}
 		},function(val){
-			showTestsStatus(val.msg);
+// 			showTestsStatus(val.msg);
 			console.log(val);
 		}).fail(function(){
 			showTestsStatus("Failed calling WL.SecurityUtils.testBase64Decode");
@@ -39,7 +39,7 @@ function testEnableOSNativeEncryption(){
 		  	console.log("WL.SecurityUtils.base64Decode: Success.");
   			testEncrypt();
 		},function(val){
-			showTestsStatus(val.msg);
+// 			showTestsStatus(val.msg);
 			console.log(val);
 		}).fail(function(){
 			showTestsStatus("Failed calling WL.SecurityUtils.testEnableOSNativeEncryption");
@@ -74,9 +74,8 @@ function showTestsStatus(message){
 			logOb = file;
 			if(!logOb) return;
 			logOb.createWriter(function(fileWriter) {
-				fileWriter.seek(fileWriter.length);
 				fileWriter.write(statusString);
-			}, fail);
+			}, null);
 		});
 	});
 }
@@ -108,7 +107,7 @@ function testWLClient(){
 		  	console.log("WL.Client.getCookies: Success.");
 		  	testResourceRequest();
 		},function(val){
-			showTestsStatus(val.msg);
+// 			showTestsStatus(val.msg);
 			console.log(val);
 		}).fail(function(){
 			showTestsStatus("Failed calling WL.Client.getCookies");
@@ -167,7 +166,7 @@ function testResourceRequest(){
           // success flow, the result can be found in response.responseJSON
       	},
       	function(error) {
-           showTestsStatus(error);
+//            showTestsStatus(error);
           // failure flow
           // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
       	}

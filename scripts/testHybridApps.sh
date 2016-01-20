@@ -13,7 +13,7 @@ cd $SCRIPTS_PATH
 ./createHybridTestProj.sh $PROJ_NAME
 
 ./deployAndroidApp.sh io.cordova.hellocordova 1
-./deployiOSApp.sh io.cordova.hellocordova 1
+#./deployiOSApp.sh io.cordova.hellocordova 1
 
 cd $PROJ_NAME
 echo "NoStatus" > ./status.txt
@@ -32,7 +32,9 @@ do
 	fi
 done
 
-TARGET_TEST_LOG=/Users/bob/Documents/Developer/Quickbuild/scripts/hypridProj/platforms/android/hybrid-android.html
+cd ..
+
+TARGET_TEST_LOG=$SCRIPTS_PATH/hypridProj/platforms/android/hybrid-android.html
 echo "<!DOCTYPE html><html><body><h1>Android Hybrid test</h1><p>" > $TARGET_TEST_LOG
 echo $testStatus >> $TARGET_TEST_LOG
 echo "</p></body></html>" >> $TARGET_TEST_LOG
