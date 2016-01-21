@@ -18,3 +18,5 @@ Test Add Header;SendHeadersTest/?type=addHeader;Success
 Test Remove Headers;SendHeadersTest/?type=removeHeaders;Success
 Test Get All Headers Headers;SendHeadersTest/?type=getAllHeaders;Success
 Test Get Headers;SendHeadersTest/?type=getHeaders;Success
+Test Add Same Header;SendHeadersTest/?type=addSameHeader;Success
+
