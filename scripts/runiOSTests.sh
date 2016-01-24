@@ -5,6 +5,7 @@ for d in */ ; do
  cd "$d"
  pwd
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?} 1.0
+ /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?} 1
  if [ -d "./adapters" ]; then
  	cd adapters/
  	for a in * ; do
