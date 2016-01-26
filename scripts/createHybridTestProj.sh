@@ -14,4 +14,4 @@ cat ./../SDKTest.js >> ./www/js/index.js
 
 cordova compile
 
-gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
+

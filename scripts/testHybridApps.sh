@@ -13,7 +13,7 @@ cd $SCRIPTS_PATH
 ./createHybridTestProj.sh $PROJ_NAME
 
 ./deployAndroidApp.sh io.cordova.hellocordova 0.0.1
-./deployiOSApp.sh io.cordova.hellocordova 0.0.1
+#./deployiOSApp.sh io.cordova.hellocordova 1
 
 cd $PROJ_NAME
 echo "NoStatus" > ./status.txt
@@ -48,7 +48,12 @@ killall emulator64-x86
 
 #TODO 
 # 1. run ios app on emulator
-# 2. check ios test run results
-# 3. stop ios simulator
-# 4. deploy ios results to ibob
+# 2. check test run results
+# 3. stop simulator
+# 4. deploy results to ibob
+
+# Do we need the setup ???
+# if [ -f "./setup.sh" ]; then
+#	./setup.sh
+# fi
 

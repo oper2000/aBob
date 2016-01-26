@@ -53,17 +53,17 @@ function testEnableOSNativeEncryption(){
 }
 
 function testEncrypt(){
-	WL.SecurityUtils.encrypt({"key":"hh", "text":"ggg"}).then(function(val) {
-		console.log(val);
-	},function(val){
-		if (val.msg.slice(0,13) == "ENCRYPT_ERROR"){
-			console.log("WL.SecurityUtils.encrypt: Success.");
-			testWLApp();
-		}else{
-			console.log(val);
-			showTestsStatus(val.msg);
-		}
-	});
+			WL.SecurityUtils.encrypt({"key":"hh", "text":"ggg"}).then(function(val) {
+  			console.log(val);
+		},function(val){
+			if (val.msg.slice(0,13) == "ENCRYPT_ERROR"){
+				console.log("WL.SecurityUtils.encrypt: Success.");
+				testWLApp();
+			}else{
+				console.log(val);
+				showTestsStatus(val.msg);
+			}
+		});
 }
 
 function showTestsStatus(message){
@@ -85,45 +85,21 @@ function showTestsStatus(message){
 }
 
 function testWLApp(){
-  testGetServerUrl();
-  //Because of bug on API we ommit the addActionReceiver API
-//  try{
-//  	WL.App.addActionReceiver("MyReceiver", function (receivedActon){
-//  	// process receivedAction
-//  	  	WL.App.removeActionReceiver("MyReceiver");
-//  	  	testGetServerUrl();
-//  	});
-//  	}catch(err){
-//  		return showTestsStatus(err.message);
-//  	}
- }
-
-
- function testGetServerUrl(){
-   try{
- 	WL.App.getServerUrl(
- 	function(url){
- 		console.log("WL.App.getServerUrl:"+url);
- 		testWLClient();
- 		//testSetServerUrl(); because of bug on API we ommit the testSetServerUrl
- 	},function(err){
- 		showTestsStatus(err.msg);
- 	});
- 	}catch(err){
-     		return showTestsStatus(err.message);
-     }
-  }
-
-function testSetServerUrl(){
-
-    WL.App.setServerUrl("http://9.148.49.79:9080/mfp/api",
-    function(url){
-         console.log("WL.App.getServerUrl:"+url);
-         testWLClient();
-    },function(err){
-         showTestsStatus(err.msg);
-    });
-//    WL.Client.reloadApp();
+try{
+	WL.App.getServerUrl(
+	function(url){
+		console.log("WL.App.getServerUrl:"+url);
+	},function(err){
+		showTestsStatus(err.msg);
+	});
+	WL.App.addActionReceiver("MyReceiver", function (receivedActon){
+	// process receivedAction
+	});
+	WL.App.removeActionReceiver("MyReceiver");
+	testWLClient();
+	}catch(err){
+		return showTestsStatus(err.message);
+	}
 }
 
 function testWLClient(){

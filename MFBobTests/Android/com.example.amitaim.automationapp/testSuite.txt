@@ -2,9 +2,9 @@
 101Test;AutomaticTest101/;101
 GetToken test with default scope;GetTokenTest/;Success
 GetToken test with scope and user-pass;GetTokenTest/?scope=usernamePassword&userName=a&password=a;Success
-GetToken test with scope and invalid user-pass;GetTokenTest/?scope=usernamePassword&userName=aa&password=a;Failure {  "failures": {    "usernamePassword": {      "failure": "account blocked"    }  }}
+GetToken test with scope and invalid user-pass;GetTokenTest/?scope=usernamePassword&userName=aa&password=a;Failure {"usernamePassword":{"failure":"account blocked"}}
 Get Ressource test with user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=a;Success
-Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=b;Failure {  "failures": {    "usernamePassword": {      "failure": "account blocked"    }  }}
+Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=b;Failure {"usernamePassword":{"failure":"account blocked"}}
 Pinning negative test;PinningTest/?testName=PinningFailure;Success
 Pinning success test;PinningTest/?testName=PinningSuccess;Success
 Send String test;SendRequestsTest/?type=string&scope=usernamePassword&userName=a&password=a;Success
@@ -18,3 +18,4 @@ Test Add Header;SendHeadersTest/?type=addHeader;Success
 Test Remove Headers;SendHeadersTest/?type=removeHeaders;Success
 Test Get All Headers Headers;SendHeadersTest/?type=getAllHeaders;Success
 Test Get Headers;SendHeadersTest/?type=getHeaders;Success
+Test Add Same Header;SendHeadersTest/?type=addSameHeader;Success
