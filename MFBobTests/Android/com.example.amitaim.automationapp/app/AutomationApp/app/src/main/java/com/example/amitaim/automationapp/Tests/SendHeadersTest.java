@@ -58,10 +58,6 @@ public class SendHeadersTest extends AutomaticTest {
                     request.addHeader("Testheader1", "header1");
                     request.addHeader("Testheader2", "header2");
                     break;
-                case "addSameHeader":
-                    request.addHeader("Testheader1", "header1");
-                    request.addHeader("Testheader1", "header2");
-                    break;
                 case "removeHeaders":
                     request.addHeader("Testheader1", "header1");
                     request.addHeader("Testheader2", "header2");
@@ -131,13 +127,6 @@ public class SendHeadersTest extends AutomaticTest {
             else if(type.equals("addHeader")) {
                 if (response.getResponseText().contains("Testheader1") &&
                         response.getResponseText().contains("Testheader2") &&
-                        response.getResponseText().contains("header1") &&
-                        response.getResponseText().contains("header2")) {
-                    MainActivity.AutomationServer.result = "Success";
-                }
-            }
-            else if(type.equals("addSameHeader")) {
-                if (response.getResponseText().contains("Testheader1") &&
                         response.getResponseText().contains("header1") &&
                         response.getResponseText().contains("header2")) {
                     MainActivity.AutomationServer.result = "Success";

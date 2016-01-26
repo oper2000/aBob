@@ -51,7 +51,6 @@ for d in */ ; do
  cd "$d"
  pwd
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployAndroidApp.sh ${d%?} 1
- /Users/bob/Documents/Developer/Quickbuild/scripts/deployAndroidApp.sh ${d%?} 1.0
  if [ -d "./adapters" ]; then
  	cd adapters/
  	for a in * ; do

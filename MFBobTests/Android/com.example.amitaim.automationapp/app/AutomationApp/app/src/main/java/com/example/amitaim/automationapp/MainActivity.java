@@ -53,23 +53,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String testName, url, expectedResult;
-        String currentLine;
 
         while (read.hasNextLine())
         {
-            currentLine = read.nextLine();
-            if (!currentLine.startsWith("#") && !currentLine.equals("")) {
-                String[] values = currentLine.split(";");
-                url = values[1];
-                expectedResult = values[2];
-                TableRow row = new TableRow(this);
-                TextView tv = new TextView(this);
-                tv.setText("http://127.0.0.1:10080/" + url + "   " + expectedResult.split(" ")[0]);
-                tv.setAutoLinkMask(Linkify.ALL);
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-                row.addView(tv);
-                layout1.addView(row, counter++);
-            }
+            String[] values = read.nextLine().split(";");
+            url = values[1];
+            expectedResult = values[2];
+            TableRow row= new TableRow(this);
+            TextView tv = new TextView(this);
+            tv.setText("http://127.0.0.1:10080/" + url  + "   "+expectedResult.split(" ")[0]);
+            tv.setAutoLinkMask(Linkify.ALL);
+            tv.setMovementMethod(LinkMovementMethod.getInstance());
+            row.addView(tv);
+            layout1.addView(row,counter++);
         }
 
 //

@@ -4,4 +4,3 @@ TEST_ROOT=$1
 cd "$TEST_ROOT"
 rm -rf instrumentscli*
 killall "Simulator"
-killall "Simulator (Watch)"
