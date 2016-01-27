@@ -75,7 +75,7 @@ fi
 
 adb -s $device shell am start -n "$1/$1.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 mkdir /Users/bob/Documents/Developer/Quickbuild/Reports/latest/$REPORT_NAME/
-adb -s $device logcat > /Users/bob/Documents/Developer/Quickbuild/Reports/latest/$REPORT_NAME/logcat.log & PID=$!
+adb -s $device logcat > /Users/bob/Documents/Developer/Quickbuild/Reports/latest/$REPORT_NAME.logcat.log & PID=$!
 
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$REPORT_NAME/$1 -DtestFile=$TEST_SUITE -DdeviceUrl=$deviceURL
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$REPORT_NAME/$1
