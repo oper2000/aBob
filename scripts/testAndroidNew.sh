@@ -91,7 +91,7 @@ for d in */ ; do
  deviceIP=$(adb -s $AVD_NAME shell ip addr show | grep 'global wlan0' | cut -d' ' -f6 | cut -d'/' -f1)
  deviceURL="http://$deviceIP:10080/"
  #echo "deviceAdd: $deviceURL"
- /Users/bob/Documents/Developer/Quickbuild/scripts/runAndroidEmulator.sh ${d%?} $(pwd)/$d2 $AVD_NAME $REPORT_NAME $(pwd)/../testSuite.txt $deviceURL
+ /Users/bob/Documents/Developer/Quickbuild/scripts/runAndroidEmulatorNew.sh ${d%?} $(pwd)/$d2 $AVD_NAME $REPORT_NAME $(pwd)/../testSuite.txt $deviceURL
  done
  
  #ps -ef | grep emulator64-x86
@@ -109,7 +109,7 @@ for d in */ ; do
  AVD_NAME=${EMULATORS[$emulatorCounter]}
  REPORT_NAME="Emulator.$AVD_NAME"
  deviceURL=http://127.0.0.1:10081/
- /Users/bob/Documents/Developer/Quickbuild/scripts/runAndroidEmulator.sh ${d%?} $(pwd)/$d2 $AVD_NAME $REPORT_NAME $(pwd)/../testSuite.txt $deviceURL
+ /Users/bob/Documents/Developer/Quickbuild/scripts/runAndroidEmulatorNew.sh ${d%?} $(pwd)/$d2 $AVD_NAME $REPORT_NAME $(pwd)/../testSuite.txt $deviceURL
  done
 
  #wait
