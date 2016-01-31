@@ -1,0 +1,55 @@
+	@Override
+	public void onActionReceived(String action, JSONObject data) {
+		try {
+			AutomationServer.result = action + ":" + data.get("status");
+		} catch (JSONException e) {
+			AutomationServer.result = action + " Failed: " + e.getMessage();
+		}
+	}
+
+
+	public static class AutomationServer extends NanoHTTPD {
+
+		public static void main(String[] args) {
+			ServerRunner.run(AutomationServer.class);
+		}
+		public static String result = "";
+		private int counter =0;
+		private int timeout = 60;
+
+
+		public AutomationServer() {
+			// set port here
+			super(10080);
+		}
+
+		@Override
+		public Response serve(IHTTPSession session) {
+			//get the right test by name
+			final String testName =  session.getUri().replace("/", "");
+			if (!testName.startsWith("test")){
+				return null;
+			}
+			// run the test on another thread and sleep until it finish/ timeout
+			new Thread() {
+				public void run() {
+					WL.getInstance().sendActionToJS(testName, null);				}
+			}.start();
+			while(result.equals("") && counter < timeout){
+				++counter;
+				try {
+					Thread.currentThread().sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			String testResult = result;
+			if(counter >= timeout){
+				testResult = "Failure. Timeout";
+			}
+			result = "";
+			counter = 0;
+			return newFixedLengthResponse(testResult);
+		}
+	}
+}
