@@ -20,26 +20,8 @@ echo "NoStatus" > ./status.txt
 
 cordova run android $TARGET_PARAM
 
-
-echo "getting status from simulator"
-testStatus="NoStatus"
-while [ "$testStatus" == "NoStatus" ] || [ "$testStatus" == "" ]
-do
-	if [ `$ANDROID_HOME/platform-tools/adb -s emulator-5554 shell "if [ -e /sdcard/Android/data/io.cordova.hellocordova/files/status.txt ]; then echo 1; fi"` ]; then 
-		$ANDROID_HOME/platform-tools/adb -s emulator-5554 pull /sdcard/Android/data/io.cordova.hellocordova/files/status.txt .;
-		testStatus=`cat ./status.txt`;
-	fi
-done
-
-cd ..
-
-TARGET_TEST_LOG=$SCRIPTS_PATH/hypridProj/platforms/android/hybrid-android.html
-echo "<!DOCTYPE html><html><body><h1>Android Hybrid test</h1><p>" > $TARGET_TEST_LOG
-echo $testStatus >> $TARGET_TEST_LOG
-echo "</p></body></html>" >> $TARGET_TEST_LOG
-
-echo "NoStatus" > ./status.txt
-$ANDROID_HOME/platform-tools/adb -s -s emulator-5554 push ./$PROJ_NAME/status.txt /sdcard/Android/data/io.cordova.hellocordova/files/status.txt
+ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET_PARAM -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
+ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET_PARAM
 
 # Kill android emulator
 ps -ef | grep emulator64-x86
