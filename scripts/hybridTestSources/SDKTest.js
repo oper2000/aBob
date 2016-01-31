@@ -57,7 +57,6 @@ function testEnableOSNativeEncryption(){
 }
 
 function testEncrypt(){
-<<<<<<< HEAD:scripts/hybridTestSources/SDKTest.js
 
 	WL.SecurityUtils.encrypt({"key":"hh", "text":"ggg"}).then(function(val) {
 		console.log(val);
@@ -107,55 +106,6 @@ function testSetServerUrl(){
 		WL.App.sendActionToNative("testSetServerUrl", data);
     });
 //    WL.Client.reloadApp();
-=======
-			WL.SecurityUtils.encrypt({"key":"hh", "text":"ggg"}).then(function(val) {
-  			console.log(val);
-		},function(val){
-			if (val.msg.slice(0,13) == "ENCRYPT_ERROR"){
-				console.log("WL.SecurityUtils.encrypt: Success.");
-				testWLApp();
-			}else{
-				console.log(val);
-				showTestsStatus(val.msg);
-			}
-		});
-}
-
-function showTestsStatus(message){
-	var statusString = "";
-	if (message == "Success"){
-		statusString = "All tests succeeded";
-	}else{
-		statusString = " Tests failed: "+ message;
-	}
-	window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function(dir) {
-		dir.getFile("status.txt", {create:true}, function(file) {
-			logOb = file;
-			if(!logOb) return;
-			logOb.createWriter(function(fileWriter) {
-				fileWriter.write(statusString);
-			}, null);
-		});
-	});
-}
-
-function testWLApp(){
-try{
-	WL.App.getServerUrl(
-	function(url){
-		console.log("WL.App.getServerUrl:"+url);
-	},function(err){
-		showTestsStatus(err.msg);
-	});
-	WL.App.addActionReceiver("MyReceiver", function (receivedActon){
-	// process receivedAction
-	});
-	WL.App.removeActionReceiver("MyReceiver");
-	testWLClient();
-	}catch(err){
-		return showTestsStatus(err.message);
-	}
->>>>>>> 552d625c66e018a771c23677cef858a6fddf1bff:scripts/SDKTest.js
 }
 
 function testWLClient(){
@@ -187,11 +137,13 @@ function testResourceRequest(){
 		request.getQueryParameters();
 		request.setTimeout(60000);
 		if (request.getTimeout() != 60000){
-			showTestsStatus("WLResourceRequest.getTimeout Error.");
+				var data = {"status":"testResourceRequest - request.getTimeout failure"};
+				return WL.App.sendActionToNative("testResourceRequest", data);
 		}
 		request.getTimeout();
 		if (request.getUrl() != "/adapters/account/balance"){
-			showTestsStatus("WLResourceRequest.getUrl Error.");
+			var data = {"status":"testResourceRequest - request.getUrl failure"};
+			return WL.App.sendActionToNative("testResourceRequest", data);
 		}
 
 		sampleAppRealmChallengeHandler = WL.Client.createWLChallengeHandler("usernamePassword");
