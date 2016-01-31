@@ -161,6 +161,7 @@ public class SyncTestNG {
 		//            String goldXmlPath = pathToTestCases + File.separator + "gold_testCase" + index + ".xml";
 		//            String compResult = compareXmls(goldXmlPath, syncOutput);
 		//String res = sendHttpResponse("?testName=GetToken");
+		System.out.println("start testCase " + urlParameters);
 		String res = sendHttpResponse(urlParameters);
 		System.out.println("device reply is: "+res);
 		Assert.assertEquals(res, expectedRes, res );
