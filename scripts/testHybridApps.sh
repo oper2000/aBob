@@ -1,7 +1,8 @@
 deviceURL=http://127.0.0.1:10081/
 PROJ_NAME=hypridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
-TARGET_PARAM="--target=Nexus_5_API_21_hybrid"
+TARGET=Nexus_5_API_21_hybrid
+TARGET_PARAM="--target=$TARGET"
 if [ ! -d $SCRIPTS_PATH ]
 then
 	SCRIPTS_PATH=.
@@ -13,15 +14,14 @@ cd $SCRIPTS_PATH
 ./createHybridTestProj.sh $PROJ_NAME
 
 ./deployAndroidApp.sh io.cordova.hellocordova 0.0.1
-#./deployiOSApp.sh io.cordova.hellocordova 1
+./deployiOSApp.sh io.cordova.hellocordova 1
 
 cd $PROJ_NAME
-echo "NoStatus" > ./status.txt
 
 cordova run android $TARGET_PARAM
 
-ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET_PARAM -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
-ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET_PARAM
+ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
+ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET
 
 # Kill android emulator
 ps -ef | grep emulator64-x86

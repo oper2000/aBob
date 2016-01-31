@@ -10,7 +10,7 @@ cordova prepare
 
 gsed -i '/app.receivedEvent(.deviceready.);/a\\t\tvar buttonOne = document.getElementById("button1");\n\t\tbuttonOne.addEventListener("click", function(){\n\t\t\ttestSDK();\n\t\t}, false);' ./www/js/index.js
 gsed -i '/Apache Cordova/a\\t\t\t<button type="button" id="button1">Click Me!<\/button>' ./www/index.html
-cat ./../hybridTests/SDKTest.js >> ./www/js/index.js
+cat ./../hybridTestSources/SDKTest.js >> ./www/js/index.js
 
 
 gsed -i '/import com.worklight.androidgap.api.WL;/aimport com.worklight.androidgap.api.WLActionReceiver;\nimport org.json.JSONException;\nimport org.json.JSONObject;\nimport fi.iki.elonen.NanoHTTPD;\nimport fi.iki.elonen.util.ServerRunner;\n' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
@@ -22,9 +22,9 @@ gsed -i '/onInitWebFrameworkComplete/a\\t\tif (server == null){\
 \t\t\t\tserver.start();\n\t\t\t} catch (Exception e) {}\
 \t\t\t}' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 gsed -i '$ d' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
-cat ./../hybridTests/mainActivityChanges.txt >> ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
+cat ./../hybridTestSources/mainActivityChanges.txt >> ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 
-cp ./../hybridTests/nanohttpd-2.2.0.jar ./platforms/android/libs
+cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
 cordova compile
 
