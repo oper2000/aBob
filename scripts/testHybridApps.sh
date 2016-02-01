@@ -1,5 +1,5 @@
 deviceURL=http://127.0.0.1:10081/
-PROJ_NAME=hypridProj
+PROJ_NAME=hybridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
 TARGET=Nexus_5_API_21_hybrid
 TARGET_PARAM="--target=$TARGET"
@@ -11,7 +11,7 @@ fi
 
 cd $SCRIPTS_PATH
 
-./createHybridTestProj.sh $PROJ_NAME
+./hybridTestSources/createHybridTestProj.sh $PROJ_NAME
 
 ./deployAndroidApp.sh io.cordova.hellocordova 0.0.1
 ./deployiOSApp.sh io.cordova.hellocordova 1
