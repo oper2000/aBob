@@ -3,6 +3,8 @@ PROJ_NAME=hybridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
 TARGET=Nexus_5_API_21_hybrid
 TARGET_PARAM="--target=$TARGET"
+device=emulator-5554
+
 if [ ! -d $SCRIPTS_PATH ]
 then
 	SCRIPTS_PATH=.
@@ -19,6 +21,8 @@ cd $SCRIPTS_PATH
 cd $PROJ_NAME
 
 cordova run android $TARGET_PARAM
+
+adb -s $device forward tcp:10081 tcp:10080
 
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET
