@@ -1,7 +1,7 @@
 	@Override
 	public void onActionReceived(String action, JSONObject data) {
 		try {
-			AutomationServer.result = data.get("status");
+			AutomationServer.result = "" + data.get("status");
 		} catch (JSONException e) {
 			AutomationServer.result = action + " Failed: " + e.getMessage();
 		}
