@@ -15,8 +15,27 @@ function wlCommonInit(){
     //	WL.NativePage.show("io.cordova.hellocordova.RunTestsActivity",function(data){alert(data);}, {key1 : 'value1'});
 }
 
-function testBase64Encode(){
+function testBase64EncodeDecode(){
 		WL.SecurityUtils.base64Encode("7").then(function(val) {
+				WL.SecurityUtils.base64Decode(val).then(function(val1) {
+					if ("7" == val1) {
+          				console.log("WL.SecurityUtils.base64Decode: Success.");
+          				var data = {"status":"success"};
+                    	WL.App.sendActionToNative("testBase64Decode", statusSuccess);
+                    }
+                    else {
+                    	console.log("testBase64Encode failure");
+                    	var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode"};
+                        WL.App.sendActionToNative("testBase64Encode", data);
+                    }
+        		},function(val){
+        			console.log("Failed calling WL.SecurityUtils.testBase64Decode:" + val);
+        		}).fail(function(){
+        			console.log("Failed calling WL.SecurityUtils.testBase64Decode" );
+        			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode"};
+                    WL.App.sendActionToNative("testBase64Decode", data);
+        		});
+
   			console.log("WL.SecurityUtils.base64Encode: Success.");
             WL.App.sendActionToNative("testBase64Encode", statusSuccess);
 		},function(val){
@@ -28,19 +47,6 @@ function testBase64Encode(){
 		});
 }
 
-function testBase64Decode(){
-		WL.SecurityUtils.base64Decode("Nw==").then(function(val) {
-  			console.log("WL.SecurityUtils.base64Decode: Success.");
-  			var data = {"status":"success"};
-            WL.App.sendActionToNative("testBase64Decode", statusSuccess);
-		},function(val){
-			console.log("Failed calling WL.SecurityUtils.testBase64Decode:" + val);
-		}).fail(function(){
-			console.log("Failed calling WL.SecurityUtils.testBase64Decode" );
-			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode"};
-            WL.App.sendActionToNative("testBase64Decode", data);
-		});
-}
 
 function testEnableOSNativeEncryption(){
 		WL.SecurityUtils.enableOSNativeEncryption(true).then(function(val) {
@@ -56,27 +62,40 @@ function testEnableOSNativeEncryption(){
 		});
 }
 
-function testEncrypt(){
+function testEncryptDecrypt(){
+	var key;
 
-	WL.SecurityUtils.encrypt({"key":"hh", "text":"ggg"}).then(function(val) {
-		console.log(val);
-			var data = {"status":"testEncrypt failure"};
-			WL.App.sendActionToNative("testEncrypt", data);
-	},function(val){
-		if (val.msg.slice(0,13) == "ENCRYPT_ERROR"){
-			console.log("WL.SecurityUtils.encrypt: Success.");
-			if ( getEnv() ==  WL.Env.IPHONE){
-            		testEnableOSNativeEncryption();
-            }else{
-            	WL.App.sendActionToNative("testEncrypt", statusSuccess);
-            }
-		}else{
-			console.log(val);
-			var data = {"status":"failure :" + val.msg};
-			WL.App.sendActionToNative("testEncrypt", data);
-		}
+	// Generate a key.
+	WL.SecurityUtils.keygen({
+	  password: 'HelloPassword',
+	  salt: Math.random().toString(),
+	  iterations: 10000
+	}).then(function (res) {
+	  // Update the key variable.
+	  key = res;
+	  // Encrypt text.
+	  return WL.SecurityUtils.encrypt({
+		key: key,
+		text: 'My secret text'
+	  });
+	}).then(function (res) {
+	  // Append the key to the result object from encrypt.
+	  res.key = key;
+	  // Decrypt.
+	  return WL.SecurityUtils.decrypt(res);
+	}).then(function (res) {
+	  // Remove the key from memory.
+	  key = null;
+	  console.log("secret:"+res);
+	  WL.App.sendActionToNative("test101", {"status":"Success"});
+	  //res => 'My secret text'
+	}).fail(function (err) {
+	  // Handle failure in any of the previously called APIs.
+		console.log("testEncryptDecrypt:"+failed);
+		WL.App.sendActionToNative("test101", {"status":"Failed"});
 	});
 }
+
 
  function testGetServerUrl(){
    try{
@@ -108,10 +127,21 @@ function testSetServerUrl(){
 //    WL.Client.reloadApp();
 }
 
+function testLocalRandomString(){
+		WL.SecurityUtils.localRandomString().then(function(val) {
+		  	console.log("WL.ecurityUtils.LocalRandomString: Success. " + val);
+            WL.App.sendActionToNative("testEnableOSNativeEncryption", {"status":"success"});
+		},function(val){
+			console.log(val);
+		}).fail(function(){
+			console.log("Failed calling WL.ecurityUtils.LocalRandomString:");
+			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption"};
+			WL.App.sendActionToNative("testEncrypt", data);
+		});
+}
+
 function testWLClient(){
 	try{
-		WL.Client.getAppProperty(WL.AppProperty.APP_VERSION);
-		WL.Client.getAppProperty(WL.AppProperty.MAIN_FILE_PATH);
 		WL.Client.getEnvironment();
 		WL.Client.getCookies().then(function(val) {
 		  	console.log("testWLClient:WL.Client.getCookies: Success.");
@@ -189,6 +219,15 @@ function testResourceRequest(){
 	}catch(err){
 		var data = {"status":"testResourceRequest failure"};
 		WL.App.sendActionToNative("testResourceRequest", data);
+	}
+}
+
+function test101(){
+	try{
+		console.log("test101 OK");
+		WL.App.sendActionToNative("test101", {"status":"Success"});
+	}catch(err){
+		WL.App.sendActionToNative("test101", {"status":"test101 failure"});
 	}
 }
 

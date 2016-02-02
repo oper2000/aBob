@@ -1,11 +1,11 @@
 #Test Display Name;                Path(Test Class Name)/Parameters;            Expected Result
-Base64Encode test;testBase64Encode;Success
-Base64Decode test;testBase64Decode;Success
-Encrypt test;testEncrypt;Success
-GetServerUrl test;testGetServerUrl;Success
-SetServerUrl test;testSetServerUrl;Success
-WLClient test;testWLClient;Success
-ResourceRequest test;testResourceRequest;Success
-Logger test;testLogger;Success
+Test Base64 Encoding;testBase64EncodeDecode;Success
+Test Encryption;testEncryptDecrypt;Success
+Test RandomString;testLocalRandomString;Success
+Test GetServerUrl test;testGetServerUrl;Success
+Test SetServerUrl test;testSetServerUrl;Success
+Test WLClient;testWLClient;Success
+Test ResourceRequest;testResourceRequest;Success
+Test Logger;testLogger;Success
 
 
