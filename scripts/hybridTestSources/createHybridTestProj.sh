@@ -1,10 +1,10 @@
 echo "creating project $1"
 cordova create $1
 cd $1
-cordova platform add ios@4.0.0
+cordova platform add ios@4.0.1
 cordova platform add android@5.0.0
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
-cordova plugin add org.apache.cordova.file
+#cordova plugin add org.apache.cordova.file
 cordova  plugin add cordova-plugin-mfp
 
 
@@ -27,7 +27,13 @@ cat ./../hybridTestSources/mainActivityChanges.txt >> ./platforms/android/src/io
 
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
+gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
+
+rm -fr ./platforms/ios
+tar -zxvf ../hybridTestSources/ios.tar.gz -C platforms
+cordova plugin update cordova-plugin-mfp --save
+
+
 cordova prepare
 cordova compile
 
-gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
