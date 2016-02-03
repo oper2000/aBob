@@ -23,15 +23,15 @@ else
 	xcodebuild OTHER_CFLAGS="-fembed-bitcode" -target $APP_NAME.xcodeproj -scheme $APP_NAME -sdk $SDK -configuration Debug clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -destination "$DESTINATION" CONFIGURATION_BUILD_DIR="$TEST_ROOT"
 fi
 xcrun instruments -w "$DEVICE" #-t "Network"
-xcrun simctl uninstall booted $APP_NAME
+xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME"
 xcrun simctl install booted "$TEST_ROOT$APP_NAME.app"
 xcrun simctl launch  booted "com.worklight.ibm.$APP_NAME"
 else
 echo "building watch app"
 xcodebuild OTHER_CFLAGS="-fembed-bitcode" -workspace $APP_NAME.xcworkspace  -scheme Watch -configuration Debug clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -destination "$DESTINATION2" CONFIGURATION_BUILD_DIR="$TEST_ROOT"
-xcrun instruments -w "$DEVICE2" #-t "Network"
+#xcrun instruments -w "$DEVICE2" #-t "Network"
 xcrun instruments -w "$WATCH" #-t "Network"
-xcrun simctl uninstall booted $APP_NAME
-xcrun simctl install booted "$TEST_ROOT$APP_NAME.app"
+xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME.watchkitapp"
+xcrun simctl install booted "$TEST_ROOT/Watch.app"
 xcrun simctl launch  booted "com.worklight.ibm.$APP_NAME.watchkitapp"
 fi
