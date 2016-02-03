@@ -159,6 +159,46 @@ function testWLClient(){
 	}
 }
 
+function testAddHeader(){
+	try{
+		var request = new WLResourceRequest('http://httpbin.org/headers', WLResourceRequest.GET);
+		request.setQueryParameter('params', [5, 6]);
+		request.getQueryParameters();
+		request.setTimeout(60000);
+		request.addHeader("WLHYBRIDHEADER", "MYHEADER")
+		if (request.getTimeout() != 60000){
+				var data = {"status":"testAddHeader - request.getTimeout failure"};
+				return WL.App.sendActionToNative("testResourceRequest", data);
+		}
+		request.getTimeout();
+		request.send().then(
+      	function(response) {
+      	    var response = JSON.stringify(response);
+      	 	console.log("testAddHeader " + response);
+      	 	if (response.indexOf("MYHEADER") > -1) {
+				WL.App.sendActionToNative("testAddHeader", statusSuccess);
+			}
+			else {
+				var data = {"status":"testAddHeader failure"};
+				WL.App.sendActionToNative("testAddHeader", data);
+			}
+          // success flow, the result can be found in response.responseJSON
+      	},
+      	function(error) {
+          // failure flow
+          // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
+      	}
+ 		).fail(function(){
+ 			console.log("testAddHeader failure");
+			var data = {"status":"testAddHeader failure"};
+			WL.App.sendActionToNative("testAddHeader", data);
+ 		});
+	}catch(err){
+		var data = {"status":"testAddHeader failure"};
+		WL.App.sendActionToNative("testAddHeader", data);
+	}
+}
+
 
 function testResourceRequest(){
 	try{

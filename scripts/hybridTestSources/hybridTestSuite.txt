@@ -7,5 +7,6 @@ Test SetServerUrl test;testSetServerUrl;Success
 Test WLClient;testWLClient;Success
 Test ResourceRequest;testResourceRequest;Success
 Test Logger;testLogger;Success
+Test WLResourceRequest addHeader;testAddHeader;Success
 
 
