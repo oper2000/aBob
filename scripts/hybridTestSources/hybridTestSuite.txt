@@ -8,5 +8,6 @@ Test WLClient;testWLClient;Success
 Test ResourceRequest;testResourceRequest;Success
 Test Logger;testLogger;Success
 Test WLResourceRequest addHeader;testAddHeader;Success
+Test GetEnvironment;testWLGetEnvironment;Success
 
 

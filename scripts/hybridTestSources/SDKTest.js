@@ -199,6 +199,23 @@ function testAddHeader(){
 	}
 }
 
+function testWLGetEnvironment() {
+	try{
+	    console.log("testWLgetEnvironment: " + WL.Client.getEnvironment());
+	    if (WL.Client.getEnvironment() === WL.Environment.ANDROID) {
+	    	console.log("testWLgetEnvironment: Success.");
+            WL.App.sendActionToNative("testWLgetEnvironment", statusSuccess);
+		}
+		else {
+			var data = {"status":"Failed testWLgetEnvironment"};
+        	WL.App.sendActionToNative("testWLClient", data);
+		}
+	}catch(err){
+		var data = {"status":"testWLgetEnvironment"};
+		WL.App.sendActionToNative("testWLgetEnvironment", data);
+	}
+}
+
 
 function testResourceRequest(){
 	try{
