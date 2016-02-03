@@ -201,8 +201,13 @@ function testAddHeader(){
 
 function testWLGetEnvironment() {
 	try{
+	    console.log("user agaent: " + navigator.userAgent);
 	    console.log("testWLgetEnvironment: " + WL.Client.getEnvironment());
-	    if (WL.Client.getEnvironment() === WL.Environment.ANDROID) {
+	    if (navigator.userAgent.indexOf("Android") > -1 && WL.Client.getEnvironment() === WL.Environment.ANDROID) {
+	    	console.log("testWLgetEnvironment: Success.");
+            WL.App.sendActionToNative("testWLgetEnvironment", statusSuccess);
+		}
+		else if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
 	    	console.log("testWLgetEnvironment: Success.");
             WL.App.sendActionToNative("testWLgetEnvironment", statusSuccess);
 		}
