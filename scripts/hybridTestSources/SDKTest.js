@@ -130,7 +130,7 @@ function testSetServerUrl(){
 function testLocalRandomString(){
 		WL.SecurityUtils.localRandomString().then(function(val) {
 		  	console.log("WL.ecurityUtils.LocalRandomString: Success. " + val);
-            WL.App.sendActionToNative("testEnableOSNativeEncryption", {"status":"success"});
+            WL.App.sendActionToNative("testEnableOSNativeEncryption", statusSuccess);
 		},function(val){
 			console.log(val);
 		}).fail(function(){
