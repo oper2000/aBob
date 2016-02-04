@@ -4,7 +4,6 @@ cd $1
 cordova platform add ios@4.0.1
 cordova platform add android@5.0.0
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
-#cordova plugin add org.apache.cordova.file
 cordova  plugin add cordova-plugin-mfp
 
 
@@ -26,6 +25,8 @@ gsed -i '$ d' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 cat ./../hybridTestSources/mainActivityChanges.txt >> ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
+
+mfpdev app register
 
 gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
 
