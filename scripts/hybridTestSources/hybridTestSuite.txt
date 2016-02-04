@@ -18,3 +18,4 @@ Test ActionReceived;testOnActionReceived;Success
 Test ErrorMessage;testErrorMessage;Success
 Test SplashScreen;testSplashScreen;Success
 Test RemoveActionReceiver;testRemoveActionReceiver;Success
+Test invokeProcedure;testInvokeProcedure;Success
