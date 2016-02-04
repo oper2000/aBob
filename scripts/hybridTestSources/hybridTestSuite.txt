@@ -16,3 +16,4 @@ Test InitWebFrameworkComplete;testOnInitWebFrameworkComplete;Success
 Test HandleWebFrameworkInitFailure;testHandleWebFrameworkInitFailure;Success
 Test ActionReceived;testOnActionReceived;Success
 Test ErrorMessage;testErrorMessage;Success
+Test SplashScreen;testSplashScreen;Success

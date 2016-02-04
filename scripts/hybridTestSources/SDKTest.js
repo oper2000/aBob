@@ -294,6 +294,20 @@ function testErrorMessage() {
     }
 }
 
+function testSplashScreen() {
+    console.log("testSplashScreen");
+	try {
+		WL.App.showSplashScreen();
+		setTimeout(function(){
+    	    WL.App.hideSplashScreen();
+    		return WL.App.sendActionToNative("testSplashScreen", statusSuccess);
+		}, 1000);
+	}catch(err){
+    	var data = {"status":"testSplashScreen failure"};
+    	WL.App.sendActionToNative("testAddHeader", data);
+    }
+}
+
 function testResourceRequest(){
 	try{
 		var request = new WLResourceRequest('/adapters/account/balance', WLResourceRequest.GET);
