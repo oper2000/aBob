@@ -17,8 +17,7 @@ cd $SCRIPTS_PATH
 
 ./hybridTestSources/createHybridTestProj.sh $PROJ_NAME
 
-./deployAndroidApp.sh io.cordova.hellocordova 0.0.1
-./deployiOSApp.sh io.cordova.hellocordova 0.0.1
+mfpdev app register
 
 cd $PROJ_NAME
 
