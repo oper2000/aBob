@@ -406,6 +406,33 @@ function testRemoveActionReceiver(){
       }
 }
 
+function testInit() {
+	try{
+	    console.log("testInit: " + WL.Client.init());
+      	WL.App.sendActionToNative("testInit", statusSuccess);
+	}catch(err){
+		var data = {"status":"testInit Failed"};
+		WL.App.sendActionToNative("testInit", data);
+	}
+}
+
+function testIsConnected() {
+	try{
+	    var conn = WL.Client.isConnected();
+	    console.log("testIsConnected: " + conn);
+	    if (conn) {
+      		WL.App.sendActionToNative("testIsConnected", statusSuccess);
+      	}
+      	else {
+            var data = {"status":"testIsConnected failure"};
+            WL.App.sendActionToNative("testIsConnected", data);
+         }
+	}catch(err){
+		var data = {"status":"testIsConnected Failed"};
+		WL.App.sendActionToNative("testIsConnected", data);
+	}
+}
+
 function test101(){
 	try{
 		console.log("test101 OK");

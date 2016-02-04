@@ -19,3 +19,5 @@ Test ErrorMessage;testErrorMessage;Success
 Test SplashScreen;testSplashScreen;Success
 Test RemoveActionReceiver;testRemoveActionReceiver;Success
 Test invokeProcedure;testInvokeProcedure;Success
+Test Init;testInit;Success
+Test IsConnected;testIsConnected;Success
