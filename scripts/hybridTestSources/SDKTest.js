@@ -370,6 +370,17 @@ function testResourceRequest(){
 	}
 }
 
+function testRemoveActionReceiver(){
+	try{
+      	WL.App.addActionReceiver("MyTestReceiver", function (receivedAction){
+      	});
+      	WL.App.removeActionReceiver("MyTestReceiver");
+      	WL.App.sendActionToNative("testRemoveActionReceiver", statusSuccess);
+      }catch(err){
+      		WL.App.sendActionToNative("testRemoveActionReceiver", {"status":"testRemoveActionReceiver failure"});
+      }
+}
+
 function test101(){
 	try{
 		console.log("test101 OK");
