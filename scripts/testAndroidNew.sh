@@ -28,9 +28,9 @@ fi
 
 if [[ "$1" = "5" ]]; then
 echo "testing using android version 5 is requested"
-if [[ $connected_devices = *"TODO: add android 5 device"*  ]]; then
-echo "TODO: found device: ###;### adding it to devices queue"
-DEVICES[$deviceCounter]="TODO: add android 5 device"
+if [[ $connected_devices = *"0384979b2151b229"*  ]]; then
+echo "found device: Nexus5_5.1;0384979b2151b229 adding it to devices queue"
+DEVICES[$deviceCounter]="Nexus5_5.1;0384979b2151b229"
 let deviceCounter=$deviceCounter+1
 else
 echo "no device found, adding emulator Nexus_5_API_21 to emulators queue"
@@ -99,12 +99,12 @@ for d in */ ; do
  
  while [ $emulatorCounter -gt 1 ]
  do
-  if [ ! -f /Users/bob/Documents/Developer/Quickbuild/Reports/latest/androidEmulatorUsed ]; then
-   echo "" > /Users/bob/Documents/Developer/Quickbuild/Reports/latest/androidEmulatorUsed
-  else
-  echo "emulator is already in use, aborting"
-  exit 1
-  fi
+#  if [ ! -f /Users/bob/Documents/Developer/Quickbuild/Reports/latest/androidEmulatorUsed ]; then
+#   echo "" > /Users/bob/Documents/Developer/Quickbuild/Reports/latest/androidEmulatorUsed
+#  else
+#  echo "emulator is already in use, aborting"
+#  exit 1
+#  fi
  let emulatorCounter=$emulatorCounter-1
  AVD_NAME=${EMULATORS[$emulatorCounter]}
  REPORT_NAME="Emulator.$AVD_NAME"
