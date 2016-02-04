@@ -283,6 +283,16 @@ function testWLClientCookie(){
 	}
 }
 
+function testErrorMessage() {
+    console.log("testErrorMessage: " + WL.App.getErrorMessage("string error"));
+    if (WL.App.getErrorMessage("string error") === "string error") {
+    	return WL.App.sendActionToNative("testErrorMessage", statusSuccess);
+    }
+    else {
+    	var data = {"status":"testErrorMessage failure"};
+    	return WL.App.sendActionToNative("testErrorMessage", data);
+    }
+}
 
 function testResourceRequest(){
 	try{

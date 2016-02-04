@@ -15,5 +15,4 @@ Test SendActionToNative;testSendActionToNative;Success
 Test InitWebFrameworkComplete;testOnInitWebFrameworkComplete;Success
 Test HandleWebFrameworkInitFailure;testHandleWebFrameworkInitFailure;Success
 Test ActionReceived;testOnActionReceived;Success
-
-
+Test ErrorMessage;testErrorMessage;Success
