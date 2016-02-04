@@ -15,6 +15,31 @@ function wlCommonInit(){
     //	WL.NativePage.show("io.cordova.hellocordova.RunTestsActivity",function(data){alert(data);}, {key1 : 'value1'});
 }
 
+function testActionReceiver(){
+    console.log("This method is tested as it serves as an infrastructure for all of the tests see wlCommonInit");
+	WL.App.sendActionToNative("testActionReceiver", statusSuccess);
+}
+
+function testSendActionToNative(){
+    console.log("This method is tested as it serves as an infrastructure for all of the tests to report status");
+	WL.App.sendActionToNative("testSendActionToNative", statusSuccess);
+}
+
+function testOnInitWebFrameworkComplete(){
+    console.log("This method is tested as it serves as an infrastructure for all of the tests see (MainActivity/MFPAppDelegate)");
+	WL.App.sendActionToNative("testSendActionToNative", statusSuccess);
+}
+
+function testHandleWebFrameworkInitFailure(){
+    console.log("This method is tested as it serves as an infrastructure for all of the tests see (MainActivity/MFPAppDelegate)");
+	WL.App.sendActionToNative("testHandleWebFrameworkInitFailure", statusSuccess);
+}
+
+function testOnActionReceived(){
+    console.log("This method is tested as it serves as an infrastructure for all of the tests see (MainActivity/MFPAppDelegate)");
+	WL.App.sendActionToNative("testOnActionReceived", statusSuccess);
+}
+
 function testBase64EncodeDecode(){
 		WL.SecurityUtils.base64Encode("7").then(function(val) {
 				WL.SecurityUtils.base64Decode(val).then(function(val1) {

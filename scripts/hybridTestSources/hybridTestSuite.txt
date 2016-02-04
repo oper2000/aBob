@@ -10,4 +10,10 @@ Test Logger;testLogger;Success
 Test WLResourceRequest addHeader;testAddHeader;Success
 Test GetEnvironment;testWLGetEnvironment;Success
 Test Cookies;testWLClientCookie;Success
+Test ActionReceiver;testActionReceiver;Success
+Test SendActionToNative;testSendActionToNative;Success
+Test InitWebFrameworkComplete;testOnInitWebFrameworkComplete;Success
+Test HandleWebFrameworkInitFailure;testHandleWebFrameworkInitFailure;Success
+Test ActionReceived;testOnActionReceived;Success
+
 
