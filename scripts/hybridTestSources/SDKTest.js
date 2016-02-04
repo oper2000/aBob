@@ -391,4 +391,29 @@ function testLogger(){
     WL.App.sendActionToNative("testLogger", statusSuccess);
 
 }
+
+function testInvokeProcedure(){
+	var invocationData = {
+			adapter : "testInvoke",
+			procedure: "hello",
+			parameters: []
+	};
+
+	WL.Client.invokeProcedure(invocationData, {
+		onSuccess: invokeProcedureOK,
+		onFailure: invokeProcedureFAIL
+	});
+
+	function invokeProcedureOK(response) {
+		console.log("ok");
+		WL.App.sendActionToNative("testInvokeProvedure", statusSuccess);
+	}
+
+	function invokeProcedureFAIL(response) {
+		console.error("fail");
+		var data = {"status":"testInvokeProvedure failure"};
+        WL.App.sendActionToNative("testInvokeProvedure", data);
+	}
+}
+
 /////////////////////// Test SDK By Eitan //////////////////////
