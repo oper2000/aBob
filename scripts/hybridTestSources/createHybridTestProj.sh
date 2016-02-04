@@ -34,6 +34,7 @@ rm -fr ./platforms/ios
 tar -zxvf ../hybridTestSources/ios.tar.gz -C platforms
 cordova plugin update cordova-plugin-mfp --save
 
+mfpdev app config android_security_test_web_resources_checksum true
 
 cordova prepare
 cordova compile
