@@ -1,3 +1,10 @@
+if [ -d $1 ]
+then
+	echo "deleting existing $1 project"
+	rm -fr $1
+fi
+
+
 echo "creating project $1"
 cordova create $1
 cd $1
