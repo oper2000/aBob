@@ -433,6 +433,48 @@ function testIsConnected() {
 	}
 }
 
+function testGlobalHeader(){
+	try{
+	    WL.Client.addGlobalHeader("WLHYBRIDHEADER", "MYHEADER");
+	    WL.Client.addGlobalHeader("WLHYBRIDHEADER2", "MYHEADER2");
+	    WL.Client.removeGlobalHeader("WLHYBRIDHEADER2");
+		var request = new WLResourceRequest('http://httpbin.org/headers', WLResourceRequest.GET);
+		request.setQueryParameter('params', [5, 6]);
+		request.getQueryParameters();
+		request.setTimeout(60000);
+		if (request.getTimeout() != 60000){
+				var data = {"status":"testGlobalHeader - request.getTimeout failure"};
+				return WL.App.sendActionToNative("testGlobalHeader", data);
+		}
+		request.getTimeout();
+		request.send().then(
+      	function(response) {
+      	    var response = JSON.stringify(response);
+      	 	console.log("testAddHeader " + response);
+      	 	if (response.indexOf("MYHEADER") > -1) {
+				WL.App.sendActionToNative("testGlobalHeader", statusSuccess);
+			}
+			else {
+				var data = {"status":"testGlobalHeader failure"};
+				WL.App.sendActionToNative("testGlobalHeader", data);
+			}
+          // success flow, the result can be found in response.responseJSON
+      	},
+      	function(error) {
+          // failure flow
+          // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
+      	}
+ 		).fail(function(){
+ 			console.log("testGlobalHeader failure");
+			var data = {"status":"testGlobalHeader failure"};
+			WL.App.sendActionToNative("testGlobalHeader", data);
+ 		});
+	}catch(err){
+		var data = {"status":"testGlobalHeader failure"};
+		WL.App.sendActionToNative("testGlobalHeader", data);
+	}
+}
+
 function test101(){
 	try{
 		console.log("test101 OK");

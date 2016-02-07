@@ -21,3 +21,4 @@ Test RemoveActionReceiver;testRemoveActionReceiver;Success
 Test invokeProcedure;testInvokeProcedure;Success
 Test Init;testInit;Success
 Test IsConnected;testIsConnected;Success
+Test GlobalHeader;testGlobalHeader;Success
