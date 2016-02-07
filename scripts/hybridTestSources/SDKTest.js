@@ -521,4 +521,20 @@ function testInvokeProcedure(){
 	}
 }
 
+function testShowNativePage(){
+
+	if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
+	    var params = {
+        	nameParam : 'text'
+    	};
+    
+    	WL.NativePage.show("ShowNativeTest",function(data){
+                WL.App.sendActionToNative("testShowNativePage", statusSuccess);
+        },params);
+	}
+	else{
+	    WL.App.sendActionToNative("testShowNativePage", statusSuccess);
+	}
+}
+
 /////////////////////// Test SDK By Eitan //////////////////////
