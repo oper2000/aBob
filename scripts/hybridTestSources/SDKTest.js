@@ -249,17 +249,25 @@ function testWLGetEnvironment() {
 function testWLClientCookie(){
 	try{
 	WL.Client.setCookie({
+          name: 'MFPCookie2',
+          value: 'cookieValue',
+          domain: 'google.com',
+          path: '/', // all paths
+          expires: -1 // never expires
+        });
+    WL.Client.deleteCookie('MFPCookie2');
+	WL.Client.setCookie({
       name: 'MFPCookie',
       value: 'cookieValue',
       domain: 'google.com',
       path: '/', // all paths
-      expires: 0 // never expires
+      expires: -1 // never expires
     }).then(function() {
       		WL.Client.getCookies().then(function(val) {
       		var cookies = JSON.stringify(val);
-      		  	console.log("testWLClient:WL.Client.getCookies: Success. " + cookies);
-      		  	if (cookies.indexOf("MFPCookie") > -1) {
-      		  	      WL.App.sendActionToNative("testWLClient", statusSuccess);
+      		  	console.log("testWLClientCookie: Success. " + cookies);
+      		  	if (cookies.indexOf("MFPCookie") > -1 && cookies.indexOf("MFPCookie2") <= -1) {
+      		  	      WL.App.sendActionToNative("testWLClientCookie", statusSuccess);
       		  	}
       		},function(val){
       			console.log(val);
