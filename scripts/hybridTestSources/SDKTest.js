@@ -483,6 +483,19 @@ function testGlobalHeader(){
 	}
 }
 
+function testSimpleDialog() {
+	try{
+		WL.SimpleDialog.show(
+    	"My Title", "My Text",
+    	[{text: "First Button", handler: function() {WL.Logger.debug("First button pressed"); }}]
+    )	;
+      	WL.App.sendActionToNative("testSimpleDialog", statusSuccess);
+	}catch(err){
+		var data = {"status":"testSimpleDialog Failed"};
+		WL.App.sendActionToNative("testSimpleDialog", data);
+	}
+}
+
 function test101(){
 	try{
 		console.log("test101 OK");
