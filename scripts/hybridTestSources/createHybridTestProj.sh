@@ -44,5 +44,9 @@ cordova plugin update cordova-plugin-mfp --save
 mfpdev app config android_security_test_web_resources_checksum true
 
 cordova prepare
+
+mkdir ./platforms/android/assets/www/certificates/
+cp ./../hybridTestSources/*.cer ./platforms/android/assets/www/certificates/
+
 cordova compile
 
