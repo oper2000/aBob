@@ -496,6 +496,26 @@ function testSimpleDialog() {
 	}
 }
 
+function testReloadApp() {
+	try{
+	    console.log("testReloadApp: " + WL.Client.reloadApp());
+      	WL.App.sendActionToNative("testReloadApp", statusSuccess);
+	}catch(err){
+		var data = {"status":"testReloadApp Failed"};
+		WL.App.sendActionToNative("testReloadApp", data);
+	}
+}
+
+function testHeartbeat() {
+	try{
+	    console.log("testHartbeat: " + WL.Client.setHeartBeatInterval(10));
+      	WL.App.sendActionToNative("testHartbeat", statusSuccess);
+	}catch(err){
+		var data = {"status":"testHartbeat Failed"};
+		WL.App.sendActionToNative("testHartbeat", data);
+	}
+}
+
 function test101(){
 	try{
 		console.log("test101 OK");
