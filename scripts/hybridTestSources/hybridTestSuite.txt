@@ -26,3 +26,5 @@ Test Show native page;testShowNativePage;Success
 Test SimpleDialog;testSimpleDialog;Success
 Test SimpleDialog;testReloadApp;Success
 Test SimpleDialog;testHeartbeat;Success
+Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
+Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure

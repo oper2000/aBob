@@ -578,4 +578,43 @@ function testShowNativePage(){
 	}
 }
 
+function testSuccessfullPinTrustedCertificatePublicKey(){
+   pinCertificateAndGetGoogleResource("testSuccessfullPinTrustedCertificatePublicKey","google.cer");
+}
+
+function testFailurePinTrustedCertificatePublicKey(){
+      pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
+}
+
+function pinCertificateAndGetGoogleResource(testName,certificateName){
+  WL.Client.pinTrustedCertificatePublicKey(certificateName).then(function(val) {
+			try{
+				var request = new WLResourceRequest('https://google.com', WLResourceRequest.GET);
+
+				request.send().then(
+					function(response) {
+						return WL.App.sendActionToNative(testName, statusSuccess);
+					},
+					function(error) {
+					// failure flow
+					// the error code and description can be found in error.errorCode and error.errorMsg fields respectively
+					}
+				).fail(function(){
+					console.log(testName +" failure");
+					var statusFailure = {"status":"Failure"};
+					return WL.App.sendActionToNative(testName, statusFailure);
+				});
+			}catch(err){
+					var statusFailure = {"status":"Failed to get resource data"};
+					return WL.App.sendActionToNative(testName, statusFailure);
+			}
+		},function(val){
+			console.log(val);
+		}).fail(function(){
+			console.log("Failed calling WL.Client.pinTrustedCertificatePublicKey");
+			var data = {"status":"Failed calling WL.Client.pinTrustedCertificatePublicKey"};
+			WL.App.sendActionToNative(testName, data);
+	});
+}
+
 /////////////////////// Test SDK By Eitan //////////////////////
