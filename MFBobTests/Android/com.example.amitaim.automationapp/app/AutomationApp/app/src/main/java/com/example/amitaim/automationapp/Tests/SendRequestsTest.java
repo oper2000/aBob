@@ -44,6 +44,9 @@ public class SendRequestsTest extends AutomaticTest {
         try {
             URI adapterPath ;
             switch (type){
+                case "empty":
+                    adapterPath = new URI("/adapters/testSend/users/testRequestString");
+                    break;
                 case "string":
                     adapterPath = new URI("/adapters/testSend/users/testRequestString");
                     break;
@@ -82,6 +85,9 @@ public class SendRequestsTest extends AutomaticTest {
                     testBytes =testString.getBytes("UTF-8");
                     request.send(testBytes,new MyResponseListener());
                     break;
+                case "empty":
+                    request.send(new MyResponseListener());
+                    break;
                 default:
                     break;
             }
@@ -98,6 +104,8 @@ public class SendRequestsTest extends AutomaticTest {
             if(type.equals("byte") && Arrays.equals(response.getResponseBytes(),testBytes) )
                 MainActivity.AutomationServer.result = "Success";
             else if(type.equals("json") && response.getResponseText().equals(testJson.toString()))
+                MainActivity.AutomationServer.result = "Success";
+            else if(type.equals("empty") && response.getResponseText().equals(""))
                 MainActivity.AutomationServer.result = "Success";
             else if (response.getResponseText().equals(testString))
                 MainActivity.AutomationServer.result = "Success";

@@ -7,6 +7,7 @@ Get Ressource test with user-pass;GetRessourcesTest/?scope=usernamePassword&user
 Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=usernamePassword&userName=a&password=b;Failure {"usernamePassword":{"failure":"account blocked"}}
 Pinning negative test;PinningTest/?testName=PinningFailure;Success
 Pinning success test;PinningTest/?testName=PinningSuccess;Success
+Send String test;SendRequestsTest/?type=empty&scope=usernamePassword&userName=a&password=a;Success
 Send String test;SendRequestsTest/?type=string&scope=usernamePassword&userName=a&password=a;Success
 Send Hash test;SendRequestsTest/?type=hash&scope=usernamePassword&userName=a&password=a;Success
 Send JSON test;SendRequestsTest/?type=json&scope=usernamePassword&userName=a&password=a;Success
