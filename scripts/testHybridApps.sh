@@ -19,7 +19,7 @@ cd $SCRIPTS_PATH
 
 cd $PROJ_NAME
 
-cordova emulate android $TARGET_PARAM
+cordova run android $TARGET_PARAM
 
 adb -s $device forward tcp:10081 tcp:10080
 
