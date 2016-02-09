@@ -19,7 +19,9 @@ cd $SCRIPTS_PATH
 
 cd $PROJ_NAME
 
-cordova run android $TARGET_PARAM
+#run on device - xwalk needs real device
+#cordova run android $TARGET_PARAM
+cordova run android
 
 adb -s $device forward tcp:10081 tcp:10080
 
