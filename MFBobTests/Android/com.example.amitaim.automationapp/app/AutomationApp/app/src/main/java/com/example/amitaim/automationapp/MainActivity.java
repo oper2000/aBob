@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 expectedResult = values[2];
                 TableRow row = new TableRow(this);
                 TextView tv = new TextView(this);
+                tv.setTextSize(10);
                 tv.setText("http://127.0.0.1:10080/" + url + "   " + expectedResult.split(" ")[0]);
                 tv.setAutoLinkMask(Linkify.ALL);
                 tv.setMovementMethod(LinkMovementMethod.getInstance());

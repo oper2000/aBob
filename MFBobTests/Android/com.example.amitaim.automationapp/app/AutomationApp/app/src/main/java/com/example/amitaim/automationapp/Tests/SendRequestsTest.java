@@ -25,6 +25,7 @@ public class SendRequestsTest extends AutomaticTest {
     private String userName;
     private String password;
     private String realm = "usernamePassword";
+    private String method = "post";
     private String type; //string; hash; json; byte; error
     private String testString = "Testing this string";
     JSONObject testJson = new JSONObject();
@@ -35,38 +36,54 @@ public class SendRequestsTest extends AutomaticTest {
         userName = session.getParms().get("userName");
         password = session.getParms().get("password");
         type = session.getParms().get("type");
+        method = session.getParms().get("method") != null ? session.getParms().get("method")  : WLResourceRequest.POST;
     }
 
     @Override
     public void run() {
         AndroidChallengeHandler challengeHandler = new AndroidChallengeHandler(realm,userName,password);
-        MainActivity.client.registerChallengeHandler(challengeHandler);
         try {
             URI adapterPath ;
+            if (type.equals("empty") || method != null) {
+                String _method = method;
+                if (method.equals("head")) _method = "get";
+                if (method.equals("options")) _method = "get";
+                if (method.equals("trace")) _method = "get";
+                adapterPath = new URI("http://httpbin.org/" + _method);
+            }
             switch (type){
                 case "empty":
-                    adapterPath = new URI("/adapters/testSend/users/testRequestString");
+                    String _method = method;
+                    if (method.equals("head")) _method = "get";
+                    if (method.equals("options")) _method = "get";
+                    if (method.equals("trace")) _method = "get";
+                    adapterPath = new URI("http://httpbin.org/" + _method);
                     break;
                 case "string":
+                    MainActivity.client.registerChallengeHandler(challengeHandler);
                     adapterPath = new URI("/adapters/testSend/users/testRequestString");
                     break;
                 case "hash":
+                    MainActivity.client.registerChallengeHandler(challengeHandler);
                     adapterPath = new URI("/adapters/testSend/users/testRequestHash");
                     break;
                 case "json":
+                    MainActivity.client.registerChallengeHandler(challengeHandler);
                     adapterPath = new URI("/adapters/testSend/users/testRequestJson");
                     break;
                 case "byte":
+                    MainActivity.client.registerChallengeHandler(challengeHandler);
                     adapterPath = new URI("/adapters/testSend/users/testRequestByte");
                     break;
                 case "error":
+                    MainActivity.client.registerChallengeHandler(challengeHandler);
                     adapterPath = new URI("/adapters/testSend/users/errorPath");
                     break;
                 default:
                     MainActivity.AutomationServer.result = "Failure, no such type! ";
                     return;
             }
-            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, WLResourceRequest.POST) : new WLResourceRequest(adapterPath, WLResourceRequest.POST, scope);
+            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, method) : new WLResourceRequest(adapterPath, method, scope);
             switch (type){
                 case "string":
                 case"error":
@@ -105,7 +122,7 @@ public class SendRequestsTest extends AutomaticTest {
                 MainActivity.AutomationServer.result = "Success";
             else if(type.equals("json") && response.getResponseText().equals(testJson.toString()))
                 MainActivity.AutomationServer.result = "Success";
-            else if(type.equals("empty") && response.getResponseText().equals(""))
+            else if(type.equals("empty") && (response.getResponseText().contains(method) || response.getStatus() == 200))
                 MainActivity.AutomationServer.result = "Success";
             else if (response.getResponseText().equals(testString))
                 MainActivity.AutomationServer.result = "Success";
