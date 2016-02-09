@@ -1,8 +1,10 @@
+#!/bin/sh
+
 deviceURL=http://127.0.0.1:10081/
 ios_deviceURL=http://127.0.0.1:8080/
 PROJ_NAME=hybridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
-TARGET=Nexus_5_API_21_hybrid
+TARGET=Nexus_5_API_23_hybrid
 TARGET_PARAM="--target=$TARGET"
 IOS_TARGET=hybrid_IOS
 device=emulator-5554
@@ -19,11 +21,30 @@ cd $SCRIPTS_PATH
 
 cd $PROJ_NAME
 
-#run on device - xwalk needs real device
-#cordova run android $TARGET_PARAM
-cordova run android
+appName=io.cordova.hellocordova
+REPORT_NAME=Nexus_5_API_23_hybrid
+
+/Users/bob/Library/Android/sdk/tools/emulator -avd $TARGET -netspeed full -netdelay none  &
+
+output=''
+while [[ ${output:0:7} != 'stopped' ]]; do
+  output=`adb shell getprop init.svc.bootanim`
+  sleep 5
+done
+
+echo "emulator is up"
+
+adb -s $device uninstall $appName 
+echo "echo adb -s $device install /Users/bob/Documents/Developer/Quickbuild/scripts/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk"
+adb -s $device install /Users/bob/Documents/Developer/Quickbuild/scripts/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk
 
 adb -s $device forward tcp:10081 tcp:10080
+
+adb -s $device shell am start -n "$appName/$appName.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+mkdir /Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET/
+adb -s $device logcat > /Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET.logcat.log & PID=$!
+
+sleep 10
 
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/$TARGET
