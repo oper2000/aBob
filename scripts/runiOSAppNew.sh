@@ -33,7 +33,7 @@ if [[ $using_simulator = "YES" ]]; then
 xcrun instruments -w "$DEVICE"
 sleep 15
 echo "$TEST_ROOT"
-if [[ "WATCH_APP" == "No" ]]; then
+if [[ "$WATCH_APP" == "No" ]]; then
 xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME"
 xcrun simctl install booted "$APP_NAME.app"
 xcrun simctl launch  booted "com.worklight.ibm.$APP_NAME"

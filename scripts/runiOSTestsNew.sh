@@ -1,4 +1,4 @@
-WATCH="Apple Watch - 42mm (2.1) [DAD9D841-024E-4DD4-86C5-162E6DE5B2D3]"
+WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
 Watch_Url=http://127.0.0.1:10080/
 DESTINATION_DEVICE='generic/platform=iOS'
 DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=latest'
