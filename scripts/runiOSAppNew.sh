@@ -31,7 +31,7 @@ source ~/.bash_profile
 cd "$TEST_ROOT"
 if [[ $using_simulator = "YES" ]]; then
 xcrun instruments -w "$DEVICE"
-sleep 15
+sleep 30
 echo "$TEST_ROOT"
 if [[ "$WATCH_APP" == "No" ]]; then
 xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME"
@@ -48,7 +48,7 @@ echo ios device: ${DEVICE}
 ios-deploy -i $DEVICE --uninstall_only --bundle_id com.worklight.ibm.$APP_NAME
 ios-deploy -i $DEVICE --justlaunch --bundle $TEST_ROOT${APP_NAME}Device.app
 fi
-sleep 5
+sleep 10
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=$REPORT_DIR -DtestFile=$TEST_FILE -DdeviceUrl=$DEVICE_URL
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=$REPORT_DIR
 
