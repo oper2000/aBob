@@ -586,6 +586,96 @@ function testFailurePinTrustedCertificatePublicKey(){
       pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
 }
 
+function testGET(){
+	testMethod('get', null);
+}
+
+function testGETWithData(){
+	testMethod('get', "data");
+}
+
+function testHEAD(){
+	testMethod('head', null);
+}
+
+function testHEADWithData(){
+	testMethod('head', "data");
+}
+
+function testOPTIONSWithData(){
+	testMethod('options', "data");
+}
+
+function testOPTIONS(){
+	testMethod('options', null);
+}
+
+function testDELETEWithData(){
+	testMethod('delete', "data");
+}
+
+function testDELETE(){
+	testMethod('delete', null);
+}
+
+function testPUT(){
+	testMethod('put', null);
+}
+
+function testPUTWithData(){
+	testMethod('put', "data");
+}
+
+function testPOST(){
+	testMethod('post', null);
+}
+
+function testPOSTWithData(){
+	testMethod('post', "data");
+}
+
+function testMethod(method, data){
+	try{
+	    var _method = method;
+	    if (method == 'options') _method = 'get';
+	    if (method == 'head') _method = 'get';
+		var request = new WLResourceRequest('http://httpbin.org/' + _method, method.toUpperCase());
+		request.setQueryParameter('params', [5, 6]);
+		request.getQueryParameters();
+		request.setTimeout(60000);
+		if (request.getTimeout() != 60000){
+				var data = {"status":"testMethod - request.getTimeout failure"};
+				return WL.App.sendActionToNative("testMethod", data);
+		}
+		request.getTimeout();
+		request.send(data).then(
+      	function(response) {
+      	    var response = JSON.stringify(response);
+      	 	console.log("testMethod " + response);
+      	 	if (response.indexOf("200") > -1) {
+				WL.App.sendActionToNative("testMethod", statusSuccess);
+			}
+			else {
+				var data = {"status":"testMethod failure"};
+				WL.App.sendActionToNative("testMethod", data);
+			}
+          // success flow, the result can be found in response.responseJSON
+      	},
+      	function(error) {
+          // failure flow
+          // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
+      	}
+ 		).fail(function(){
+ 			console.log("testMethod failure");
+			var data = {"status":"testMethod failure"};
+			WL.App.sendActionToNative("testMethod", data);
+ 		});
+	}catch(err){
+		var data = {"status":"testMethod failure"};
+		WL.App.sendActionToNative("testMethod	", data);
+	}
+}
+
 function pinCertificateAndGetGoogleResource(testName,certificateName){
   WL.Client.pinTrustedCertificatePublicKey(certificateName).then(function(val) {
 			try{

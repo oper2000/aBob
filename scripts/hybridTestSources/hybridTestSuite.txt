@@ -28,3 +28,15 @@ Test SimpleDialog;testReloadApp;Success
 Test SimpleDialog;testHeartbeat;Success
 Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
 Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure
+Test GET;testGET;Success
+Test GET with data;testGETWithData;Success
+Test HEAD;testHEAD;Success
+Test HEAD with data;testHEADWithData;Success
+Test OPTIONS;testOPTIONS;Success
+Test OPTIONS with data;testOPTIONSWithData;Success
+Test DELETE;testDELETE;Success
+Test DELETE with data;testDELETEWithData;Success
+Test PUT;testPUT;Success
+Test PUT with data;testPUTWithData;Success
+Test POST;testPOST;Success
+Test POST with data;testPOSTWithData;Success
