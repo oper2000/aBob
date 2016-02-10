@@ -38,7 +38,7 @@ adb -s $device forward tcp:10081 tcp:10080
 
 adb -s $device shell am start -n "$appName/$appName.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 mkdir $SCRIPTS_PATH/../Reports/latest/$TARGET/
-adb -s $device logcat > $SCRIPTS_PATH/../Reports/latest/$TARGET.logcat.log & PID=$!
+adb -s $device logcat > $SCRIPTS_PATH/../Reports/latest/$TARGET/logcat.log & PID=$!
 
 sleep 10
 
