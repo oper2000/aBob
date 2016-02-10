@@ -83,7 +83,7 @@ public class SendRequestsTest extends AutomaticTest {
                     MainActivity.AutomationServer.result = "Failure, no such type! ";
                     return;
             }
-            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, method) : new WLResourceRequest(adapterPath, method, scope);
+            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, method) : new WLResourceRequest(adapterPath, method.toUpperCase(), scope);
             switch (type){
                 case "string":
                 case"error":
