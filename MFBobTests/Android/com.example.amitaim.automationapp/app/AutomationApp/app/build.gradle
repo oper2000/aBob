@@ -45,5 +45,13 @@ dependencies {
     //compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.2.0'
     //compile(name:'ibmmobilefirstplatformfoundation', ext:'aar')
-    compile 'com.ibm.mobile.foundation:ibmmobilefirstplatformfoundation:8.0.Beta1-SNAPSHOT'
+    //compile 'com.ibm.mobile.foundation:ibmmobilefirstplatformfoundation:8.0.Beta1-SNAPSHOT'
+    compile group: 'com.ibm.mobile.foundation',
+            name: 'ibmmobilefirstplatformfoundation',
+            version: '8.0.Beta1-SNAPSHOT',
+            changing: true
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
