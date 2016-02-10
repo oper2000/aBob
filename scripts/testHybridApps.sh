@@ -5,14 +5,12 @@ ios_deviceURL=http://127.0.0.1:8080/
 PROJ_NAME=hybridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
 TARGET=Nexus_5_API_23_hybrid
-TARGET_PARAM="--target=$TARGET"
 IOS_TARGET=hybrid_IOS
 device=emulator-5554
 
 if [ ! -d $SCRIPTS_PATH ]
 then
 	SCRIPTS_PATH=.
-	TARGET_PARAM=""
 fi
 
 cd $SCRIPTS_PATH
@@ -22,7 +20,7 @@ cd $SCRIPTS_PATH
 cd $PROJ_NAME
 
 appName=io.cordova.hellocordova
-REPORT_NAME=Nexus_5_API_23_hybrid
+REPORT_NAME=$TARGET
 
 /Users/bob/Library/Android/sdk/tools/emulator -avd $TARGET -netspeed full -netdelay none  &
 
