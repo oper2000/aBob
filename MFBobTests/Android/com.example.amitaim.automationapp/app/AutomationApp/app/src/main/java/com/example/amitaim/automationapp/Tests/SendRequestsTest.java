@@ -58,6 +58,8 @@ public class SendRequestsTest extends AutomaticTest {
                     if (method.equals("options")) _method = "get";
                     if (method.equals("trace")) _method = "get";
                     adapterPath = new URI("http://httpbin.org/" + _method);
+                    if(scope!=null)
+                        MainActivity.client.registerChallengeHandler(challengeHandler);
                     break;
                 case "string":
                     MainActivity.client.registerChallengeHandler(challengeHandler);

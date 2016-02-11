@@ -13,7 +13,7 @@ Send HEAD test;SendRequestsTest/?type=empty&method=head;Success
 Send OPTIONS test;SendRequestsTest/?type=empty&method=options;Success
 Send PUT test;SendRequestsTest/?type=empty&method=put;Success
 Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
-Send String test;SendRequestsTest/?type=empty&scope=usernamePassword&userName=a&password=a;Success
+Send String test;SendRequestsTest/?type=empty&method=post&scope=usernamePassword&userName=a&password=a;Success
 Send String test;SendRequestsTest/?type=string&scope=usernamePassword&userName=a&password=a;Success
 Send Hash test;SendRequestsTest/?type=hash&scope=usernamePassword&userName=a&password=a;Success
 Send JSON test;SendRequestsTest/?type=json&scope=usernamePassword&userName=a&password=a;Success
