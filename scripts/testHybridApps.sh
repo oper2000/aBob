@@ -24,7 +24,7 @@ $ANDROID_HOME/tools/emulator -avd $TARGET -netspeed full -netdelay none  &
 
 output=''
 while [[ ${output:0:7} != 'stopped' ]]; do
-  output=`adb shell getprop init.svc.bootanim`
+  output=`adb -s $device shell getprop init.svc.bootanim`
   sleep 5
 done
 
