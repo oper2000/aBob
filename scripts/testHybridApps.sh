@@ -23,31 +23,40 @@ REPORT_NAME=$TARGET
 $ANDROID_HOME/tools/emulator -avd $TARGET -netspeed full -netdelay none  &
 
 output=''
-while [[ ${output:0:7} != 'stopped' ]]; do
+counter=0
+while [[ ${output:0:7} != 'stopped' && $counter -lt 60 ]]; do
+  let counter=counter+1
+  echo $counter
   output=`adb -s $device shell getprop init.svc.bootanim`
   sleep 5
 done
 
-echo "emulator is up"
+if [ ${output:0:7} == 'stopped' ]
+then
+	echo "emulator is up"
+	adb -s $device shell input keyevent 82
 
-adb -s $device uninstall $appName 
-echo "echo adb -s $device install $SCRIPTS_PATH/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk"
-adb -s $device install $SCRIPTS_PATH/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk
+	adb -s $device uninstall $appName 
+	echo "echo adb -s $device install $SCRIPTS_PATH/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk"
+	adb -s $device install $SCRIPTS_PATH/hybridProj/platforms/android/build/outputs/apk/android-x86-debug.apk
 
-adb -s $device forward tcp:10081 tcp:10080
+	adb -s $device forward tcp:10081 tcp:10080
 
-adb -s $device shell am start -n "$appName/$appName.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
-mkdir $SCRIPTS_PATH/../Reports/latest/$TARGET/
-adb -s $device logcat > $SCRIPTS_PATH/../Reports/latest/$TARGET/logcat.log & PID=$!
+	adb -s $device shell am start -n "$appName/$appName.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+	mkdir $SCRIPTS_PATH/../Reports/latest/$TARGET/
+	adb -s $device logcat > $SCRIPTS_PATH/../Reports/latest/$TARGET/logcat.log & PID=$!
 
-sleep 10
+	sleep 10
 
-ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
-ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET
+	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
+	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET
 
-# Kill android emulator
-ps -ef | grep emulator64-x86
-killall emulator64-x86
+	# Kill android emulator
+	ps -ef | grep emulator64-x86
+	killall emulator64-x86
+else
+  	echo "Error:Simulator did not start successfully"
+fi
 
 cd $PROJ_NAME
 
