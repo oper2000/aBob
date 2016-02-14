@@ -26,7 +26,7 @@ output=''
 counter=0
 while [[ ${output:0:7} != 'stopped' && $counter -lt 60 ]]; do
   let counter=counter+1
-  echo $counter
+  #echo $counter
   output=`adb -s $device shell getprop init.svc.bootanim`
   sleep 5
 done

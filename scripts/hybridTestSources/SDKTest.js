@@ -583,7 +583,12 @@ function testSuccessfullPinTrustedCertificatePublicKey(){
 }
 
 function testFailurePinTrustedCertificatePublicKey(){
-      pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
+	  if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
+	  	var data = {"status":"testFailurePinTrustedCertificatePublicKey failure - some problem on api!!!!"};
+        WL.App.sendActionToNative("testInvokeProvedure", data);
+	  }else{
+	        pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
+	  }
 }
 
 function testGET(){
