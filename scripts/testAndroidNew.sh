@@ -80,6 +80,8 @@ for d in */ ; do
  if [[ "$1" = "compile" ]]; then
  yes |cp "$(pwd)/../testSuite.txt" "$(pwd)/${d2}app/src/main/assets/testSuite.txt"
  /Users/bob/Documents/Developer/Quickbuild/scripts/compileAndroidApp.sh $(pwd)/$d2
+ rc=$?; if [[ $rc != 0 ]]; then
+ echo ***build failed***; exit $rc; fi
  fi
  if [[ "$1" != "compile" ]]; then
  while [ $deviceCounter -gt 1 ]
