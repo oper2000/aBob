@@ -69,3 +69,5 @@ ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$SCRIPTS_
 
 killall "Simulator"
 
+$SCRIPTS_PATH/hybridTestSources/verifyTestResultsOnLogcat.sh
+
