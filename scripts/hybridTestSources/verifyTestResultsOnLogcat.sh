@@ -1,6 +1,6 @@
 resultMissing=""
 iosSimulatorFolder=`ls -td -- ~/Library/Logs/CoreSimulator/*/ | head -n 1`
-for txt2verify in {"wl.test : debug \[1,2,3\]","wl.test : log testLogger:log message","wl.test : info 1 2 3","wl.test : error Error: testLogger:oh no","wl.test : fatal testLogger: fatal message","MyTestReceiver found. Removing","Showing Splash Screen","testReloadApp","ffff"}
+for txt2verify in {"wl.test : debug \[1,2,3\]","wl.test : log testLogger:log message","wl.test : info 1 2 3","wl.test : error Error: testLogger:oh no","wl.test : fatal testLogger: fatal message","MyTestReceiver found. Removing","Showing Splash Screen","testReloadApp"}
 do
 	found=`grep -c "$txt2verify" ../Reports/latest/$1/logcat.log`  
 	if [[ $found == 0 ]]; then
