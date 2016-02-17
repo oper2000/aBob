@@ -4,6 +4,7 @@ deviceURL=http://127.0.0.1:10081/
 ios_deviceURL=http://127.0.0.1:8080/
 PROJ_NAME=hybridProj
 SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
+REPROTS_PATH=/Users/bob/Documents/Developer/Quickbuild/Reports
 TARGET=Nexus_5_API_23_hybrid
 IOS_TARGET=hybrid_IOS
 device=emulator-5554
@@ -11,6 +12,7 @@ device=emulator-5554
 if [ ! -d $SCRIPTS_PATH ]
 then
 	SCRIPTS_PATH=.
+	REPROTS_PATH=$SCRIPTS_PATH/../Reports
 fi
 
 cd $SCRIPTS_PATH
@@ -48,8 +50,8 @@ then
 
 	sleep 10
 
-	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
-	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$TARGET
+	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
+	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$TARGET
 
 	# Kill android emulator
 	ps -ef | grep emulator64-x86
@@ -64,8 +66,8 @@ cordova emulate ios
 
 sleep 15
 
-ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$IOS_TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $ios_deviceURL
-ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$SCRIPTS_PATH/../Reports/latest/$IOS_TARGET
+ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $ios_deviceURL
+ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET
 
 killall "Simulator"
 
