@@ -445,22 +445,14 @@ function testGlobalHeader(){
 	try{
 	    WL.Client.addGlobalHeader("WLHYBRIDHEADER", "MYHEADER");
 	    WL.Client.addGlobalHeader("WLHYBRIDHEADER2", "MYHEADER2");
-	    WL.Client.removeGlobalHeader("WLHYBRIDHEADER2");
-		var request = new WLResourceRequest('http://httpbin.org/headers', WLResourceRequest.GET);
-		request.setQueryParameter('params', [5, 6]);
-		request.getQueryParameters();
-		request.setTimeout(60000);
-		if (request.getTimeout() != 60000){
-				var data = {"status":"testGlobalHeader - request.getTimeout failure"};
-				return WL.App.sendActionToNative("testGlobalHeader", data);
-		}
-		request.getTimeout();
+	    var request = getRequest();
 		request.send().then(
       	function(response) {
       	    var response = JSON.stringify(response);
       	 	console.log("testAddHeader " + response);
       	 	if (response.indexOf("MYHEADER") > -1) {
-				WL.App.sendActionToNative("testGlobalHeader", statusSuccess);
+      	 		WL.Client.removeGlobalHeader("WLHYBRIDHEADER2");
+      	 		testRemoveGlobalHeader();
 			}
 			else {
 				var data = {"status":"testGlobalHeader failure"};
@@ -469,9 +461,7 @@ function testGlobalHeader(){
           // success flow, the result can be found in response.responseJSON
       	},
       	function(error) {
-          // failure flow
-          // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
-      	}
+        }
  		).fail(function(){
  			console.log("testGlobalHeader failure");
 			var data = {"status":"testGlobalHeader failure"};
@@ -481,6 +471,48 @@ function testGlobalHeader(){
 		var data = {"status":"testGlobalHeader failure"};
 		WL.App.sendActionToNative("testGlobalHeader", data);
 	}
+}
+
+function testRemoveGlobalHeader(){
+	try{
+        var request = getRequest();
+		request.send().then(
+			function(response) {
+				var response = JSON.stringify(response);
+				console.log("testAddHeader " + response);
+				if (response.indexOf("MYHEADER2") > -1) {
+					var data = {"status":"testGlobalHeader remove failure"};
+					WL.App.sendActionToNative("testGlobalHeader", data);
+				}
+				else {
+					WL.App.sendActionToNative("testGlobalHeader", statusSuccess);
+				}
+			  // success flow, the result can be found in response.responseJSON
+			},
+			function(error) {
+			}
+ 		).fail(function(){
+ 			console.log("testGlobalHeader remove failure");
+			var data = {"status":"testGlobalHeader remove failure"};
+			WL.App.sendActionToNative("testGlobalHeader", data);
+ 		});
+	}catch(err){
+		var data = {"status":"testGlobalHeader remove failure"};
+		WL.App.sendActionToNative("testGlobalHeader", data);
+	}
+}
+
+function getRequest(){
+		var request = new WLResourceRequest('http://httpbin.org/headers', WLResourceRequest.GET);
+		request.setQueryParameter('params', [5, 6]);
+		request.getQueryParameters();
+		request.setTimeout(60000);
+		if (request.getTimeout() != 60000){
+				var data = {"status":"testGlobalHeader remove - request.getTimeout failure"};
+				return WL.App.sendActionToNative("testGlobalHeader", data);
+		}
+		request.getTimeout();
+		return request;
 }
 
 function testSimpleDialog() {
@@ -559,6 +591,36 @@ function testInvokeProcedure(){
 		console.error("fail");
 		var data = {"status":"testInvokeProvedure failure"};
         WL.App.sendActionToNative("testInvokeProvedure", data);
+	}
+}
+
+function testInvokeProcedureHeaders(){
+
+	WL.Client.addGlobalHeader("MyCustomHeader","1234567");
+	var invocationData = {
+			adapter : "testInvoke",
+			procedure: "globalHeader",
+			parameters: []
+	};
+
+	WL.Client.invokeProcedure(invocationData, {
+		onSuccess: invokeProcedureOK,
+		onFailure: invokeProcedureFAIL
+	});
+
+	function invokeProcedureOK(response) {
+		if(response.invocationResult.MyCustomHeader != "1234567"){
+        	var data = {"status":"testInvokeProcedureHeaders failure"};
+        	WL.App.sendActionToNative("testInvokeProcedureHeaders", data);
+        } else {
+        	WL.App.sendActionToNative("testInvokeProcedureHeaders", statusSuccess);
+        }
+
+	}
+
+	function invokeProcedureFAIL(response) {
+		var data = {"status":"testInvokeProcedureHeaders failure"};
+        WL.App.sendActionToNative("testInvokeProcedureHeaders", data);
 	}
 }
 
