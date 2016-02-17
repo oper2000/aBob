@@ -8,8 +8,8 @@ fi
 echo "creating project $1"
 cordova create $1
 cd $1
-cordova platform add ios@4.0.1
-cordova platform add android@5.0.0
+cordova platform add ios
+cordova platform add android
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
 cordova plugin add cordova-plugin-crosswalk-webview
 cordova  plugin add cordova-plugin-mfp
@@ -39,7 +39,8 @@ mfpdev app register
 gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
 
 rm -fr ./platforms/ios
-tar -zxvf ../hybridTestSources/ios.tar.gz -C platforms
+echo "extracting the ios project from tar file ios.tar.gz...."
+tar -zxf ../hybridTestSources/ios.tar.gz -C platforms
 cordova plugin update cordova-plugin-mfp --save
 
 mfpdev app config android_security_test_web_resources_checksum true
