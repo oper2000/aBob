@@ -138,14 +138,29 @@ function testEncryptDecrypt(){
 
 function testSetServerUrl(){
 
-    WL.App.setServerUrl("http://9.148.49.79:9080/mfp/api",
+	var data = {"status":"testSetServerUrl failure"};
+    WL.App.setServerUrl("http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api",
     function(url){
          console.log("WL.App.setServerUrl:"+url);
-		WL.App.sendActionToNative("testSetServerUrl", statusSuccess);
+         WL.App.getServerUrl(
+ 		function(url2){
+ 			console.log("WL.App.getServerUrl:"+url2);
+ 			if(url2=="http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api/"){
+ 			WL.App.sendActionToNative("testGetServerUrl", statusSuccess);
+ 			}
+ 			else
+ 			{
+ 			WL.App.sendActionToNative("testSetServerUrl", data);
+ 			}
+			
+ 		},function(err){
+ 			console.log("WL.App.getServerUrl: Failure");
+			WL.App.sendActionToNative("testSetServerUrl", data);
+ 		});
+		
     },function(err){
          console.log("WL.App.setServerUrl: Failure");
-		var data = {"status":"testSetServerUrl failure"};
-		WL.App.sendActionToNative("testSetServerUrl", data);
+		 WL.App.sendActionToNative("testSetServerUrl", data);
     });
 //    WL.Client.reloadApp();
 }
