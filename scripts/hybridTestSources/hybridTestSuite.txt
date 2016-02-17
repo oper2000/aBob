@@ -24,8 +24,8 @@ Test GlobalHeader;testGlobalHeader;Success
 Test Init;testInit;Success
 Test Show native page;testShowNativePage;Success
 Test SimpleDialog;testSimpleDialog;Success
-Test SimpleDialog;testReloadApp;Success
-Test SimpleDialog;testHeartbeat;Success
+Test ReloadApp;testReloadApp;Success
+Test Heartbeat;testHeartbeat;Success
 Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
 Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure
 Test GET;testGET;Success

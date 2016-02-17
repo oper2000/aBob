@@ -61,8 +61,6 @@ function testBase64EncodeDecode(){
                     WL.App.sendActionToNative("testBase64Decode", data);
         		});
 
-  			console.log("WL.SecurityUtils.base64Encode: Success.");
-            WL.App.sendActionToNative("testBase64Encode", statusSuccess);
 		},function(val){
 			console.log(val);
 		}).fail(function(){
