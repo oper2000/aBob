@@ -728,14 +728,25 @@ function testMethod(method, data){
 	    if (method == 'options') _method = 'get';
 	    if (method == 'head') _method = 'get';
 		var request = new WLResourceRequest('http://httpbin.org/' + _method, method.toUpperCase());
-		request.setQueryParameter('params', [5, 6]);
-		request.getQueryParameters();
+		request.setQueryParameter('params', 5);
+        if (JSON.stringify(request.getQueryParameters())!="{\"params\":5}") {
+            var data = {"status":"testMethod - request.setQueryParameter failure"};
+			return WL.App.sendActionToNative("testMethod", data);
+        }
+        request.setQueryParameters({'key1':'value1','key2':6});
+        if (JSON.stringify(request.getQueryParameters())!="{\"key1\":\"value1\",\"key2\":6}") {
+            var data = {"status":"testMethod - request.setQueryParameters failure"};
+			return WL.App.sendActionToNative("testMethod", data);
+        }
 		request.setTimeout(60000);
 		if (request.getTimeout() != 60000){
 				var data = {"status":"testMethod - request.getTimeout failure"};
 				return WL.App.sendActionToNative("testMethod", data);
 		}
-		request.getTimeout();
+		if (request.getMethod() != method.toUpperCase()){
+			var data = {"status":"testResourceRequest - request.getMethod failure"};
+			return WL.App.sendActionToNative("testResourceRequest", data);
+		}
 		request.send(data).then(
       	function(response) {
       	    var response = JSON.stringify(response);
@@ -761,6 +772,78 @@ function testMethod(method, data){
 	}catch(err){
 		var data = {"status":"testMethod failure"};
 		WL.App.sendActionToNative("testMethod	", data);
+	}
+}
+
+function testHeaders() {
+    try{
+	    var request = new WLResourceRequest('http://httpbin.org/headers', WLResourceRequest.GET);
+        request.addHeader("WLHEADER", "MYHEADER");
+	    request.setHeader("WLHEADER2", "MYHEADER2");
+        var statusFailure = {"status":"Failure header value is different than expected"};
+        if(request.getHeader("WLHEADER")!= "MYHEADER" || request.getHeader("WLHEADER2")!= "MYHEADER2"){
+		   return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        request.setHeader("WLHEADER","MYHEADER1");
+         if(request.getHeader("WLHEADER")!= "MYHEADER1"){
+		   return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+		j1=JSON.stringify(request.getHeaders())
+		if(JSON.stringify(request.getHeaders())!= "{\"WLHEADER2\":\"MYHEADER2\",\"WLHEADER\":\"MYHEADER1\"}"){
+           statusFailure = {"status":"Failure getHeaders values are different than expected"};
+           return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        request.setHeaders({"WLHEADER":"MYHEADER","WLHEADER3":"MYHEADER3"});
+        if(request.getHeader("WLHEADER")!= "MYHEADER" || request.getHeader("WLHEADER3")!= "MYHEADER3"){
+		   return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        if(request.getHeader("WLHEADER5")!= undefined){
+		   return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        if(request.getHeaders("WLHEADER5")!= undefined){
+		   return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+		request.setHeader("WLHEADER2", "MYHEADER2");
+        j1=JSON.stringify(request.getHeaders())
+        j2=JSON.stringify(request.getHeaders("WLHEADER2"))
+        j3=JSON.stringify(request.getHeaderNames())
+		if(JSON.stringify(request.getHeaders())!= "{\"WLHEADER\":\"MYHEADER\",\"WLHEADER3\":\"MYHEADER3\",\"WLHEADER2\":\"MYHEADER2\"}"){
+           statusFailure = {"status":"Failure getHeaders values are different than expected"};
+           return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        if(JSON.stringify(request.getHeaders("WLHEADER2"))!= "[\"MYHEADER2\"]"){
+           statusFailure = {"status":"Failure getHeaders values are different than expected"};
+           return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+        if(JSON.stringify(request.getHeaderNames())!="[\"WLHEADER\",\"WLHEADER3\",\"WLHEADER2\"]"){
+            statusFailure = {"status":"Failure getHeaderNames values are different than expected"};
+            return WL.App.sendActionToNative("testHeaders", statusFailure);
+        }
+
+		request.send().then(
+      	function(response) {
+      	    var response = JSON.stringify(response);
+      	 	console.log("testAddHeader " + response);
+      	 	if (response.indexOf("MYHEADER") > -1 && response.indexOf("MYHEADER2") && response.indexOf("MYHEADER3")
+               && response.indexOf("Wlheader") > -1 && response.indexOf("Wlheader2") && response.indexOf("Wlheader3")) {
+      	 		return WL.App.sendActionToNative("testHeaders", statusSuccess);
+			}
+			else {
+				var data = {"status":"testHeaders failure"};
+				WL.App.sendActionToNative("testHeaders", data);
+			}
+          // success flow, the result can be found in response.responseJSON
+      	},
+      	function(error) {
+        }
+ 		).fail(function(){
+ 			console.log("testHeaders failure");
+			var data = {"status":"testHeaders failure"};
+			WL.App.sendActionToNative("testHeaders", data);
+ 		});
+	}catch(err){
+		var data = {"status":"testHeaders failure"};
+		WL.App.sendActionToNative("testHeaders", data);
 	}
 }
 

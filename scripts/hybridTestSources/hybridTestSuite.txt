@@ -28,6 +28,7 @@ Test ReloadApp;testReloadApp;Success
 Test Heartbeat;testHeartbeat;Success
 Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
 Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure
+Test Resource Request Headers;testHeaders;Success
 Test GET;testGET;Success
 Test GET with data;testGETWithData;Success
 Test HEAD;testHEAD;Success
