@@ -139,7 +139,7 @@ function testEncryptDecrypt(){
 function testSetServerUrl(){
 
 	var data = {"status":"testSetServerUrl failure"};
-    WL.App.setServerUrl("http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api",
+    WL.App.setServerUrl("http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api/",
     function(url){
          console.log("WL.App.setServerUrl:"+url);
          WL.App.getServerUrl(
