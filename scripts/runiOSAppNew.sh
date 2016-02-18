@@ -22,6 +22,7 @@ echo "using simulator $DEVICE"
 killall "Simulator"
 killall "Simulator (Watch)"
 using_simulator="YES"
+sleep 5
 else
 echo "using device $DEVICE"
 fi
