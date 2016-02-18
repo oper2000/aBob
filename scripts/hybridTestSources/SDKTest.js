@@ -267,37 +267,45 @@ function testWLClientCookie(){
           domain: 'google.com',
           path: '/', // all paths
           expires: -1 // never expires
-        });
-    WL.Client.deleteCookie('MFPCookie2');
-	WL.Client.setCookie({
-      name: 'MFPCookie',
-      value: 'cookieValue',
-      domain: 'google.com',
-      path: '/', // all paths
-      expires: -1 // never expires
-    }).then(function() {
-      		WL.Client.getCookies().then(function(val) {
-      		var cookies = JSON.stringify(val);
-      		  	console.log("testWLClientCookie: Success. " + cookies);
-      		  	if (cookies.indexOf("MFPCookie") > -1 && cookies.indexOf("MFPCookie2") <= -1) {
+        }).then(function(){
+            WL.Client.deleteCookie('MFPCookie2').then(function() {
+               	WL.Client.setCookie({
+                name: 'MFPCookie',
+                value: 'cookieValue',
+                domain: 'google.com',
+                path: '/', // all paths
+                expires: -1 // never expires
+                }).then(function() {
+      		        WL.Client.getCookies().then(function(val) {
+      		        var cookies = JSON.stringify(val);
+      		  	     console.log("testWLClientCookie: Success. " + cookies);
+      		  	     if (cookies.indexOf("MFPCookie") > -1 && cookies.indexOf("MFPCookie2") <= -1) {
       		  	      WL.App.sendActionToNative("testWLClientCookie", statusSuccess);
-      		  	}
-      		},function(val){
-      			console.log(val);
-      		}).fail(function(){
-      			console.log("Failed calling testWLClientCookie");
-      			var data = {"status":"Failed calling testWLClientCookie"};
-      			WL.App.sendActionToNative("testWLClient", data);
-      		})
+      		  	      }
+                      else{
+                      var data = {"status":"Failed wrong cookies data"};
+      			      WL.App.sendActionToNative("testWLClient", data); 
+                      }
+      		    },function(val){
+      			   console.log(val);
+      		    }).fail(function(){
+      			   console.log("Failed calling testWLClientCookie");
+      			   var data = {"status":"Failed calling testWLClientCookie"};
+      			   WL.App.sendActionToNative("testWLClient", data);
+      		    });
     }
     ,function(val){
          console.log(val);
+         var data = {"status":"Failed calling WL.Client.getCookies"};
+          WL.App.sendActionToNative("testWLClient", data);
       }).fail(function(){
              			console.log("Failed calling WL.Client.getCookies");
              			var data = {"status":"Failed calling WL.Client.getCookies"};
              			WL.App.sendActionToNative("testWLClient", data);
              		}
-     );
+     ); 
+            });
+        });
 	}catch(err){
 		var data = {"status":"testWLClientCookie failure"};
 		WL.App.sendActionToNative("testWLClientCookie", data);
