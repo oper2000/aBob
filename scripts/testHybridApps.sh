@@ -3,17 +3,11 @@
 deviceURL=http://127.0.0.1:10081/
 ios_deviceURL=http://127.0.0.1:8080/
 PROJ_NAME=hybridProj
-SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts
-REPROTS_PATH=/Users/bob/Documents/Developer/Quickbuild/Reports
+SCRIPTS_PATH=~/Documents/Developer/Quickbuild/scripts
+REPROTS_PATH=~/Documents/Developer/Quickbuild/Reports
 TARGET=Nexus_5_API_23_hybrid
 IOS_TARGET=hybrid_IOS
 device=emulator-5554
-
-if [ ! -d $SCRIPTS_PATH ]
-then
-	SCRIPTS_PATH=.
-	REPROTS_PATH=$SCRIPTS_PATH/../Reports
-fi
 
 cd $SCRIPTS_PATH
 
@@ -45,8 +39,8 @@ then
 	adb -s $device forward tcp:10081 tcp:10080
 
 	adb -s $device shell am start -n "$appName/$appName.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
-	mkdir $SCRIPTS_PATH/../Reports/latest/$TARGET/
-	adb -s $device logcat > $SCRIPTS_PATH/../Reports/latest/$TARGET/logcat.log & PID=$!
+	mkdir $REPROTS_PATH/latest/$TARGET/
+	adb -s $device logcat > $REPROTS_PATH/latest/$TARGET/logcat.log & PID=$!
 
 	sleep 10
 
