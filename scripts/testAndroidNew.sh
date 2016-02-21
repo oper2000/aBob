@@ -60,13 +60,19 @@ for d in */ ; do
  pwd
  if [[ "$1" = "compile" ]]; then
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployAndroidApp.sh ${d%?} 1
+ rc=$?; if [[ $rc != 0 ]]; then
+ echo ***deployAndroidApp failed***; exit $rc; fi
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployAndroidApp.sh ${d%?} 1.0
+ rc=$?; if [[ $rc != 0 ]]; then
+ echo ***deployAndroidApp failed***; exit $rc; fi
  fi
  if  [ -d "./adapters" ] && [ "$1" = "compile" ] ; then
  	cd adapters/
  	for a in * ; do
    		echo "$a\n"
    		/Users/bob/Documents/Developer/Quickbuild/scripts/deployAdapter.sh $a
+   		 rc=$?; if [[ $rc != 0 ]]; then
+ 		 echo ***deployAdapter failed***; exit $rc; fi
  	done
  	cd ../
  fi
