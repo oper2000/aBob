@@ -72,6 +72,10 @@ function testBase64EncodeDecode(){
 
 
 function testEnableOSNativeEncryption(){
+        if (navigator.userAgent.indexOf("Android") > -1 && WL.Client.getEnvironment() === WL.Environment.ANDROID) {
+	    	console.log("Android Environment, skipping test");
+            return WL.App.sendActionToNative("testEnableOSNativeEncryption", statusSuccess);
+		}
 		WL.SecurityUtils.enableOSNativeEncryption(true).then(function(val) {
 		  	console.log("WL.SecurityUtils.base64Decode: Success.");
   			var data = {"status":"success"};
@@ -82,6 +86,27 @@ function testEnableOSNativeEncryption(){
 			console.log("Failed calling WL.SecurityUtils.testEnableOSNativeEncryption");
 			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption"};
 			WL.App.sendActionToNative("testEncrypt", data);
+		});
+}
+
+function testDisableOSNativeEncryption(){
+        if (navigator.userAgent.indexOf("Android") > -1 && WL.Client.getEnvironment() === WL.Environment.ANDROID) {
+	    	console.log("Android Environment, skipping test");
+            return WL.App.sendActionToNative("testEnableOSNativeEncryption", statusSuccess);
+		}
+		WL.SecurityUtils.enableOSNativeEncryption(false).then(function(val) {
+            console.log("was able to call WL.SecurityUtils.testEnableOSNativeEncryption");
+			var data = {"status":"Failed: was able to call WL.SecurityUtils.testEnableOSNativeEncryption"};
+			WL.App.sendActionToNative("testEncrypt", data);
+		},function(val){
+			console.log(val);
+            if(val.msg=="Missing IBM OpenSSL bridge framework. Add the IBMMobileFirstPlatformFoundationOpenSSLUtils framework to your project"){
+				WL.App.sendActionToNative("testDisableOSNativeEncryption", statusSuccess); 
+            }
+            else{
+            	var data = {"status":"Failed, expecting different error msg: "+val.msg};
+				WL.App.sendActionToNative("testDisableOSNativeEncryption", data);
+            }
 		});
 }
 
@@ -110,7 +135,12 @@ function testEncryptDecrypt(){
 	  // Remove the key from memory.
 	  key = null;
 	  console.log("secret:"+res);
-	  WL.App.sendActionToNative("test101", {"status":"Success"});
+      if(res=='My secret text'){
+	       WL.App.sendActionToNative("testEncryptDecrypt", {"status":"Success"});
+      }
+      else{
+          WL.App.sendActionToNative("testEncryptDecrypt", {"status":"Decrypt failed"});
+      }
 	  //res => 'My secret text'
 	}).fail(function (err) {
 	  // Handle failure in any of the previously called APIs.

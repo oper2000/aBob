@@ -1,6 +1,8 @@
 #Test Display Name;                Path(Test Class Name)/Parameters;            Expected Result
 Test Base64 Encoding;testBase64EncodeDecode;Success
 Test Encryption;testEncryptDecrypt;Success
+Test testEnableOSNativeEncryption;testEnableOSNativeEncryption;Success
+Test testEnableOSNativeEncryption Negative test;testDisableOSNativeEncryption;Success
 Test RandomString;testLocalRandomString;Success
 Test GetServerUrl test;testGetServerUrl;Success
 Test SetServerUrl test;testSetServerUrl;Success
