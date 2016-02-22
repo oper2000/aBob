@@ -100,11 +100,11 @@ function testDisableOSNativeEncryption(){
 			WL.App.sendActionToNative("testEncrypt", data);
 		},function(val){
 			console.log(val);
-            if(val.msg=="Missing IBM OpenSSL bridge framework. Add the IBMMobileFirstPlatformFoundationOpenSSLUtils framework to your project"){
+            if(val.msg.indexOf("Missing IBM OpenSSL bridge framework.") > -1){
 				WL.App.sendActionToNative("testDisableOSNativeEncryption", statusSuccess); 
             }
             else{
-            	var data = {"status":"Failed, expecting different error msg: "+val.msg};
+            	var data = {"status":"Failed, expecting different error msg than: "+val.msg};
 				WL.App.sendActionToNative("testDisableOSNativeEncryption", data);
             }
 		});
