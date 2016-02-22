@@ -368,17 +368,57 @@ function testSplashScreen() {
 }
 
 function testResourceRequest(){
+	testResourceRequest();
+}
+
+function testResourceRequestGetQuery(){
+	testResourceRequest("get-query");
+}
+
+function testResourceRequestGetForm(){
+	testResourceRequest("get-form");
+}
+
+function testResourceRequestPostQuery(){
+	testResourceRequest("post-query");
+}
+
+function testResourceRequestPostForm(){
+	testResourceRequest("post-form");
+}
+
+function testResourceRequest(type){
 	try{
 		var request = new WLResourceRequest('/adapters/account/balance', WLResourceRequest.GET);
-		request.setQueryParameter('params', [5, 6]);
-		request.getQueryParameters();
+		if (!type) {
+		    request = new WLResourceRequest('/adapters/account/balance', WLResourceRequest.GET);
+			request.setQueryParameter('params', [5, 6]);
+        	request.getQueryParameters();
+		}
+		else if (type == "get-query") {
+			request = new WLResourceRequest('/adapters/bankAdapterUnprotected/view/balanceGet', WLResourceRequest.GET);
+        	request.setQueryParameter('params', [5, 6]);
+		}
+		else if (type == "get-form") {
+		    request = new WLResourceRequest('/adapters/bankAdapterUnprotected/view/balanceGet', WLResourceRequest.GET);
+            request.sendFormParameters({ "params" : "[5, 6])" });
+		}
+		else if (type == "post-query") {
+		    request = new WLResourceRequest('/adapters/bankAdapterUnprotected/view/balancePost', WLResourceRequest.POST);
+        	request.setQueryParameter('params', [5, 6]);
+		}
+		else if (type == "post-form") {
+			request = new WLResourceRequest('/adapters/bankAdapterUnprotected/view/balancePost', WLResourceRequest.POST);
+        	request.sendFormParameters({ "params" : "[5, 6])" });
+        }
+
 		request.setTimeout(60000);
 		if (request.getTimeout() != 60000){
 				var data = {"status":"testResourceRequest - request.getTimeout failure"};
 				return WL.App.sendActionToNative("testResourceRequest", data);
 		}
 		request.getTimeout();
-		if (request.getUrl() != "/adapters/account/balance"){
+		if (request.getUrl().indexOf("balance") <= -1){
 			var data = {"status":"testResourceRequest - request.getUrl failure"};
 			return WL.App.sendActionToNative("testResourceRequest", data);
 		}
