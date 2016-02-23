@@ -507,8 +507,16 @@ function testRemoveActionReceiver(){
 
 function testInit() {
 	try{
-	    console.log("testInit: " + WL.Client.init());
-      	WL.App.sendActionToNative("testInit", statusSuccess);
+	    console.log("testInit: " + WL.Client.init({
+	    onSuccess: function(){
+	    	WL.App.sendActionToNative("testInit", statusSuccess);
+	    },
+	    onFailure: function(){
+	    	var data = {"status":"testInit Failed"};
+			WL.App.sendActionToNative("testInit", data);
+	    }
+	    
+	    }));
 	}catch(err){
 		var data = {"status":"testInit Failed"};
 		WL.App.sendActionToNative("testInit", data);
