@@ -658,13 +658,13 @@ function testInvokeProcedure(){
 
 	function invokeProcedureOK(response) {
 		console.log("ok");
-		WL.App.sendActionToNative("testInvokeProvedure", statusSuccess);
+		WL.App.sendActionToNative("testInvokeProcedure", statusSuccess);
 	}
 
 	function invokeProcedureFAIL(response) {
 		console.error("fail");
-		var data = {"status":"testInvokeProvedure failure"};
-        WL.App.sendActionToNative("testInvokeProvedure", data);
+		var data = {"status":"testInvokeProcedure failure"};
+        WL.App.sendActionToNative("testInvokeProcedure", data);
 	}
 }
 
@@ -763,7 +763,7 @@ function testSuccessfullPinTrustedCertificatePublicKey(){
 function testFailurePinTrustedCertificatePublicKey(){
 	  if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
 	  	var data = {"status":"testFailurePinTrustedCertificatePublicKey failure - some problem on api!!!!"};
-        WL.App.sendActionToNative("testInvokeProvedure", data);
+        WL.App.sendActionToNative("testInvokeProcedure", data);
 	  }else{
 	        pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
 	  }
