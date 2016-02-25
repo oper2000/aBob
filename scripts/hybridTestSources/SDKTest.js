@@ -469,31 +469,6 @@ function testResourceRequest(type){
 	}
 }
 
-function testInvokeProcedure(){
-	var invocationData = {
-			adapter : "testInvoke",
-			procedure: "hello",
-			parameters: []
-	};
-
-	WL.Client.invokeProcedure(invocationData, {
-		onSuccess: invokeProcedureOK,
-		onFailure: invokeProcedureFAIL
-	});
-
-	function invokeProcedureOK(response) {
-		console.log("ok");
-		WL.App.sendActionToNative("testInvokeProvedure", statusSuccess);
-	}
-
-	function invokeProcedureFAIL(response) {
-		console.error("fail");
-		var data = {"status":"testInvokeProvedure failure"};
-        WL.App.sendActionToNative("testInvokeProvedure", data);
-	}
-}
-
-
 function testRemoveActionReceiver(){
 	try{
       	WL.App.addActionReceiver("MyTestReceiver", function (receivedAction){
