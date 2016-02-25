@@ -21,6 +21,8 @@ Test ErrorMessage;testErrorMessage;Success
 Test SplashScreen;testSplashScreen;Success
 Test RemoveActionReceiver;testRemoveActionReceiver;Success
 Test invokeProcedure;testInvokeProcedure;Success
+Test invokeProcedure compress positive;testInvokeProcedureEncodingHeadersPositive;Success
+Test invokeProcedure compress negative;testInvokeProcedureEncodingHeadersNegative;Success
 Test invokeProcedure globalHeaders;testInvokeProcedureHeaders;Success
 Test GlobalHeader;testGlobalHeader;Success
 Test Init;testInit;Success

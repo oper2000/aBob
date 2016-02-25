@@ -723,6 +723,48 @@ function testInvokeProcedureHeaders(){
 	}
 }
 
+function testInvokeProcedureEncodingHeadersPositive(){
+     testInvokeProcedureEncodingHeaders(true);
+}
+
+function testInvokeProcedureEncodingHeadersNegative(){
+     testInvokeProcedureEncodingHeaders(false);
+}
+
+function testInvokeProcedureEncodingHeaders(enable){
+
+	var invocationData = {
+			adapter : "testInvoke",
+			procedure: "encoding",
+			isCompressResponse: enable,
+			parameters: []
+	};
+
+	WL.Client.invokeProcedure(invocationData, {
+		onSuccess: invokeProcedureOK,
+		onFailure: invokeProcedureFAIL
+	});
+
+	function invokeProcedureOK(response) {
+		if(enable && response.invocationResult.EncodingHeader != "gzip"){
+        	var data = {"status":"testInvokeProcedureEncodingHeaders failure"};
+        	WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", data);
+        }
+        else if(!enable && response.invocationResult.EncodingHeader != null){
+			var data = {"status":"testInvokeProcedureEncodingHeaders failure"};
+			WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", data);
+		}
+        else {
+        	WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", statusSuccess);
+        }
+
+	}
+	function invokeProcedureFAIL(response) {
+		var data = {"status":"testInvokeProcedureEncodingHeaders failure"};
+        WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", data);
+	}
+}
+
 function testShowNativePage(){
 
 	if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
