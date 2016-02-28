@@ -3,6 +3,10 @@
 
 var statusSuccess = {"status":"Success"};
 
+function testSDK(){
+	testFailurePinTrustedCertificatePublicKey();
+}
+
 function wlCommonInit(){
       try{
       	 	WL.App.addActionReceiver("MyReceiver", function (receivedAction){
@@ -786,12 +790,7 @@ function testSuccessfullPinTrustedCertificatePublicKey(){
 }
 
 function testFailurePinTrustedCertificatePublicKey(){
-	  if (navigator.userAgent.indexOf("iPhone") > -1 && WL.Client.getEnvironment() === WL.Environment.IPHONE) {
-	  	var data = {"status":"testFailurePinTrustedCertificatePublicKey failure - some problem on api!!!!"};
-        WL.App.sendActionToNative("testInvokeProvedure", data);
-	  }else{
-	        pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");
-	  }
+	pinCertificateAndGetGoogleResource("testFailurePinTrustedCertificatePublicKey","ibm.cer");  
 }
 
 function testGET(){

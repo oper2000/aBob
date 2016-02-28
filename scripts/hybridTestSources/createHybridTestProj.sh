@@ -38,10 +38,21 @@ mfpdev app register
 
 gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
 
-rm -fr ./platforms/ios
+
+
+mv ./platforms/ios ./platforms/ios-save
 echo "extracting the ios project from tar file ios.tar.gz...."
 tar -zxf ../hybridTestSources/ios.tar.gz -C platforms
-cordova plugin update cordova-plugin-mfp --save
+rm -fr ./platforms/ios/www/plugins
+rm -fr ./platforms/ios/www/js
+rm -fr ./platforms/ios/platform_www/plugins
+mv ./platforms/ios-save/www/plugins ./platforms/ios/www
+mv ./platforms/ios-save/www/js ./platforms/ios/www
+mv ./platforms/ios-save/platform_www/plugins ./platforms/ios/platform_www/
+rm -fr ./platforms/ios-save
+
+rm -fr ./platforms/ios/HelloCordova/Plugins/cordova-plugin-mfp/*.framework
+cp  -r ./plugins/cordova-plugin-mfp/src/ios/Frameworks/* ./platforms/ios/HelloCordova/Plugins/cordova-plugin-mfp/
 
 mfpdev app config android_security_test_web_resources_checksum true
 
