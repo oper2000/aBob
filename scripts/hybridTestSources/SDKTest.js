@@ -750,7 +750,7 @@ function testInvokeProcedureEncodingHeaders(enable){
 	});
 
 	function invokeProcedureOK(response) {
-		if(enable && response.invocationResult.EncodingHeader != "gzip"){
+        if(enable && response.invocationResult.EncodingHeader.indexOf("gzip")<=-1){
         	var data = {"status":"testInvokeProcedureEncodingHeaders failure"};
         	WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", data);
         }
