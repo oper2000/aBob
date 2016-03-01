@@ -1,0 +1,540 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		28D1F7AD75345A059AD3AB34CD16164F /* Pods-AutomationAppIos-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C995C1456EB683A071FACEA672F5D32F /* Pods-AutomationAppIos-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5449778B7427D57DCD909EB6EC840C5B /* Pods-Watch Extension-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ECF3CB73046A81B54407178193C490A /* Pods-Watch Extension-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6BE8F9801D38FAF44F137BAB12BD67B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6B89BDF4940B4AF9D57D7449055DAA /* Foundation.framework */; };
+		8DFBCE6C622A95A669DE8BEDC744C134 /* Pods-Watch Extension-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E51DFC5EB8E95E460557B64DC637B1F /* Pods-Watch Extension-dummy.m */; };
+		E164D42EE339CC96857A5490B4CABF0E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D79CDBEF832FB5A2106CDDC44C55D38 /* Foundation.framework */; };
+		F19856EB257DBAA9A70718FF81CA8E8C /* Pods-AutomationAppIos-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 19F914AD9907F0AE7106422041CFFC0D /* Pods-AutomationAppIos-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0C492D79DBFEF11714B0E82D73DA7CFD /* Pods_Watch_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Watch_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		19F914AD9907F0AE7106422041CFFC0D /* Pods-AutomationAppIos-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AutomationAppIos-dummy.m"; sourceTree = "<group>"; };
+		22F59E3E3328062252BEED07D078837E /* IBMMobileFirstPlatformFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IBMMobileFirstPlatformFoundation.framework; path = IBMMobileFirstPlatformFoundation/Frameworks/IBMMobileFirstPlatformFoundation.framework; sourceTree = "<group>"; };
+		2E51DFC5EB8E95E460557B64DC637B1F /* Pods-Watch Extension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Watch Extension-dummy.m"; sourceTree = "<group>"; };
+		309D2AF8C5DB1CE8E2A2B30729F51D90 /* Pods-Watch Extension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Watch Extension-acknowledgements.markdown"; sourceTree = "<group>"; };
+		320D8E98347ECDD8A368356B131D09B3 /* Pods-Watch Extension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Watch Extension-acknowledgements.plist"; sourceTree = "<group>"; };
+		3B8243B07DE1F032E3CACA3C1BAE2562 /* Pods-Watch Extension-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Watch Extension-resources.sh"; sourceTree = "<group>"; };
+		4F7D3268DAFBA311D1CB1A52E213504A /* Pods-Watch Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Watch Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		4FDB3BB0C0BF09179F8C6458BDDE4CC1 /* Pods-Watch Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Watch Extension.release.xcconfig"; sourceTree = "<group>"; };
+		6BCBBDEF954217053CF76FD30D478F1F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D79CDBEF832FB5A2106CDDC44C55D38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7ECF3CB73046A81B54407178193C490A /* Pods-Watch Extension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Watch Extension-umbrella.h"; sourceTree = "<group>"; };
+		817A70AED774EB600D2F1D9E702E059A /* Localizations.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = Localizations.bundle; path = IBMMobileFirstPlatformFoundation/Resources/Localizations.bundle; sourceTree = "<group>"; };
+		898176D16CAC8F79AD3B7D9826C7AA92 /* Pods-AutomationAppIos.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-AutomationAppIos.modulemap"; sourceTree = "<group>"; };
+		8C6B89BDF4940B4AF9D57D7449055DAA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS2.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		91194DF6BC02072597E95715F44FEAA9 /* IBMMobileFirstPlatformFoundationWatchOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IBMMobileFirstPlatformFoundationWatchOS.framework; path = IBMMobileFirstPlatformFoundation/Frameworks/IBMMobileFirstPlatformFoundationWatchOS.framework; sourceTree = "<group>"; };
+		91D4AB672D4F6077CBB22F93868BBB07 /* Pods-Watch Extension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Watch Extension.modulemap"; sourceTree = "<group>"; };
+		95F3E1DDB5CC09151206FCCA01311039 /* IBMMobileFirstPlatformFoundationOpenSSLUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IBMMobileFirstPlatformFoundationOpenSSLUtils.framework; path = IBMMobileFirstPlatformFoundation/Frameworks/IBMMobileFirstPlatformFoundationOpenSSLUtils.framework; sourceTree = "<group>"; };
+		ABD77F51FE50C1DD6378298CB5CAEECE /* Pods-AutomationAppIos-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AutomationAppIos-resources.sh"; sourceTree = "<group>"; };
+		B20D2DF98B1A44D8ED5162DFE7420305 /* Pods-AutomationAppIos-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AutomationAppIos-acknowledgements.plist"; sourceTree = "<group>"; };
+		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C7E26FFD15BEB3E6DF505BD80FFE0C21 /* Pods-AutomationAppIos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AutomationAppIos.debug.xcconfig"; sourceTree = "<group>"; };
+		C995C1456EB683A071FACEA672F5D32F /* Pods-AutomationAppIos-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AutomationAppIos-umbrella.h"; sourceTree = "<group>"; };
+		CC8030D2536F0F6EABAE2118A495E81E /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = openssl.framework; path = IBMMobileFirstPlatformFoundation/Frameworks/openssl.framework; sourceTree = "<group>"; };
+		D4D5FC86061B86FEBB458FC69D8C4EEC /* Pods-Watch Extension-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Watch Extension-frameworks.sh"; sourceTree = "<group>"; };
+		D51EAD8F459F9A5F9FFA72C09687AF19 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC1D7413E6E98E6406A9ACA8A6733E32 /* Pods-AutomationAppIos-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AutomationAppIos-acknowledgements.markdown"; sourceTree = "<group>"; };
+		E69A3997EA732C639C0E148F3B8D641F /* Pods-AutomationAppIos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AutomationAppIos.release.xcconfig"; sourceTree = "<group>"; };
+		E8494E829F07E42E6FCB3238354F87F4 /* Pods-AutomationAppIos-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AutomationAppIos-frameworks.sh"; sourceTree = "<group>"; };
+		FD98E2BC65D4C3CCED08EC4C2EECBACA /* Pods_AutomationAppIos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AutomationAppIos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3BC7864325D90BA3208EEFEABCCE9F29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E164D42EE339CC96857A5490B4CABF0E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60D2E43D38A04FE9D8456AACE5F92E7D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BE8F9801D38FAF44F137BAB12BD67B3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0B88F7909C9A9E11D5B0AC77287DF1C9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				95F3E1DDB5CC09151206FCCA01311039 /* IBMMobileFirstPlatformFoundationOpenSSLUtils.framework */,
+				CC8030D2536F0F6EABAE2118A495E81E /* openssl.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		18BB2AC6B63B6D6B2AF30047A93C3C37 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4D7B2147B448022004F9EEE04E3DFC7B /* Pods-AutomationAppIos */,
+				D8487F0BC44C68F80635096AE4B89C8C /* Pods-Watch Extension */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		1D9A21D7B677BB7F09D4175A1A5BF1AB /* IBMMobileFirstPlatformFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				7F33A90D2E57683AED018518D5108172 /* Frameworks */,
+				A5F3A6693D005506E362F868CC694B61 /* Resources */,
+			);
+			path = IBMMobileFirstPlatformFoundation;
+			sourceTree = "<group>";
+		};
+		4D7B2147B448022004F9EEE04E3DFC7B /* Pods-AutomationAppIos */ = {
+			isa = PBXGroup;
+			children = (
+				6BCBBDEF954217053CF76FD30D478F1F /* Info.plist */,
+				898176D16CAC8F79AD3B7D9826C7AA92 /* Pods-AutomationAppIos.modulemap */,
+				DC1D7413E6E98E6406A9ACA8A6733E32 /* Pods-AutomationAppIos-acknowledgements.markdown */,
+				B20D2DF98B1A44D8ED5162DFE7420305 /* Pods-AutomationAppIos-acknowledgements.plist */,
+				19F914AD9907F0AE7106422041CFFC0D /* Pods-AutomationAppIos-dummy.m */,
+				E8494E829F07E42E6FCB3238354F87F4 /* Pods-AutomationAppIos-frameworks.sh */,
+				ABD77F51FE50C1DD6378298CB5CAEECE /* Pods-AutomationAppIos-resources.sh */,
+				C995C1456EB683A071FACEA672F5D32F /* Pods-AutomationAppIos-umbrella.h */,
+				C7E26FFD15BEB3E6DF505BD80FFE0C21 /* Pods-AutomationAppIos.debug.xcconfig */,
+				E69A3997EA732C639C0E148F3B8D641F /* Pods-AutomationAppIos.release.xcconfig */,
+			);
+			name = "Pods-AutomationAppIos";
+			path = "Target Support Files/Pods-AutomationAppIos";
+			sourceTree = "<group>";
+		};
+		5122A3F52D800E80BACD9CC992713105 /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				8C6B89BDF4940B4AF9D57D7449055DAA /* Foundation.framework */,
+			);
+			name = watchOS;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
+				8F91EE078EA3977443D1BDC2601132EF /* Frameworks */,
+				917881983DB34B4443333ADBCC02D26C /* Pods */,
+				D0EC97048D5F113BE6393B9FADD6D713 /* Products */,
+				18BB2AC6B63B6D6B2AF30047A93C3C37 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		7F33A90D2E57683AED018518D5108172 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				22F59E3E3328062252BEED07D078837E /* IBMMobileFirstPlatformFoundation.framework */,
+				91194DF6BC02072597E95715F44FEAA9 /* IBMMobileFirstPlatformFoundationWatchOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8F91EE078EA3977443D1BDC2601132EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BEA166D13A2FBD7DDAD7CEE0F68399FD /* iOS */,
+				5122A3F52D800E80BACD9CC992713105 /* watchOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		917881983DB34B4443333ADBCC02D26C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1D9A21D7B677BB7F09D4175A1A5BF1AB /* IBMMobileFirstPlatformFoundation */,
+				F68942703C6E3EEA4731CE6D704E8F41 /* IBMMobileFirstPlatformFoundationOpenSSLUtils */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A5F3A6693D005506E362F868CC694B61 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				817A70AED774EB600D2F1D9E702E059A /* Localizations.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		BEA166D13A2FBD7DDAD7CEE0F68399FD /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6D79CDBEF832FB5A2106CDDC44C55D38 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		D0EC97048D5F113BE6393B9FADD6D713 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FD98E2BC65D4C3CCED08EC4C2EECBACA /* Pods_AutomationAppIos.framework */,
+				0C492D79DBFEF11714B0E82D73DA7CFD /* Pods_Watch_Extension.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8487F0BC44C68F80635096AE4B89C8C /* Pods-Watch Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D51EAD8F459F9A5F9FFA72C09687AF19 /* Info.plist */,
+				91D4AB672D4F6077CBB22F93868BBB07 /* Pods-Watch Extension.modulemap */,
+				309D2AF8C5DB1CE8E2A2B30729F51D90 /* Pods-Watch Extension-acknowledgements.markdown */,
+				320D8E98347ECDD8A368356B131D09B3 /* Pods-Watch Extension-acknowledgements.plist */,
+				2E51DFC5EB8E95E460557B64DC637B1F /* Pods-Watch Extension-dummy.m */,
+				D4D5FC86061B86FEBB458FC69D8C4EEC /* Pods-Watch Extension-frameworks.sh */,
+				3B8243B07DE1F032E3CACA3C1BAE2562 /* Pods-Watch Extension-resources.sh */,
+				7ECF3CB73046A81B54407178193C490A /* Pods-Watch Extension-umbrella.h */,
+				4F7D3268DAFBA311D1CB1A52E213504A /* Pods-Watch Extension.debug.xcconfig */,
+				4FDB3BB0C0BF09179F8C6458BDDE4CC1 /* Pods-Watch Extension.release.xcconfig */,
+			);
+			name = "Pods-Watch Extension";
+			path = "Target Support Files/Pods-Watch Extension";
+			sourceTree = "<group>";
+		};
+		F68942703C6E3EEA4731CE6D704E8F41 /* IBMMobileFirstPlatformFoundationOpenSSLUtils */ = {
+			isa = PBXGroup;
+			children = (
+				0B88F7909C9A9E11D5B0AC77287DF1C9 /* Frameworks */,
+			);
+			path = IBMMobileFirstPlatformFoundationOpenSSLUtils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		502274E3FBDE7C6D93FB7CF09F4DB9B6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5449778B7427D57DCD909EB6EC840C5B /* Pods-Watch Extension-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		726740244164B7551DAAE511122B1117 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28D1F7AD75345A059AD3AB34CD16164F /* Pods-AutomationAppIos-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EA94F328F4C7B0A6EB14ABBED16CDA85 /* Pods-AutomationAppIos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CFCFBD8B156AA0715F67DE93D2A3FA1 /* Build configuration list for PBXNativeTarget "Pods-AutomationAppIos" */;
+			buildPhases = (
+				1D9936DB7648B8227BE148AB8AC1D389 /* Sources */,
+				3BC7864325D90BA3208EEFEABCCE9F29 /* Frameworks */,
+				726740244164B7551DAAE511122B1117 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-AutomationAppIos";
+			productName = "Pods-AutomationAppIos";
+			productReference = FD98E2BC65D4C3CCED08EC4C2EECBACA /* Pods_AutomationAppIos.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EADC1FEAD9E0083B4396E5D3EC4EBC6E /* Pods-Watch Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93F7CB58659B33DBF3210335C63E9835 /* Build configuration list for PBXNativeTarget "Pods-Watch Extension" */;
+			buildPhases = (
+				EA5C27674452BAD1C8FED08D068C79DE /* Sources */,
+				60D2E43D38A04FE9D8456AACE5F92E7D /* Frameworks */,
+				502274E3FBDE7C6D93FB7CF09F4DB9B6 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Watch Extension";
+			productName = "Pods-Watch Extension";
+			productReference = 0C492D79DBFEF11714B0E82D73DA7CFD /* Pods_Watch_Extension.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = D0EC97048D5F113BE6393B9FADD6D713 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA94F328F4C7B0A6EB14ABBED16CDA85 /* Pods-AutomationAppIos */,
+				EADC1FEAD9E0083B4396E5D3EC4EBC6E /* Pods-Watch Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D9936DB7648B8227BE148AB8AC1D389 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F19856EB257DBAA9A70718FF81CA8E8C /* Pods-AutomationAppIos-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA5C27674452BAD1C8FED08D068C79DE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DFBCE6C622A95A669DE8BEDC744C134 /* Pods-Watch Extension-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		11DF6A28662E2407D47F47644970A99D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F7D3268DAFBA311D1CB1A52E213504A /* Pods-Watch Extension.debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Watch Extension/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Watch Extension/Pods-Watch Extension.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_Watch_Extension;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		36487827903AE050A668D444B76B2B8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4FDB3BB0C0BF09179F8C6458BDDE4CC1 /* Pods-Watch Extension.release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Watch Extension/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Watch Extension/Pods-Watch Extension.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_Watch_Extension;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		515C632D15785B39656A24FC66C63AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		5FC6715C13902085CD2E72E541CDAAE2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7E26FFD15BEB3E6DF505BD80FFE0C21 /* Pods-AutomationAppIos.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-AutomationAppIos/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-AutomationAppIos/Pods-AutomationAppIos.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_AutomationAppIos;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		76569EE9F1E528A4373E53BA3D0FA5CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E69A3997EA732C639C0E148F3B8D641F /* Pods-AutomationAppIos.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-AutomationAppIos/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-AutomationAppIos/Pods-AutomationAppIos.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_AutomationAppIos;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D9B099BE7626556CE3F898C02D7E7746 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				515C632D15785B39656A24FC66C63AB9 /* Debug */,
+				D9B099BE7626556CE3F898C02D7E7746 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CFCFBD8B156AA0715F67DE93D2A3FA1 /* Build configuration list for PBXNativeTarget "Pods-AutomationAppIos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC6715C13902085CD2E72E541CDAAE2 /* Debug */,
+				76569EE9F1E528A4373E53BA3D0FA5CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93F7CB58659B33DBF3210335C63E9835 /* Build configuration list for PBXNativeTarget "Pods-Watch Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11DF6A28662E2407D47F47644970A99D /* Debug */,
+				36487827903AE050A668D444B76B2B8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

@@ -1,0 +1,1 @@
+OpenSSL test with ObjC and CocoaPods install;OpenSSLOCCocoaPodsTest;OK

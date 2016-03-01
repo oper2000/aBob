@@ -1,0 +1,3 @@
+
+IOS Get Ressource test with user-pass delegate and scope;GetRessourcesTest/?type=delegate&scope=usernamePassword&user=a&password=a;Success
+IOS Get Ressource test with invalid user-pass delegate and scope;GetRessourcesTest/?type=delegate&scope=usernamePassword&user=a&password=b;Failure{"failures":{"usernamePassword":{"failure":"account blocked"}}

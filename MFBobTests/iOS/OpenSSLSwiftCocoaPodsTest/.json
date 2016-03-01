@@ -1,0 +1,8 @@
+{
+  "applicationKey": {
+    "bundleId": "com.ibm.mfp.AppBundle",
+    "version": "AppVersion",
+    "clientPlatform":"ios"
+  },
+  "mandatoryScope": ""
+}

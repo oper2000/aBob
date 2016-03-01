@@ -1,0 +1,17 @@
+source 'https://hub.jazz.net/git/oper2000/imf-client-sdk-specs-inhouse.git'
+
+xcodeproj 'AutomationAppIos'
+
+use_frameworks!
+
+target :AutomationAppIos do
+platform :ios, 9.0
+pod 'IBMMobileFirstPlatformFoundation'
+pod 'IBMMobileFirstPlatformFoundationOpenSSLUtils'
+
+target :'Watch Extension' do
+    platform :watchos, 2.0
+    pod 'IBMMobileFirstPlatformFoundation'
+end 
+
+end
