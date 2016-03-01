@@ -740,7 +740,7 @@ function testInvokeProcedureEncodingHeaders(enable){
 	var invocationData = {
 			adapter : "testInvoke",
 			procedure: "encoding",
-			isCompressResponse: enable,
+			compressResponse: enable,
 			parameters: []
 	};
 
