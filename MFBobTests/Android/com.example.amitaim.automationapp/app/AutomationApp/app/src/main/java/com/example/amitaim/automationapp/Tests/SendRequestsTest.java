@@ -24,7 +24,7 @@ public class SendRequestsTest extends AutomaticTest {
     private String scope;
     private String userName;
     private String password;
-    private String realm = "usernamePassword";
+    private String realm = "UserLogin";
     private String method = "post";
     private String type; //string; hash; json; byte; error
     private String testString = "Testing this string";

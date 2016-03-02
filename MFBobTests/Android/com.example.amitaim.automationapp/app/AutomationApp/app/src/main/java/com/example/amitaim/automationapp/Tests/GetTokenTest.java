@@ -22,7 +22,7 @@ public class GetTokenTest extends AutomaticTest {
     private String scope;
     private String userName;
     private String password;
-    private String realm = "usernamePassword";
+    private String realm = "UserLogin";
 
     public GetTokenTest(NanoHTTPD.IHTTPSession session) {
         scope = session.getParms().get("scope");

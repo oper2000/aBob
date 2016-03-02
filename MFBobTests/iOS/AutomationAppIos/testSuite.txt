@@ -1,9 +1,9 @@
 IOS GetToken test with default scope;GetTokenTest/;Success
-IOS GetToken test with scope;GetTokenTest/?scope=usernamePassword&user=a&password=a;Success
-IOS GetToken test with scope and invalid credential;GetTokenTest/?scope=usernamePassword&user=a&password=b;Failure{"failures":{"usernamePassword":{"failure":"Account blocked"}}
+IOS GetToken test with scope;GetTokenTest/?scope=UserLogin&user=a&password=a;Success
+IOS GetToken test with scope and invalid credential;GetTokenTest/?scope=UserLogin&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
 IOS Get Ressource test with user-pass handler;GetRessourcesTest/?type=handler&user=a&password=a;Success
-IOS Get Ressource test with invalid user-pass handler;GetRessourcesTest/?type=handler&user=a&password=b;Failure{"failures":{"usernamePassword":{"failure":"Account blocked"}}
-IOS Get Ressource test with user-pass handler and scope;GetRessourcesTest/?type=handler&scope=usernamePassword&user=a&password=a;Success
-IOS Get Ressource test with invalid user-pass handler and scope;GetRessourcesTest/?type=handler&scope=usernamePassword&user=a&password=b;Failure{"failures":{"usernamePassword":{"failure":"Account blocked"}}
+IOS Get Ressource test with invalid user-pass handler;GetRessourcesTest/?type=handler&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
+IOS Get Ressource test with user-pass handler and scope;GetRessourcesTest/?type=handler&scope=UserLogin&user=a&password=a;Success
+IOS Get Ressource test with invalid user-pass handler and scope;GetRessourcesTest/?type=handler&scope=UserLogin&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
 IOS Get Ressource test with user-pass delegate;GetRessourcesTest/?type=delegate&user=a&password=a;Success
-IOS Get Ressource test with invalid user-pass delegate;GetRessourcesTest/?type=delegate&user=a&password=b;Failure{"failures":{"usernamePassword":{"failure":"Account blocked"}}
+IOS Get Ressource test with invalid user-pass delegate;GetRessourcesTest/?type=delegate&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}

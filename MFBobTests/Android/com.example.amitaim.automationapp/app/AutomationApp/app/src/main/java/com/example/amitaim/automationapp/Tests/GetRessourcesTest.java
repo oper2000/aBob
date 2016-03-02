@@ -23,7 +23,7 @@ public class GetRessourcesTest extends AutomaticTest {
     private String scope;
     private String userName;
     private String password;
-    private String realm = "usernamePassword";
+    private String realm = "UserLogin";
     private String path;
 
     public GetRessourcesTest(NanoHTTPD.IHTTPSession session) {

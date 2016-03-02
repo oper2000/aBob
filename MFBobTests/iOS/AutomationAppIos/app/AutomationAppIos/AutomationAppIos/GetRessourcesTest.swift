@@ -18,7 +18,7 @@ import Foundation
 
 class GetRessourcesTest : AutomaticTest, NSURLSessionDataDelegate{
     
-    let realm = "usernamePassword";
+    let realm = "UserLogin";
     
     internal  override func run(urlParams :[(String, String)]){
         let dictParams :NSMutableDictionary =  NSMutableDictionary()

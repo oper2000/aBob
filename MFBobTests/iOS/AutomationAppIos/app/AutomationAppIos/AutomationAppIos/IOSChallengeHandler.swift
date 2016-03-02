@@ -51,7 +51,7 @@ class IOSChallengeHandler : WLChallengeHandler{
      * This method is called when the IBM MobileFirst Platform Server returns a challenge for the realm.
      */
     internal override func handleChallenge(challenge: [NSObject : AnyObject]!){
-        submitChallengeAnswer(["user":userName!, "password":password!]);
+        submitChallengeAnswer(["username":userName!, "password":password!]);
     }
     
 

@@ -38,7 +38,7 @@ public class AndroidChallengeHandler extends WLChallengeHandler {
 	public void submitLogin( ){
 		JSONObject paramsJson = new JSONObject();
 		try {
-			paramsJson.put("user", userName);
+			paramsJson.put("username", userName);
 			paramsJson.put("password", password);
 		} catch (JSONException e) {
 			e.printStackTrace();
