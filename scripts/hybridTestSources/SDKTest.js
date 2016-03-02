@@ -59,14 +59,14 @@ function testBase64EncodeDecode(){
                     }
         		},function(val){
         			console.log("Failed calling WL.SecurityUtils.testBase64Decode:" + val);
-        			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode:" + val.errorMsg};
+        			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode:" + getErrorDesc(val)};
                     WL.App.sendActionToNative("testBase64Decode", data);
                     console.log("Failed calling WL.SecurityUtils.testBase64Decode" );
         		});
 
 		},function(val){
 			console.log("testBase64Encode failure:" + val);
-			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode:" + val.errorMsg};
+			var data = {"status":"Failed calling WL.SecurityUtils.testBase64Decode:" + getErrorDesc(val)};
             WL.App.sendActionToNative("testBase64Encode", data);
 		});
 }
@@ -84,7 +84,7 @@ function testEnableOSNativeEncryption(){
 		},function(val){
 			console.log("Failed calling WL.SecurityUtils.testEnableOSNativeEncryption");
 			console.log(val);
-			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption:" + val.errorMsg};
+			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption:" + getErrorDesc(val)};
 			WL.App.sendActionToNative("testEncrypt", data);
 		});
 }
@@ -104,7 +104,7 @@ function testDisableOSNativeEncryption(){
 				WL.App.sendActionToNative("testDisableOSNativeEncryption", statusSuccess); 
             }
             else{
-            	var data = {"status":"Failed, expecting different error msg than: "+val.msg};
+            	var data = {"status":"Failed, expecting different error msg than: " + getErrorDesc(val)};
 				WL.App.sendActionToNative("testDisableOSNativeEncryption", data);
             }
 		});
@@ -201,7 +201,7 @@ function testLocalRandomString(){
             WL.App.sendActionToNative("testEnableOSNativeEncryption", statusSuccess);
 		},function(val){
 			console.log("Failed calling WL.ecurityUtils.LocalRandomString:");
-			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption:" + val.errorMsg};
+			var data = {"status":"Failed calling WL.SecurityUtils.testEnableOSNativeEncryption:" + getErrorDesc(val)};
 			WL.App.sendActionToNative("testEncrypt", data);
 		});
 }
@@ -215,11 +215,11 @@ function testWLClient(){
 		},function(val){
 			console.log("Failed calling WL.Client.getCookies");
 			console.log(val);
-			var data = {"status":"Failed calling WL.Client.getCookies:" + val.errorMsg};
+			var data = {"status":"Failed calling WL.Client.getCookies:" + getErrorDesc(val)};
 			WL.App.sendActionToNative("testWLClient", data);
 		});
 	}catch(err){
-		var data = {"status":"testWLClient failure:" + + err.errorMsg};
+		var data = {"status":"testWLClient failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testWLClient", data);
 	}
 }
@@ -251,12 +251,12 @@ function testAddHeader(){
       	},
       	function(error) {
       	 	console.log("testAddHeader failure");
-          	var data = {"status":"testAddHeader failure:" + error.errorMsg};
+          	var data = {"status":"testAddHeader failure:" + getErrorDesc(error)};
 			WL.App.sendActionToNative("testAddHeader", data);
       	}
  		);
 	}catch(err){
-		var data = {"status":"testAddHeader failure:" + err.errorMsg};
+		var data = {"status":"testAddHeader failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testAddHeader", data);
 	}
 }
@@ -278,7 +278,7 @@ function testWLGetEnvironment() {
         	WL.App.sendActionToNative("testWLClient", data);
 		}
 	}catch(err){
-		var data = {"status":"testWLgetEnvironment:" + err.errorMsg};
+		var data = {"status":"testWLgetEnvironment:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testWLgetEnvironment", data);
 	}
 }
@@ -313,20 +313,20 @@ function testWLClientCookie(){
       		    },function(val){
       		    	console.log("Failed calling testWLClientCookie");
       			   console.log(val);
-      			   var data = {"status":"Failed calling testWLClientCookie:" + val.errorMsg};
+      			   var data = {"status":"Failed calling testWLClientCookie:" + getErrorDesc(val)};
       			   WL.App.sendActionToNative("testWLClient", data);
       		    });
     	}
     	,function(val){
          console.log(val);
          console.log("Failed calling WL.Client.getCookies");
-         var data = {"status":"Failed calling WL.Client.getCookies:" + val.errorMsg};
+         var data = {"status":"Failed calling WL.Client.getCookies:" + getErrorDesc(val)};
           WL.App.sendActionToNative("testWLClient", data);
       	}); 
       });
      });
 	}catch(err){
-		var data = {"status":"testWLClientCookie failure:" + err.errorMsg};
+		var data = {"status":"testWLClientCookie failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testWLClientCookie", data);
 	}
 }
@@ -351,7 +351,7 @@ function testSplashScreen() {
     		return WL.App.sendActionToNative("testSplashScreen", statusSuccess);
 		}, 1000);
 	}catch(err){
-    	var data = {"status":"testSplashScreen failure:" + err.errorMsg};
+    	var data = {"status":"testSplashScreen failure:" + getErrorDesc(err)};
     	WL.App.sendActionToNative("testAddHeader", data);
     }
 }
@@ -444,13 +444,13 @@ function testResourceRequest(type){
           // success flow, the result can be found in response.responseJSON
       	},
       	function(error) {
- 			var data = {"status": "Failure"+error.errorMsg};
+ 			var data = {"status": "Failure" + getErrorDesc(error)};
 			WL.App.sendActionToNative("testResourceRequest", data);
 			console.log("testResourceRequest failure");
       	}
  		);
 	}catch(err){
-	 	var data = {"status": "Failure"+err.errorMsg};
+	 	var data = {"status": "Failure" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testResourceRequest", data);
 	}
 }
@@ -474,7 +474,7 @@ function testInvokeProcedure(){
 
 	function invokeProcedureFAIL(response) {
 		console.error("fail");
-		var data = {"status":"failure:" + response.errorMsg};
+		var data = {"status":"failure:" + getErrorDesc(response)};
         WL.App.sendActionToNative("testInvokeProvedure", data);
 	}
 }
@@ -505,7 +505,7 @@ function testInit() {
 	    }	    
 	  });
 	}catch(err){
-		var data = {"status":"testInit Failed:"+ err.errorMsg};
+		var data = {"status":"testInit Failed:"+ getErrorDesc(err)};
 		WL.App.sendActionToNative("testInit", data);
 	}
 }
@@ -522,7 +522,7 @@ function testIsConnected() {
             WL.App.sendActionToNative("testIsConnected", data);
          }
 	}catch(err){
-		var data = {"status":"testIsConnected Failed:" + err.errorMsg};
+		var data = {"status":"testIsConnected Failed:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testIsConnected", data);
 	}
 }
@@ -547,13 +547,13 @@ function testGlobalHeader(){
           // success flow, the result can be found in response.responseJSON
       	},
       	function(error) {
-      		var data = {"status":"testGlobalHeader failure:" + error.errorMsg};
+      		var data = {"status":"testGlobalHeader failure:" + getErrorDesc(error)};
 			WL.App.sendActionToNative("testGlobalHeader", data);
 			console.log("testGlobalHeader failure");
         }
  		);
 	}catch(err){
-		var data = {"status":"testGlobalHeader failure:"+ + err.errorMsg};
+		var data = {"status":"testGlobalHeader failure:"+ getErrorDesc(err)};
 		WL.App.sendActionToNative("testGlobalHeader", data);
 	}
 }
@@ -581,7 +581,7 @@ function testRemoveGlobalHeader(){
 			}
  		);
 	}catch(err){
-		var data = {"status":"testGlobalHeader remove failure:" +  + err.errorMsg};
+		var data = {"status":"testGlobalHeader remove failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testGlobalHeader", data);
 	}
 }
@@ -673,7 +673,7 @@ function testInvokeProcedure(){
 
 	function invokeProcedureFAIL(response) {
 		console.error("fail");
-		var data = {"status":"testInvokeProvedure failure:" +  + response.errorMsg};
+		var data = {"status":"testInvokeProvedure failure:" + getErrorDesc(response)};
         WL.App.sendActionToNative("testInvokeProvedure", data);
 	}
 }
@@ -703,7 +703,7 @@ function testInvokeProcedureHeaders(){
 	}
 
 	function invokeProcedureFAIL(response) {
-		var data = {"status":"testInvokeProcedureHeaders failure:" +  + response.errorMsg};
+		var data = {"status":"testInvokeProcedureHeaders failure:" + getErrorDesc(response)};
         WL.App.sendActionToNative("testInvokeProcedureHeaders", data);
 	}
 }
@@ -745,7 +745,7 @@ function testInvokeProcedureEncodingHeaders(enable){
 
 	}
 	function invokeProcedureFAIL(response) {
-		var data = {"status":"testInvokeProcedureEncodingHeaders failure:" + response.errorMsg};
+		var data = {"status":"testInvokeProcedureEncodingHeaders failure:" + getErrorDesc(response)};
         WL.App.sendActionToNative("testInvokeProcedureEncodingHeaders", data);
 	}
 }
@@ -863,14 +863,14 @@ function testMethod(method, data){
       	function(error) {
           // failure flow
           // the error code and description can be found in error.errorCode and error.errorMsg fields respectively
-          	var data = {"status":"testMethod failure:" + error.errorMsg};
+          	var data = {"status":"testMethod failure:" + getErrorDesc(error)};
 			WL.App.sendActionToNative("testMethod", data);
 			console.log("testMethod failure");
 
       	}
  		);
 	}catch(err){
-		var data = {"status":"testMethod failure:" + err.errorMsg};
+		var data = {"status":"testMethod failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testMethod	", data);
 	}
 }
@@ -935,14 +935,14 @@ function testHeaders() {
           // success flow, the result can be found in response.responseJSON
       	},
       	function(error) {
-      		var data = {"status":"testHeaders failure:" + error.errorMsg};
+      		var data = {"status":"testHeaders failure:" + getErrorDesc(error)};
 			WL.App.sendActionToNative("testHeaders", data);
 			console.log("testHeaders failure");
       	 
         }
  		);
 	}catch(err){
-		var data = {"status":"testHeaders failure:" +  + err.errorMsg};
+		var data = {"status":"testHeaders failure:" + getErrorDesc(err)};
 		WL.App.sendActionToNative("testHeaders", data);
 	}
 }
@@ -972,6 +972,18 @@ function pinCertificateAndGetGoogleResource(testName,certificateName){
 			var data = {"status":"Failed calling WL.Client.pinTrustedCertificatePublicKey"};
 			WL.App.sendActionToNative(testName, data);
 		});
+}
+
+function getErrorDesc(error){
+  if (error.errorMsg != null){
+  	return error.errorMsg;
+  }else if (error.responseText != null){
+  	return error.responseText;
+  }else if (error.status != null){
+  	return error.status;
+  }else{
+  	return "no available error description"
+  }
 }
 
 /////////////////////// Test SDK By Eitan //////////////////////
