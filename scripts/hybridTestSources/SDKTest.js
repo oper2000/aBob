@@ -412,7 +412,7 @@ function testResourceRequest(type){
 			return WL.App.sendActionToNative("testResourceRequest", data);
 		}
 
-		sampleAppRealmChallengeHandler = WL.Client.createWLChallengeHandler("usernamePassword");
+		sampleAppRealmChallengeHandler = WL.Client.createWLChallengeHandler("UserLogin");
 
 		sampleAppRealmChallengeHandler.handleChallenge = function(challenge) {
 			console.log("handleChallenge :: authenticationRequired :: " + challenge.authenticationRequired);
@@ -424,7 +424,7 @@ function testResourceRequest(type){
 				}
 			}
 			var credentials = {
-					user : "a",
+					username : "a",
 					password : "a"
 				};
 			sampleAppRealmChallengeHandler.submitChallengeAnswer(credentials);
