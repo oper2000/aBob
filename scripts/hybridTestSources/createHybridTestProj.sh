@@ -9,7 +9,7 @@ echo "creating project $1"
 cordova create $1
 cd $1
 cordova platform add ios
-cordova platform add android
+cordova platform add android@5.1.0
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
 if [ "$USER" == "bob" ]
 then
