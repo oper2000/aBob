@@ -356,10 +356,6 @@ function testSplashScreen() {
     }
 }
 
-function testResourceRequest(){
-	testResourceRequest();
-}
-
 function testResourceRequestGetQuery(){
 	testResourceRequest("get-query");
 }
@@ -382,7 +378,6 @@ function testResourceRequest(type){
 		if (!type) {
 		    request = new WLResourceRequest('/adapters/account/balance', WLResourceRequest.GET);
 			request.setQueryParameter('params', [5, 6]);
-        	request.getQueryParameters();
 		}
 		else if (type == "get-query") {
 			request = new WLResourceRequest('/adapters/bankAdapterUnprotected/view/balanceGet', WLResourceRequest.GET);

@@ -7,7 +7,6 @@ Test RandomString;testLocalRandomString;Success
 Test GetServerUrl test;testGetServerUrl;Success
 Test SetServerUrl test;testSetServerUrl;Success
 Test WLClient;testWLClient;Success
-Test ResourceRequest;testResourceRequest;Success
 Test Logger;testLogger;Success
 Test WLResourceRequest addHeader;testAddHeader;Success
 Test GetEnvironment;testWLGetEnvironment;Success
@@ -22,7 +21,7 @@ Test SplashScreen;testSplashScreen;Success
 Test RemoveActionReceiver;testRemoveActionReceiver;Success
 Test invokeProcedure;testInvokeProcedure;Success
 Test invokeProcedure compress positive;testInvokeProcedureEncodingHeadersPositive;Success
-Test invokeProcedure compress negative;testInvokeProcedureEncodingHeadersNegative;Success
+Test invokeProcedure compress negative;testInvokeProcedureEncodingHeadersNegative;testInvokeProcedureEncodingHeaders failure
 Test invokeProcedure globalHeaders;testInvokeProcedureHeaders;Success
 Test GlobalHeader;testGlobalHeader;Success
 Test Init;testInit;Success
@@ -45,6 +44,7 @@ Test PUT;testPUT;Success
 Test PUT with data;testPUTWithData;Success
 Test POST;testPOST;Success
 Test POST with data;testPOSTWithData;Success
+Test ResourceRequest;testResourceRequest;Success
 Test POST-QUERY;testResourceRequestPostQuery;Success
 Test POST-FORM;testResourceRequestPostForm;Success
 Test GET-QUERY;testResourceRequestGetQuery;Success
