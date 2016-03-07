@@ -289,16 +289,14 @@ function testWLClientCookie(){
           name: 'MFPCookie2',
           value: 'cookieValue',
           domain: 'google.com',
-          path: '/', // all paths
-          expires: -1 // never expires
+          path: '/' // all paths
         }).then(function(){
             WL.Client.deleteCookie('MFPCookie2').then(function() {
                	WL.Client.setCookie({
                 name: 'MFPCookie',
                 value: 'cookieValue',
                 domain: 'google.com',
-                path: '/', // all paths
-                expires: -1 // never expires
+                path: '/' // all paths
                 }).then(function() {
       		        WL.Client.getCookies().then(function(val) {
       		        var cookies = JSON.stringify(val);
