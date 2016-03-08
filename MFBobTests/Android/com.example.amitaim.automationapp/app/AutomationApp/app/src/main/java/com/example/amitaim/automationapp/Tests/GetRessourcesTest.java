@@ -25,12 +25,15 @@ public class GetRessourcesTest extends AutomaticTest {
     private String password;
     private String realm = "UserLogin";
     private String path;
+    private int timeout;
+    private WLResourceRequest request;
 
     public GetRessourcesTest(NanoHTTPD.IHTTPSession session) {
         scope = session.getParms().get("scope");
         path = session.getParms().get("adapterPath");
         userName = session.getParms().get("userName");
         password = session.getParms().get("password");
+        timeout = session.getParms().get("timeout") == null ? 30000 : Integer.valueOf(session.getParms().get("timeout"));
     }
 
     @Override
@@ -44,7 +47,7 @@ public class GetRessourcesTest extends AutomaticTest {
             else
                 adapterPath = new URI(path);
             //Create WLResourceRequest object. Choose the HTTP Method (GET, POST, etc).
-            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, WLResourceRequest.GET) : new WLResourceRequest(adapterPath, WLResourceRequest.GET, scope);
+            request = scope == null ? new WLResourceRequest(adapterPath, WLResourceRequest.GET, timeout) : new WLResourceRequest(adapterPath, WLResourceRequest.GET, timeout, scope);
             request.send(new MyResponseListener());
         }catch (Exception e){
             MainActivity.AutomationServer.result = "Failure " + e.getMessage();
@@ -66,8 +69,15 @@ public class GetRessourcesTest extends AutomaticTest {
             String errorMsg=response.getErrorMsg();
             if (errorMsg != null)
                 errorMsg=errorMsg.replace("\n","").replace("\r","").replace("\t","");
-            MainActivity.AutomationServer.result = "Failure " + errorMsg;
-            WLAuthorizationManagerInternal.getInstance().clearRegistration();
+            if (request.getTimeout() == 10) {
+                if (errorMsg.contains("timed out")) {
+                    MainActivity.AutomationServer.result = "Success";
+                }
+            }
+            else {
+                MainActivity.AutomationServer.result = "Failure " + errorMsg;
+                WLAuthorizationManagerInternal.getInstance().clearRegistration();
+            }
             return;
         }
     }

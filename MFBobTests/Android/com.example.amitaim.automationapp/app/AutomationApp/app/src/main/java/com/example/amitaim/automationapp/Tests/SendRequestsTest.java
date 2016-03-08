@@ -29,6 +29,7 @@ public class SendRequestsTest extends AutomaticTest {
     private String type; //string; hash; json; byte; error
     private String testString = "Testing this string";
     JSONObject testJson = new JSONObject();
+    WLResourceRequest request;
     byte[] testBytes;
 
     public SendRequestsTest(NanoHTTPD.IHTTPSession session) {
@@ -36,6 +37,7 @@ public class SendRequestsTest extends AutomaticTest {
         userName = session.getParms().get("userName");
         password = session.getParms().get("password");
         type = session.getParms().get("type");
+        testString = session.getParms().get("testString") == null ? "Testing this string" : session.getParms().get("testString");
         method = session.getParms().get("method") != null ? session.getParms().get("method")  : WLResourceRequest.POST;
     }
 
@@ -85,9 +87,13 @@ public class SendRequestsTest extends AutomaticTest {
                     MainActivity.AutomationServer.result = "Failure, no such type! ";
                     return;
             }
-            WLResourceRequest request = scope == null ? new WLResourceRequest(adapterPath, method) : new WLResourceRequest(adapterPath, method.toUpperCase(), scope);
+            request = scope == null ? new WLResourceRequest(adapterPath, method) : new WLResourceRequest(adapterPath, method.toUpperCase(), scope);
             switch (type){
                 case "string":
+                    if (testString.equals("setget")) {
+                        request.setTimeout(40000);
+                        request.setQueryParameter("testString", "setget");
+                    }
                 case"error":
                     request.send(testString,new MyResponseListener());
                     break;
@@ -126,8 +132,21 @@ public class SendRequestsTest extends AutomaticTest {
                 MainActivity.AutomationServer.result = "Success";
             else if(type.equals("empty") && (response.getResponseText().contains(method) || response.getStatus() == 200))
                 MainActivity.AutomationServer.result = "Success";
-            else if (response.getResponseText().equals(testString))
-                MainActivity.AutomationServer.result = "Success";
+            else if (response.getResponseText().equals(testString)) {
+                if(testString.equals("setget")) {
+                    if (request.getTimeout() == 40000 && request.getUrl().toString().contains("/mfp/api/adapters/testSend/users/testRequestString") &&
+                            request.getMethod().equals(WLResourceRequest.POST) && request.getQueryString().equals("testString=setget") &&
+                            request.getQueryParameters().size() == 1 && request.getQueryParameters().entrySet().toString().contains("[testString=setget]")) {
+                        MainActivity.AutomationServer.result = "Success";
+                    }
+                    else {
+                        MainActivity.AutomationServer.result = "Failure: getters differ from setters";
+                    }
+                }
+                else {
+                    MainActivity.AutomationServer.result = "Success";
+                }
+            }
             else
                 MainActivity.AutomationServer.result = "Failure: send is different from received";
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
