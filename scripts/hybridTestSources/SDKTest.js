@@ -169,13 +169,13 @@ function testEncryptDecrypt(){
 function testSetServerUrl(){
 
 	var data = {"status":"testSetServerUrl failure"};
-    WL.App.setServerUrl("http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api/",
+    WL.App.setServerUrl("http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api",
     function(url){
          console.log("WL.App.setServerUrl:"+url);
          WL.App.getServerUrl(
  		function(url2){
  			console.log("WL.App.getServerUrl:"+url2);
- 			if(url2=="http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api/"){
+ 			if(url2=="http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api/" || url2=="http://ibobs-mac-mini.haifa.ibm.com:9080/mfp/api"){
  			WL.App.sendActionToNative("testGetServerUrl", statusSuccess);
  			}
  			else
