@@ -50,12 +50,16 @@ import Foundation
         WLClient.sharedInstance().registerChallengeHandler(challengeHandler)
     
             switch (type!){
-            case "empty":
+            case "empty" , "emptyssl":
                 var _method = self.method;
                 if (self.method == "head" || self.method == "options" || self.method == "OPTIONS" || self.method == "trace"){
                     _method = "get";
                 }
-                adapterPath = NSURL(string: "http://httpbin.org/" + _method);
+                if(type == "emptyssl"){
+                    adapterPath = NSURL(string: "https://httpbin.org/" + _method + "?testParam=param");
+                }else{
+                    adapterPath = NSURL(string: "http://httpbin.org/" + _method + "?testParam=param");
+                }
                 break;
             case "string":
                 adapterPath = NSURL(string: "/adapters/testSend/users/testRequestString");
@@ -105,7 +109,7 @@ import Foundation
             case "byte":
                 request.sendWithData(testBytes, completionHandler: completionHandler)
                 break;
-            case "empty":
+            case "empty", "emptyssl":
                 request.sendWithCompletionHandler(completionHandler);
                 break;
             default:
@@ -125,7 +129,7 @@ import Foundation
             else if(type == "json" && response.getResponseJson().description == testJson.description){
                 GlobalVar.result = "Success"
             }
-            else if(type == "empty"  && (response.responseText.containsString(method) || response.status == 200)){
+            else if(type == "empty" || type == "emptyssl"  && (response.responseText.containsString(method) || response.status == 200)){
                 GlobalVar.result = "Success"
             }
             else if (response.responseText == testString){

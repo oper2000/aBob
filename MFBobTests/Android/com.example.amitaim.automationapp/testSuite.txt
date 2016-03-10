@@ -1,13 +1,17 @@
 #Test Display Name;                Path(Test Class Name)/Parameters;            Expected Result
 101Test;AutomaticTest101/;101
+
 GetToken test with default scope;GetTokenTest/;Success
 GetToken test with scope and user-pass;GetTokenTest/?scope=UserLogin&userName=a&password=a;Success
 GetToken test with scope and invalid user-pass;GetTokenTest/?scope=UserLogin&userName=aa&password=a;Failure {"UserLogin":{"failure":"Account blocked"}}
+
 Get Ressource test with user-pass;GetRessourcesTest/?scope=UserLogin&userName=a&password=a;Success
 Get Ressource test with timeout;GetRessourcesTest/?scope=UserLogin&userName=a&password=a&timeout=10;Success
 Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=UserLogin&userName=a&password=b;Failure {"UserLogin":{"failure":"Account blocked"}}
+
 Pinning negative test;PinningTest/?testName=PinningFailure;Success
 Pinning success test;PinningTest/?testName=PinningSuccess;Success
+
 Send POST test;SendRequestsTest/?type=empty&method=post;Success
 Send GET test;SendRequestsTest/?type=empty&method=get;Success
 Send HEAD test;SendRequestsTest/?type=empty&method=head;Success
@@ -15,7 +19,7 @@ Send OPTIONS test;SendRequestsTest/?type=empty&method=options;Success
 Send PUT test;SendRequestsTest/?type=empty&method=put;Success
 Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
 Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&userName=a&password=a;Success
-Send String test;SendRequestsTest/?type=string&scope=UserLogin&userName=a&password=a;Success
+
 Send POST test;SendRequestsTest/?type=emptyssl&method=post;Success
 Send GET test;SendRequestsTest/?type=emptyssl&method=get;Success
 Send HEAD test;SendRequestsTest/?type=emptyssl&method=head;Success
@@ -23,11 +27,14 @@ Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options;Success
 Send PUT test;SendRequestsTest/?type=emptyssl&method=put;Success
 Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete;Success
 Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a;Success
+
+Send String test;SendRequestsTest/?type=string&scope=UserLogin&userName=a&password=a;Success
 Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&userName=a&password=a;Success
 Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&userName=a&password=a;Success
 Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&userName=a&password=a;Success
 Send error test;SendRequestsTest/?type=error&scope=UserLogin&userName=a&password=a;Failure Service not found
 Test setters getters;SendRequestsTest/?type=string&scope=UserLogin&userName=a&password=a&testString=setget;Success
+
 Test Set Headers;SendHeadersTest/?type=setHeaders;Success
 Test Add Header;SendHeadersTest/?type=addHeader;Success
 Test Remove Headers;SendHeadersTest/?type=removeHeaders;Success

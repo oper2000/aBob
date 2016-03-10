@@ -15,8 +15,16 @@ IOS Send HEAD test;SendRequestsTest/?type=empty&method=head;Success
 IOS Send OPTIONS test;SendRequestsTest/?type=empty&method=OPTIONS;Success
 IOS Send PUT test;SendRequestsTest/?type=empty&method=put;Success
 IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
-
 IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a;Success
+
+Send POST test;SendRequestsTest/?type=emptyssl&method=post;Success
+Send GET test;SendRequestsTest/?type=emptyssl&method=get;Success
+Send HEAD test;SendRequestsTest/?type=emptyssl&method=head;Success
+Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options;Success
+Send PUT test;SendRequestsTest/?type=emptyssl&method=put;Success
+Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete;Success
+Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a;Success
+
 IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a;Success
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a;Success
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a;Success
