@@ -29,8 +29,6 @@ Test Show native page;testShowNativePage;Success
 Test SimpleDialog;testSimpleDialog;Success
 Test ReloadApp;testReloadApp;Success
 Test Heartbeat;testHeartbeat;Success
-Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
-Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure
 Test Resource Request Headers;testHeaders;Success
 Test GET;testGET;Success
 Test GET with data;testGETWithData;Success
@@ -49,3 +47,5 @@ Test POST-QUERY;testResourceRequestPostQuery;Success
 Test POST-FORM;testResourceRequestPostForm;Success
 Test GET-QUERY;testResourceRequestGetQuery;Success
 Test GET-FORM;testResourceRequestGetForm;Success
+Test pinTrustedCertificatePublicKey;testSuccessfullPinTrustedCertificatePublicKey;Success
+Test Wrong pinTrustedCertificatePublicKey;testFailurePinTrustedCertificatePublicKey;Failure
