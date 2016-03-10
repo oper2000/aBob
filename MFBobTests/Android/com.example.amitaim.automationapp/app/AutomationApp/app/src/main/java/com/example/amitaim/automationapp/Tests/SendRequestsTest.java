@@ -46,20 +46,30 @@ public class SendRequestsTest extends AutomaticTest {
         AndroidChallengeHandler challengeHandler = new AndroidChallengeHandler(realm,userName,password);
         try {
             URI adapterPath ;
-            if (type.equals("empty") || method != null) {
+            if (type.startsWith("empty") || method != null) {
                 String _method = method;
                 if (method.equals("head")) _method = "get";
                 if (method.equals("options")) _method = "get";
                 if (method.equals("trace")) _method = "get";
-                adapterPath = new URI("http://httpbin.org/" + _method);
+                if (type.equals("emptyssl")) {
+                    adapterPath = new URI("https://httpbin.org/" + _method + "?testParam=param");
+                }
+                else {
+                    adapterPath = new URI("http://httpbin.org/" + _method + "?testParam=param");
+                }
             }
             switch (type){
-                case "empty":
+                case "empty": case "emptyssl":
                     String _method = method;
                     if (method.equals("head")) _method = "get";
                     if (method.equals("options")) _method = "get";
                     if (method.equals("trace")) _method = "get";
-                    adapterPath = new URI("http://httpbin.org/" + _method);
+                    if (type.equals("emptyssl")) {
+                        adapterPath = new URI("https://httpbin.org/" + _method + "?testParam=param");
+                    }
+                    else {
+                        adapterPath = new URI("http://httpbin.org/" + _method + "?testParam=param");
+                    }
                     if(scope!=null)
                         MainActivity.client.registerChallengeHandler(challengeHandler);
                     break;
@@ -110,7 +120,7 @@ public class SendRequestsTest extends AutomaticTest {
                     testBytes =testString.getBytes("UTF-8");
                     request.send(testBytes,new MyResponseListener());
                     break;
-                case "empty":
+                case "empty":case "emptyssl":
                     request.send(new MyResponseListener());
                     break;
                 default:
@@ -130,7 +140,7 @@ public class SendRequestsTest extends AutomaticTest {
                 MainActivity.AutomationServer.result = "Success";
             else if(type.equals("json") && response.getResponseText().equals(testJson.toString()))
                 MainActivity.AutomationServer.result = "Success";
-            else if(type.equals("empty") && (response.getResponseText().contains(method) || response.getStatus() == 200))
+            else if(type.startsWith("empty") && (response.getResponseText().contains(method) || response.getStatus() == 200))
                 MainActivity.AutomationServer.result = "Success";
             else if (response.getResponseText().equals(testString)) {
                 if(testString.equals("setget")) {
