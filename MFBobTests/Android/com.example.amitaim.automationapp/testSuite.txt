@@ -6,6 +6,13 @@ GetToken test with scope and invalid user-pass;GetTokenTest/?scope=UserLogin&use
 Get Ressource test with user-pass;GetRessourcesTest/?scope=UserLogin&userName=a&password=a;Success
 Get Ressource test with timeout;GetRessourcesTest/?scope=UserLogin&userName=a&password=a&timeout=10;Success
 Get Ressource test with invalid user-pass;GetRessourcesTest/?scope=UserLogin&userName=a&password=b;Failure {"UserLogin":{"failure":"Account blocked"}}
+Send POST test;SendRequestsTest/?type=emptyssl&method=post;Success
+Send GET test;SendRequestsTest/?type=emptyssl&method=get;Success
+Send HEAD test;SendRequestsTest/?type=emptyssl&method=head;Success
+Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options;Success
+Send PUT test;SendRequestsTest/?type=emptyssl&method=put;Success
+Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete;Success
+Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a;Success
 Pinning negative test;PinningTest/?testName=PinningFailure;Success
 Pinning success test;PinningTest/?testName=PinningSuccess;Success
 Send POST test;SendRequestsTest/?type=empty&method=post;Success
@@ -16,13 +23,6 @@ Send PUT test;SendRequestsTest/?type=empty&method=put;Success
 Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
 Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&userName=a&password=a;Success
 Send String test;SendRequestsTest/?type=string&scope=UserLogin&userName=a&password=a;Success
-Send POST test;SendRequestsTest/?type=emptyssl&method=post;Success
-Send GET test;SendRequestsTest/?type=emptyssl&method=get;Success
-Send HEAD test;SendRequestsTest/?type=emptyssl&method=head;Success
-Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options;Success
-Send PUT test;SendRequestsTest/?type=emptyssl&method=put;Success
-Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete;Success
-Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a;Success
 Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&userName=a&password=a;Success
 Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&userName=a&password=a;Success
 Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&userName=a&password=a;Success
