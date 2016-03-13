@@ -22,10 +22,17 @@ IOS Send HEAD test;SendRequestsTest/?type=empty&method=head;Success
 IOS Send OPTIONS test;SendRequestsTest/?type=empty&method=OPTIONS;Success
 IOS Send PUT test;SendRequestsTest/?type=empty&method=put;Success
 IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
-
 IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a;Success
-IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a;Success
-IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a;Success
-IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a;Success
-IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a;Success
-IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a;FailureRequest failed: not found (404)
+
+IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=handler;Success
+IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=handler;Success
+IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=handler;Success
+IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=handler;Success
+IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=handler;FailureRequest failed: not found (404)
+
+
+IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=delegate;Success
+IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=delegate;Success
+IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=delegate;Success
+IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=delegate;Success
+IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=delegate;FailureRequest failed: not found (404)
