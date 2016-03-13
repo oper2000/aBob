@@ -41,11 +41,13 @@ public class PinningTest extends AutomaticTest{
                 @Override
                 public void onSuccess(final WLResponse wlResponse) {
                     handleWLResponse(wlResponse);
+                    MainActivity.client.pinTrustedCertificatePublicKey("httpbin.cer");
                 }
 
                 @Override
                 public void onFailure(final WLFailResponse wlFailResponse) {
                     handleWLResponse(wlFailResponse);
+                    MainActivity.client.pinTrustedCertificatePublicKey("httpbin.cer");
                 }
             });
 
@@ -70,6 +72,7 @@ public class PinningTest extends AutomaticTest{
                 return;
             }
         }
+
         MainActivity.AutomationServer.result = "Success";
     }
 }
