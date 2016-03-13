@@ -1,6 +1,7 @@
 IOS GetToken test with default scope;GetTokenTest/;Success
 IOS GetToken test with scope;GetTokenTest/?scope=UserLogin&user=a&password=a;Success
 IOS GetToken test with scope and invalid credential;GetTokenTest/?scope=UserLogin&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
+
 IOS Get Ressource test with user-pass handler;GetRessourcesTest/?type=handler&user=a&password=a;Success
 IOS Get Ressource test with invalid user-pass handler;GetRessourcesTest/?type=handler&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
 IOS Get Ressource test with user-pass handler and scope;GetRessourcesTest/?type=handler&scope=UserLogin&user=a&password=a;Success
@@ -8,28 +9,27 @@ IOS Get Ressource test with invalid user-pass handler and scope;GetRessourcesTes
 IOS Get Ressource test with user-pass delegate;GetRessourcesTest/?type=delegate&user=a&password=a;Success
 IOS Get Ressource test with invalid user-pass delegate;GetRessourcesTest/?type=delegate&user=a&password=b;Failure{"failures":{"UserLogin":{"failure":"Account blocked"}}
 
-Send POST test;SendRequestsTest/?type=emptyssl&method=post;Success
-Send GET test;SendRequestsTest/?type=emptyssl&method=get;Success
-Send HEAD test;SendRequestsTest/?type=emptyssl&method=head;Success
-Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options;Success
-Send PUT test;SendRequestsTest/?type=emptyssl&method=put;Success
-Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete;Success
-Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a;Success
+IOS Send POST test;SendRequestsTest/?type=emptyssl&method=post&completionType=handler;Success
+IOS Send GET test;SendRequestsTest/?type=emptyssl&method=get&completionType=handler;Success
+IOS Send HEAD test;SendRequestsTest/?type=emptyssl&method=head&completionType=handler;Success
+IOS Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options&completionType=handler;Success
+IOS Send PUT test;SendRequestsTest/?type=emptyssl&method=put&completionType=handler;Success
+IOS Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete&completionType=handler;Success
+IOS Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&userName=a&password=a&completionType=handler;Success
 
-IOS Send POST test;SendRequestsTest/?type=empty&method=post;Success
-IOS Send GET test;SendRequestsTest/?type=empty&method=get;Success
-IOS Send HEAD test;SendRequestsTest/?type=empty&method=head;Success
-IOS Send OPTIONS test;SendRequestsTest/?type=empty&method=OPTIONS;Success
-IOS Send PUT test;SendRequestsTest/?type=empty&method=put;Success
-IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete;Success
-IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a;Success
+IOS Send POST test;SendRequestsTest/?type=empty&method=post&completionType=handler;Success
+IOS Send GET test;SendRequestsTest/?type=empty&method=get&completionType=handler;Success
+IOS Send HEAD test;SendRequestsTest/?type=empty&method=head&completionType=handler;Success
+IOS Send OPTIONS test;SendRequestsTest/?type=empty&method=OPTIONS&completionType=handler;Success
+IOS Send PUT test;SendRequestsTest/?type=empty&method=put&completionType=handler;Success
+IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete&completionType=handler;Success
+IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a&completionType=handler;Success
 
 IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=handler;FailureRequest failed: not found (404)
-
 
 IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=delegate;Success
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=delegate;Success
