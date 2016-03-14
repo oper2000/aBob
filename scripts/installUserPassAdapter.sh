@@ -16,8 +16,13 @@ cd mfp-server-console-artifacts/console/
 
 mkdir UserLogin
 unzip UserLogin.zip -d UserLogin
-cd UserLogin/UserLogin/
 
+cd UserLogin/UserLogin/src/main/adapter-resources
+sed -i.bak s/'"blockedStateExpirationSec" defaultValue="10"'/'"blockedStateExpirationSec" defaultValue="1"'/g adapter.xml
+rc=$?; if [[ $rc != 0 ]]; then
+echo "***changing security check settings failed***"; exit $rc; fi
+
+cd ../../../
 mvn clean install
 rc=$?; if [[ $rc != 0 ]]; then
 echo "***install user pass adapter failed***"; exit $rc; fi
