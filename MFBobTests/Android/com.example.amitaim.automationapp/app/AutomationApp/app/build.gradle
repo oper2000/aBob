@@ -5,8 +5,8 @@ repositories {
     }
     maven {
         //url "https://oss.sonatype.org/content/repositories/snapshots/"
-        url "http://ibobs-Mac-mini.local:8081/nexus/content/repositories/snapshots/"
-        //url "http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-s/"
+        //url "http://ibobs-Mac-mini.local:8081/nexus/content/repositories/snapshots/"
+        url "http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-s/"
 
     }
 }
