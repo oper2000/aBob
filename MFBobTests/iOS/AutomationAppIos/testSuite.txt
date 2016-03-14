@@ -12,7 +12,7 @@ IOS Get Ressource test with invalid user-pass delegate;GetRessourcesTest/?type=d
 IOS Send POST test;SendRequestsTest/?type=emptyssl&method=post&completionType=handler;Success
 IOS Send GET test;SendRequestsTest/?type=emptyssl&method=get&completionType=handler;Success
 IOS Send HEAD test;SendRequestsTest/?type=emptyssl&method=head&completionType=handler;Success
-IOS Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=options&completionType=handler;Success
+IOS Send OPTIONS test;SendRequestsTest/?type=emptyssl&method=OPTIONS&completionType=handler;Success
 IOS Send PUT test;SendRequestsTest/?type=emptyssl&method=put&completionType=handler;Success
 IOS Send DELETE test;SendRequestsTest/?type=emptyssl&method=delete&completionType=handler;Success
 IOS Send String test;SendRequestsTest/?type=emptyssl&method=post&scope=UserLogin&user=a&password=a&completionType=handler;Success
