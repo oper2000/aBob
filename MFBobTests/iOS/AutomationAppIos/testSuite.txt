@@ -35,4 +35,4 @@ IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&passwo
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=delegate;Success
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=delegate;Success
 IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=delegate;Success
-IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=delegate;FailureRequest failed: not found (404)
+IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=delegate;Failure, response not 200

@@ -49,7 +49,7 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
         }
         let challengeHandler =  IOSChallengeHandler(user: userName, pass :password,realm:realm)
         
-        var adapterPath:NSURL? ;
+        var adapterPath:NSURL?
         WLClient.sharedInstance().registerChallengeHandler(challengeHandler)
         
         switch (type!){
@@ -59,28 +59,28 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
                 _method = "get";
             }
             if(type == "emptyssl"){
-                adapterPath = NSURL(string: "https://httpbin.org/" + _method + "?testParam=param");
+                adapterPath = NSURL(string: "https://httpbin.org/" + _method + "?testParam=param")
             }else{
-                adapterPath = NSURL(string: "http://httpbin.org/" + _method + "?testParam=param");
+                adapterPath = NSURL(string: "http://httpbin.org/" + _method + "?testParam=param")
             }
             break;
         case "string":
-            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestString");
+            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestString")
             break;
         case "hash":
-            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestHash");
+            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestHash")
             break;
         case "json":
-            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestJson");
+            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestJson")
             break;
         case "byte":
-            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestByte");
+            adapterPath = NSURL(string: "/adapters/testSend/users/testRequestByte")
             break;
         case "error":
-            adapterPath = NSURL(string: "/adapters/testSend/users/errorPath");
+            adapterPath = NSURL(string: "/adapters/testSend/users/errorPath")
             break;
         default:
-            GlobalVar.result = "Failure, no such type! ";
+            GlobalVar.result = "Failure, no such type! "
             return;
         }
         var request : WLResourceRequest
@@ -96,7 +96,7 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
             case "string":
                 if (testString == "setget"){
                     request.timeoutInterval = 40000;
-                    request.queryParameters = ["testString": "setget"];
+                    request.queryParameters = ["testString": "setget"]
                 }
                 request.sendWithBody(testString, completionHandler: completionHandler)
                 break;
@@ -105,7 +105,7 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
                 break;
             case "hash":
                 let testHash = ["testString":testString]
-                request.sendWithFormParameters(testHash, completionHandler:completionHandler);
+                request.sendWithFormParameters(testHash, completionHandler:completionHandler)
                 break;
             case "json":
                 request.sendWithJSON(testJson, completionHandler: completionHandler)
@@ -114,7 +114,7 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
                 request.sendWithData(testBytes, completionHandler: completionHandler)
                 break;
             case "empty", "emptyssl":
-                request.sendWithCompletionHandler(completionHandler);
+                request.sendWithCompletionHandler(completionHandler)
                 break;
             default:
                 break;
@@ -180,6 +180,12 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
     
     
     internal func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void){
+         if let httpResponse = response as? NSHTTPURLResponse {
+            if(httpResponse.statusCode != 200){
+                GlobalVar.result = "Failure, response not 200"
+            }
+        }
+
         
         completionHandler(NSURLSessionResponseDisposition.Allow)
     }
@@ -189,8 +195,8 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
         }
         else if(type! == "json"){
             do{
-                let ok = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers).description == testJson.description
-                if(ok != true){
+                let result = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! [NSObject:AnyObject]
+                if(result.description != testJson.description){
                     GlobalVar.result = "Failure: send is different from received"
                 }
                 else{
@@ -215,7 +221,10 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
     }
     internal func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?){
         
-        GlobalVar.result = "Failure" + GlobalVar.gettErrorMessage(error!)
+        GlobalVar.result = "Failure"
+        if(error != nil){
+            GlobalVar.result += GlobalVar.gettErrorMessage(error!)
+        }
         WLClient.sharedInstance().setServerUrl( WLClient.sharedInstance().serverUrl())
     }
     
