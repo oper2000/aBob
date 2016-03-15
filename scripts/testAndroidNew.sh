@@ -85,10 +85,10 @@ for d in */ ; do
  for d2 in */ ; do
  if [[ "$1" = "compile" ]]; then
  yes |cp "$(pwd)/../testSuite.txt" "$(pwd)/${d2}app/src/main/assets/testSuite.txt"
- if [[ "$USER" != "bob" ]]; then
- 	localhost=$(hostname)
- 	echo $localhost
- 	sed -i.bak s/"wlServerHost = ibobs-mac-mini.haifa.ibm.com"/"wlServerHost = $localhost"/g $(pwd)/${d2}app/src/main/assets/mfpclient.properties
+ if [[ "$USER" = "norton" ]]; then
+ 	#localhost=$(hostname)
+ 	#echo $localhost
+ 	sed -i.bak s/"wlServerHost = ibobs-mac-mini.haifa.ibm.com"/"wlServerHost = 9.109.250.170"/g $(pwd)/${d2}app/src/main/assets/mfpclient.properties
  fi
  /Users/bob/Documents/Developer/Quickbuild/scripts/compileAndroidApp.sh $(pwd)/$d2
  rc=$?; if [[ $rc != 0 ]]; then
