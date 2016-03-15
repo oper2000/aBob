@@ -1,4 +1,5 @@
-WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
+#WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
+WATCH="Apple Watch - 42mm (2.1) ["
 Watch_Url=http://127.0.0.1:10080/
 DESTINATION_DEVICE='generic/platform=iOS'
 DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=latest'
@@ -29,8 +30,10 @@ echo "found device: iPhone5c8.1.2;38e22ee28a37f0f5113dfb6ca364dd0847eb80f6"
 DEVICE="iPhone5c8.1.2;38e22ee28a37f0f5113dfb6ca364dd0847eb80f6"
 UsingDevice="YES"
 else
-echo "no device found, using simulator: iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]"
-DEVICE='iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]'
+#echo "no device found, using simulator: iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]"
+echo "no device found, using simulator: iPhone 6 (8.1)"
+#DEVICE='iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]'
+DEVICE='iPhone 6 (8.1)'
 UsingDevice="NO"
 fi
 fi
@@ -42,8 +45,10 @@ echo "found device: iPhone6.8.4.1;fa303e8643d5871d31a7ea7cd9e18400972e75ca"
 DEVICE="iPhone6.8.4.1;fa303e8643d5871d31a7ea7cd9e18400972e75ca"
 UsingDevice="YES"
 else
-echo "no device found, using simulator: iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]"
-DEVICE='iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]'
+#echo "no device found, using simulator: iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]"
+echo "no device found, using simulator: iPhone 6s (9.2)"
+#DEVICE='iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]'
+DEVICE='iPhone 6s (9.2) ['
 UsingDevice="NO"
 fi
 fi
