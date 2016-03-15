@@ -58,7 +58,7 @@ then
 	ps -ef | grep emulator64-x86
 	killall emulator64-x86
 	
-	$ANDROID_HOMEtools/emulator -avd $AVD_NAME -netspeed full -netdelay none &
+	/Users/$USER/Library/Android/sdk/tools/emulator -avd $AVD_NAME -netspeed full -netdelay none &
 	waitForEmulator
 	echo "back from wait-for-emulator"
 fi
