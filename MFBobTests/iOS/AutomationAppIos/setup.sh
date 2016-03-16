@@ -1,2 +1,5 @@
 cd /Users/bob/Documents/Developer/Quickbuild/tests/IOS/AutomationAppIos/app/AutomationAppIos
-pod install
+pod update
+open "AutomationAppIos.xcworkspace"
+sleep 15
+killall Xcode
