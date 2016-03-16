@@ -38,8 +38,11 @@ cat ./../hybridTestSources/mainActivityChanges.txt >> ./platforms/android/src/io
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
 mfpdev app register
-
+if [[ "$USER" = "norton" ]]; then
+gsed -i 's/10.0.0.1/9.109.250.170/g' ./config.xml
+else
 gsed -i 's/10.0.0.1/ibobs-mac-mini.haifa.ibm.com/g' ./config.xml
+fi
 
 
 
