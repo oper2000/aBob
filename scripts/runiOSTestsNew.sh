@@ -1,5 +1,7 @@
-#WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
-WATCH="Apple Watch - 42mm (2.1) ["
+WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
+if [[ "$USER" = "norton" ]]; then
+WATCH="Apple Watch - 42mm (2.1) [0F658FE6-825D-46E9-9984-BE84014F9011]"
+fi
 Watch_Url=http://127.0.0.1:10080/
 DESTINATION_DEVICE='generic/platform=iOS'
 DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=latest'
