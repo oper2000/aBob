@@ -3,8 +3,8 @@
 deviceURL=http://127.0.0.1:10081/
 ios_deviceURL=http://127.0.0.1:8080/
 PROJ_NAME=hybridProj
-SCRIPTS_PATH=~/Documents/Developer/Quickbuild/scripts
-REPROTS_PATH=~/Documents/Developer/Quickbuild/Reports
+SCRIPTS_PATH=/Users/bob/Documents/Developer/Quickbuild/scripts/
+REPROTS_PATH=/Users/bob/Documents/Developer/Quickbuild/Reports
 TARGET=Nexus_5_API_23_hybrid
 IOS_TARGET=hybrid_IOS
 device=emulator-5554
