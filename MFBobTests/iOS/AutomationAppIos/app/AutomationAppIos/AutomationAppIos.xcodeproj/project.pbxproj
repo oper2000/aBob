@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3B3CF7B11C95769D00719BDE /* SendRequestsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */; };
 		3B3CF7B21C95769D00719BDE /* SendRequestsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */; };
+		3B3CF7B41C959CDB00719BDE /* SendHeadersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B31C959CDB00719BDE /* SendHeadersTest.swift */; };
+		3B3CF7B51C959CDB00719BDE /* SendHeadersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B31C959CDB00719BDE /* SendHeadersTest.swift */; };
 		3B9CFF361C4FC8C500B3A187 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9CFF2E1C4FC8C500B3A187 /* DemoServer.swift */; };
 		3B9CFF371C4FC8C500B3A187 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9CFF2F1C4FC8C500B3A187 /* HttpHandlers.swift */; };
 		3B9CFF381C4FC8C500B3A187 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9CFF301C4FC8C500B3A187 /* HttpParser.swift */; };
@@ -107,6 +109,7 @@
 /* Begin PBXFileReference section */
 		30C9032154EC293521BE9CEC /* Pods-AutomationAppIos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutomationAppIos.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutomationAppIos/Pods-AutomationAppIos.debug.xcconfig"; sourceTree = "<group>"; };
 		3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendRequestsTest.swift; sourceTree = "<group>"; };
+		3B3CF7B31C959CDB00719BDE /* SendHeadersTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendHeadersTest.swift; sourceTree = "<group>"; };
 		3B9CFF2E1C4FC8C500B3A187 /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		3B9CFF2F1C4FC8C500B3A187 /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 		3B9CFF301C4FC8C500B3A187 /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -243,6 +246,7 @@
 				3BC921541C47AF7D00BD2F2D /* GetRessourcesTest.swift */,
 				3BCD9CD31C54AEA000FB97AB /* GlobalVar.swift */,
 				3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */,
+				3B3CF7B31C959CDB00719BDE /* SendHeadersTest.swift */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -626,6 +630,7 @@
 				3B9CFF6E1C4FCBAF00B3A187 /* String+Misc.swift in Sources */,
 				3BEA88AA1C50DC4300C2A8F3 /* AutomaticTest.swift in Sources */,
 				3B9CFF581C4FCA9100B3A187 /* NotificationController.swift in Sources */,
+				3B3CF7B51C959CDB00719BDE /* SendHeadersTest.swift in Sources */,
 				3B9CFF561C4FCA9100B3A187 /* ExtensionDelegate.swift in Sources */,
 				3B9CFF6D1C4FCBAF00B3A187 /* Socket.swift in Sources */,
 				3B9CFF691C4FCBAF00B3A187 /* HttpHandlers.swift in Sources */,
@@ -663,6 +668,7 @@
 				3BDEEAC21C16E3B100B9263F /* AppDelegate.swift in Sources */,
 				3B9CFF391C4FC8C500B3A187 /* HttpRequest.swift in Sources */,
 				3B9CFF381C4FC8C500B3A187 /* HttpParser.swift in Sources */,
+				3B3CF7B41C959CDB00719BDE /* SendHeadersTest.swift in Sources */,
 				3B9CFF361C4FC8C500B3A187 /* DemoServer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

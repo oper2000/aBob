@@ -1,13 +1,13 @@
 PODS:
-  - IBMMobileFirstPlatformFoundation (8.0.113)
-  - IBMMobileFirstPlatformFoundationOpenSSLUtils (8.0.113)
+  - IBMMobileFirstPlatformFoundation (8.0.137)
+  - IBMMobileFirstPlatformFoundationOpenSSLUtils (8.0.137)
 
 DEPENDENCIES:
   - IBMMobileFirstPlatformFoundation
   - IBMMobileFirstPlatformFoundationOpenSSLUtils
 
 SPEC CHECKSUMS:
-  IBMMobileFirstPlatformFoundation: d0b0a344bb2e405f0115054068276d11e7450d34
-  IBMMobileFirstPlatformFoundationOpenSSLUtils: 4ce005bb990f474135877ce5121c2ee3dac0c076
+  IBMMobileFirstPlatformFoundation: d0ff52f61fc59f2825a3f34782ea0ab6ff341a55
+  IBMMobileFirstPlatformFoundationOpenSSLUtils: 5b11452b62bc213ec4597856431955896c3fb363
 
 COCOAPODS: 0.39.0
