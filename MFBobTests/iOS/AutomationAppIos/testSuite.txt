@@ -25,6 +25,7 @@ IOS Send PUT test;SendRequestsTest/?type=empty&method=put&completionType=handler
 IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete&completionType=handler;Success
 IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a&completionType=handler;Success
 
+IOS Test setters getters;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&testString=setget&completionType=handler;Success
 IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=handler;Success
@@ -36,3 +37,9 @@ IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=delegate;Success
 IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=delegate;Success
 IOS Send error test;SendRequestsTest/?type=error&scope=UserLogin&user=a&password=a&completionType=delegate;Failure, response not 200
+
+IOS Test Set Headers;SendHeadersTest/?type=setHeaders;Success
+IOS Test Add Header;SendHeadersTest/?type=addHeader;Success
+IOS Test Remove Headers;SendHeadersTest/?type=removeHeaders;Success
+IOS Test Get All Headers Headers;SendHeadersTest/?type=getAllHeaders;Success
+IOS Test Get Headers;SendHeadersTest/?type=getHeaders;Success

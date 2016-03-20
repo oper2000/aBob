@@ -47,6 +47,9 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
         if let paramMethod = dictParams.valueForKey("method") as? String{
             method = paramMethod
         }
+        if let tString = dictParams.valueForKey("testString") as? String{
+            testString = tString
+        }
         let challengeHandler =  IOSChallengeHandler(user: userName, pass :password,realm:realm)
         
         var adapterPath:NSURL?
@@ -97,6 +100,12 @@ class SendRequestsTest : AutomaticTest , NSURLSessionDataDelegate {
                 if (testString == "setget"){
                     request.timeoutInterval = 40000;
                     request.queryParameters = ["testString": "setget"]
+                    if (request.timeoutInterval == 40000 && request.url.path!.containsString("/mfp/api/adapters/testSend/users/testRequestString") &&
+                        request.httpMethod == WLHttpMethodPost && request.getQueryString() == ("testString=setget") &&
+                        request.queryParameters.count == 1 && request.queryParameters.description.containsString("[testString: setget]" )) {
+                            GlobalVar.result = "Success"
+                            return
+                    }
                 }
                 request.sendWithBody(testString, completionHandler: completionHandler)
                 break;
