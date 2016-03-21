@@ -32,7 +32,7 @@ source ~/.bash_profile
 cd "$TEST_ROOT"
 if [[ $using_simulator = "YES" ]]; then
 xcrun instruments -w "$DEVICE"
-sleep 30
+sleep 60
 echo "$TEST_ROOT"
 if [[ "$WATCH_APP" == "No" ]]; then
 xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME"
