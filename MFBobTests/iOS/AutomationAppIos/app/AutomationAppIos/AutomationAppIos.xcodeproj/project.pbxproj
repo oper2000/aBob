@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E2048EF1CA0045F00F12C43 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3B9CFF401C4FCA9100B3A187 /* Watch.app */; };
 		3B3CF7B11C95769D00719BDE /* SendRequestsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */; };
 		3B3CF7B21C95769D00719BDE /* SendRequestsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B01C95769D00719BDE /* SendRequestsTest.swift */; };
 		3B3CF7B41C959CDB00719BDE /* SendHeadersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3CF7B31C959CDB00719BDE /* SendHeadersTest.swift */; };
@@ -93,6 +94,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		1E2048EE1CA0043E00F12C43 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1E2048EF1CA0045F00F12C43 /* Watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3B9CFF621C4FCA9100B3A187 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -382,6 +394,7 @@
 				3BDEEABC1C16E3B100B9263F /* Resources */,
 				CE828CDB4AAFF4A2170978AA /* Embed Pods Frameworks */,
 				7FD21593632C97718FC73537 /* Copy Pods Resources */,
+				1E2048EE1CA0043E00F12C43 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
