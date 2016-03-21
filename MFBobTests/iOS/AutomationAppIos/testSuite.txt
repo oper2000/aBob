@@ -25,8 +25,8 @@ IOS Send PUT test;SendRequestsTest/?type=empty&method=put&completionType=handler
 IOS Send DELETE test;SendRequestsTest/?type=empty&method=delete&completionType=handler;Success
 IOS Send String test;SendRequestsTest/?type=empty&method=post&scope=UserLogin&user=a&password=a&completionType=handler;Success
 
-# defect 103321 IOS Test setters getters;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&testString=setget&completionType=handler;Success
-IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=handler;Success
+IOS Test setters getters;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&testString=setget&completionType=handler;Success
+# defect 103321 IOS Send String test;SendRequestsTest/?type=string&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send Hash test;SendRequestsTest/?type=hash&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send JSON test;SendRequestsTest/?type=json&scope=UserLogin&user=a&password=a&completionType=handler;Success
 IOS Send byte array test;SendRequestsTest/?type=byte&scope=UserLogin&user=a&password=a&completionType=handler;Success
