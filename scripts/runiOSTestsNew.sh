@@ -7,6 +7,7 @@ DESTINATION_DEVICE='generic/platform=iOS'
 DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=latest'
 DESTINATION2='platform=iOS Simulator,OS=latest,name=iPhone 6s Plus'
 Report_Dir=/Users/bob/Documents/Developer/Quickbuild/Reports/latest/
+Run_Watch=$2
 
 if [[ "$1" != "compile" ]]; then
 connected_devices=$(ios-deploy -c)
@@ -157,7 +158,7 @@ fi
 # running test
 /Users/bob/Documents/Developer/Quickbuild/scripts/runiOSAppNew.sh $TEST_ROOT $APP_NAME No "$DEVICE" ${Report_Dir}${REPORT_NAME}/$APP_NAME $(pwd)/../testSuite.txt $deviceURL
 echo "checking if watch testing is needed"
- if [ -d "${TEST_ROOT}Watch Extension" ] && [ ! -d "${Report_Dir}Watch/$APP_NAME" ] ; then
+ if [ -d "${TEST_ROOT}Watch Extension" ] && [ ! -d "${Report_Dir}Watch/$APP_NAME" ] && [ $Run_Watch = "yes" ] ; then
  echo "yes"
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1.0
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1
