@@ -42,8 +42,8 @@ then
 
 	sleep 10
 
-# 	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
-# 	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$TARGET
+ 	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $deviceURL
+ 	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$TARGET
 
 	# Kill android emulator
 	# ps -ef | grep emulator64-x86
