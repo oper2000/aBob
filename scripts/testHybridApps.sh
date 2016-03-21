@@ -35,7 +35,7 @@ then
 	echo "emulator is up"
 	adb -s $device forward tcp:10081 tcp:10080
 
-	cordova run android
+	cordova emulate android
 
 	mkdir $REPROTS_PATH/latest/$TARGET/
 	adb -s $device logcat > $REPROTS_PATH/latest/$TARGET/logcat.log & PID=$!
