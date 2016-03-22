@@ -1,4 +1,4 @@
-WATCH="Apple Watch - 42mm (2.1) [4A3DA953-8E26-47F3-9C1D-0E303A354F2C]"
+WATCH="Apple Watch - 42mm (2.2) [BB87BF38-BF36-48BD-A22E-12F17DE640E3]"
 if [[ "$USER" = "norton" ]]; then
 WATCH="Apple Watch - 42mm (2.1) [0F658FE6-825D-46E9-9984-BE84014F9011]"
 fi
@@ -43,15 +43,19 @@ fi
 
 if [[ "$1" = "9" ]]; then
 echo "testing using iOS9 is requested"
-if [[ $connected_devices = *"fa303e8643d5871d31a7ea7cd9e18400972e75ca"*  ]]; then
-echo "found device: iPhone6.8.4.1;fa303e8643d5871d31a7ea7cd9e18400972e75ca"
-DEVICE="iPhone6.8.4.1;fa303e8643d5871d31a7ea7cd9e18400972e75ca"
+if [[ $connected_devices = *"6317c3c54ee3ad973b202ddb42947bfa87595a5a"*  ]]; then
+echo "found device: iPhone6.9.3;6317c3c54ee3ad973b202ddb42947bfa87595a5a"
+DEVICE="iPhone6.9.3;6317c3c54ee3ad973b202ddb42947bfa87595a5a"
 UsingDevice="YES"
 else
 #echo "no device found, using simulator: iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]"
 echo "no device found, using simulator: iPhone 6s (9.2)"
 #DEVICE='iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]'
+if [[ "$USER" = "norton" ]]; then
 DEVICE='iPhone 6s (9.2) ['
+else
+DEVICE='iPhone 6s (9.3) ['
+fi
 UsingDevice="NO"
 fi
 fi
