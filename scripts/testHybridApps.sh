@@ -55,7 +55,7 @@ fi
 
 cordova emulate ios
 
-sleep 15
+sleep 30
 
 ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $ios_deviceURL
 ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET
