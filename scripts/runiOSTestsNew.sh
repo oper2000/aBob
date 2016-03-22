@@ -158,7 +158,7 @@ fi
 # running test
 /Users/bob/Documents/Developer/Quickbuild/scripts/runiOSAppNew.sh $TEST_ROOT $APP_NAME No "$DEVICE" ${Report_Dir}${REPORT_NAME}/$APP_NAME $(pwd)/../testSuite.txt $deviceURL
 echo "checking if watch testing is needed"
- if [ -d "${TEST_ROOT}Watch Extension" ] && [ ! -d "${Report_Dir}Watch/$APP_NAME" ] && [ $Run_Watch = "yes" ] ; then
+ if [ -d "${TEST_ROOT}Watch Extension" ] && [ ! -d "${Report_Dir}Watch/$APP_NAME" ] && [ "$Run_Watch" = "yes" ] ; then
  echo "yes"
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1.0
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1
