@@ -51,6 +51,8 @@ ios-deploy -i $DEVICE --justlaunch --bundle $TEST_ROOT${APP_NAME}Device.app
 fi
 sleep 10
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml -Dreport.dir=$REPORT_DIR -DtestFile=$TEST_FILE -DdeviceUrl=$DEVICE_URL
+ rc=$?; if [[ $rc != 0 ]]; then
+ echo ***tests failed***; exit $rc; fi    
 ant -f /Users/bob/Documents/Developer/Quickbuild/scripts/testng/runTests.xml replaceTestsName -Dreport.dir=$REPORT_DIR
 
 if [[ $using_simulator == "NO" ]]; then

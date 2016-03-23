@@ -167,6 +167,18 @@ echo "checking if watch testing is needed"
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1.0
  /Users/bob/Documents/Developer/Quickbuild/scripts/deployiOSApp.sh ${d%?}.watchkitapp.watchkitextension 1
  /Users/bob/Documents/Developer/Quickbuild/scripts/runiOSAppNew.sh $TEST_ROOT $APP_NAME YES "$WATCH" ${Report_Dir}Watch/$APP_NAME $(pwd)/../testSuite.txt $Watch_Url
+ rc=$?; if [[ $rc != 0 ]]; then
+ 	echo "running watch tests again";
+  	if [ -d "${Report_Dir}Watch/$APP_NAME" ]; then
+ 		echo "deleting old test reports"
+		rm -rf ${Report_Dir}Watch/$APP_NAME
+	fi
+	echo "building watch app"
+ 	xcodebuild OTHER_CFLAGS="-fembed-bitcode" -workspace $TEST_ROOT$APP_NAME.xcworkspace  -scheme Watch -configuration Debug clean build CODE_SIGNING_REQUIRED=NO -destination "$DESTINATION2" CONFIGURATION_BUILD_DIR="$TEST_ROOT"
+ 	rc=$?; if [[ $rc != 0 ]]; then
+ 	echo ***build failed***; exit $rc; fi
+  	/Users/bob/Documents/Developer/Quickbuild/scripts/runiOSAppNew.sh $TEST_ROOT $APP_NAME YES "$WATCH" ${Report_Dir}Watch/$APP_NAME $(pwd)/../testSuite.txt $Watch_Url
+ fi
  else
  echo "no"
  fi
