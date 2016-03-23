@@ -11,10 +11,10 @@ cd $1
 cordova platform add ios
 cordova platform add android
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
-# if [ "$USER" == "bob" ]
-# then
-# 	cordova plugin add cordova-plugin-crosswalk-webview
-# fi
+if [ "$USER" == "bob" ]
+then
+	cordova plugin add cordova-plugin-crosswalk-webview
+fi
 cordova  plugin add cordova-plugin-mfp
 
 
@@ -34,6 +34,7 @@ gsed -i '/onInitWebFrameworkComplete/a\\t\tif (server == null){\
 \t\t\t}' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 gsed -i '$ d' ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
 cat ./../hybridTestSources/mainActivityChanges.txt >> ./platforms/android/src/io/cordova/hellocordova/MainActivity.java
+cp ./../hybridTestSources/gradle.properties ./platforms/android/
 
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
