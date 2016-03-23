@@ -35,6 +35,7 @@ xcrun instruments -w "$DEVICE"
 sleep 60
 echo "$TEST_ROOT"
 if [[ "$WATCH_APP" == "No" ]]; then
+sleep 30
 xcrun simctl uninstall booted "com.worklight.ibm.$APP_NAME"
 xcrun simctl install booted "$APP_NAME.app"
 xcrun simctl launch  booted "com.worklight.ibm.$APP_NAME"
