@@ -58,8 +58,20 @@ cordova emulate ios
 sleep 30
 
 ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $ios_deviceURL
-ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET
-
+ rc=$?; if [[ $rc != 0 ]]; then
+ 	echo "tests failed, trying again"
+ 	killall "Simulator"
+ 	if [ -d "$REPROTS_PATH/latest/$IOS_TARGET" ]; then
+ 		echo "deleting old test reports"
+		rm -rf $REPROTS_PATH/latest/$IOS_TARGET
+	fi
+ 	cordova emulate ios
+ 	sleep 30
+ 	ant -f $SCRIPTS_PATH/testng/runTests.xml -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET -DtestFile $SCRIPTS_PATH/hybridTestSources/hybridTestSuite.txt -DdeviceUrl $ios_deviceURL
+ 	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET
+ else
+	ant -f $SCRIPTS_PATH/testng/runTests.xml replaceTestsName -Dreport.dir=$REPROTS_PATH/latest/$IOS_TARGET
+ fi
 killall "Simulator"
 
 $SCRIPTS_PATH/hybridTestSources/verifyTestResultsOnLogcat.sh $TARGET
