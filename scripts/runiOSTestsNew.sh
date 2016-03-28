@@ -109,8 +109,11 @@ for d in */ ; do
  APP_NAME=${d2%?}
  
  if [[ "$1" = "compile" ]]; then
+ if [[ "$USER" != "bob" ]]; then
+ macIP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1{print $2}')
+ sed -i.bak s/"ibobs-mac-mini.haifa.ibm.com"/"$macIP"/g ${TEST_ROOT}/${APP_NAME}/mfpclient.plist
+ fi
  # compiling app
- #cd $TEST_ROOT
  rm -rf ${TEST_ROOT}*.app
 
  if [ -d "${TEST_ROOT}Watch Extension" ]; then
