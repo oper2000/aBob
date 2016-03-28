@@ -1,5 +1,5 @@
 resultMissing=""
-REPORTS_PATH=~/Documents/Developer/Quickbuild/Reports
+REPORTS_PATH=/Users/bob/Documents/Developer/Quickbuild/Reports
 iosSimulatorFolder=`ls -td -- ~/Library/Logs/CoreSimulator/*/ | head -n 1`
 for txt2verify in {"wl.test : debug \[1,2,3\]","wl.test : log testLogger:log message","wl.test : info 1 2 3","wl.test : error Error: testLogger:oh no","wl.test : fatal testLogger: fatal message","MyTestReceiver found. Removing","Showing Splash Screen","testReloadApp"}
 do
