@@ -1,6 +1,6 @@
 use_frameworks!
 #source 'https://github.com/CocoaPods/Specs.git'
 #pod 'DemoOpensSSL’,’0.1.16’
-source 'https://hub.jazz.net/git/oper2000/imf-client-sdk-specs-inhouse.git'
+#source 'https://hub.jazz.net/git/oper2000/imf-client-sdk-specs-inhouse.git'
 pod 'IBMMobileFirstPlatformFoundation'
 pod 'IBMMobileFirstPlatformFoundationOpenSSLUtils'
