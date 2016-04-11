@@ -11,7 +11,7 @@ cd $1
 cordova platform add ios
 cordova platform add android
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
-if [ "$USER" == "bob" ]
+if [ "$HOSTNAME" == "ibobs-mac-mini.haifa.ibm.com" ]
 then
 	cordova plugin add cordova-plugin-crosswalk-webview
 fi
