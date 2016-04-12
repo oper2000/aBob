@@ -20,6 +20,9 @@ cordova  plugin add cordova-plugin-mfp
 
 gsed -i '/app.receivedEvent(.deviceready.);/a\\t\tvar buttonOne = document.getElementById("button1");\n\t\tbuttonOne.addEventListener("click", function(){\n\t\t\ttestSDK();\n\t\t}, false);' ./www/js/index.js
 gsed -i '/Apache Cordova/a\\t\t\t<button type="button" id="button1">Automation Hybrid App!<\/button>' ./www/index.html
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
+gsed -i "s/ibobs-mac-mini.haifa.ibm.com/$(HOSTNAME)/g" ./../hybridTestSources/SDKTest.js
+fi
 cat ./../hybridTestSources/SDKTest.js >> ./www/js/index.js
 
 
