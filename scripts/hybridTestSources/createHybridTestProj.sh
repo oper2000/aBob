@@ -39,7 +39,7 @@ cp ./../hybridTestSources/gradle.properties ./platforms/android/
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
 mfpdev app register
-if [[ "$USER" != "bob" ]]; then
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
 macIP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1{print $2}')
 gsed -i "s/10.0.0.1/$macIP/g" ./config.xml
 else
