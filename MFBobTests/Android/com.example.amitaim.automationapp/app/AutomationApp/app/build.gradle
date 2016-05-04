@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 repositories {
+    mavenCentral()
+
+    /*
     flatDir {
         dirs 'libs'
     }
     maven {
-        //url "https://oss.sonatype.org/content/repositories/snapshots/"
-        //url "http://ibobs-Mac-mini.local:8081/nexus/content/repositories/snapshots/"
         url "http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-s/"
-
     }
+    */
 }
 
 android {
@@ -42,18 +43,22 @@ android {
     }
 
     /// *   uncomment to use with code * ///
-    /*
+
     sourceSets {
         main {
             java {
-                srcDir '/XXX - path-to/worklight-android-native/src/main/java'
+                srcDir '/Users/michaeld/Documents/Developer/MF_Main/worklight-android-native/src/main/java'
             }
             resources {
-                srcDir '/XXX path -to/worklight-android-native/src/main/resources'
+                srcDir '/Users/michaeld/Documents/Developer/MF_Main/worklight-android-native/src/main/resources'
             }
         }
     }
-    */
+
+    sourceSets {
+        //main.java.srcDirs += '/Users/michaeld/Documents/Developer/MF_Main/worklight-android-native/src/test/java'
+    }
+
 }
 
 dependencies {
@@ -62,9 +67,12 @@ dependencies {
     compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.2.0'
 
     /// *   uncomment to use with code * ///
-    //compile 'com.squareup.okhttp:okhttp:2.7.0'
+    compile 'com.squareup.okhttp:okhttp:2.7.0'
     /// * comment out to use with codes *///
-    compile group: 'com.ibm.mobile.foundation', name: 'ibmmobilefirstplatformfoundation',version: '8.0.Beta1-SNAPSHOT', changing: true
+    //compile 'com.ibm.mobile.foundation:ibmmobilefirstplatformfoundation:8.0.+'
+
+    //compile 'com.ibm.mobile.foundation:ibmmobilefirstplatformfoundation:8.0.+'
+    //compile group: 'com.ibm.mobile.foundation', name: 'ibmmobilefirstplatformfoundation',version: '8.0.Beta1-SNAPSHOT', changing: true
 }
 
 configurations.all {
