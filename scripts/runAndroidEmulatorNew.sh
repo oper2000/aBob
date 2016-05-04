@@ -84,6 +84,8 @@ if [[ $using_emulator = "YES" ]]
 then
 	ps -ef | grep emulator64-x86
 	killall emulator64-x86
+	ps -ef | grep qemu-system-i386
+	killall qemu-system-i386
 else
 kill $PID
 fi

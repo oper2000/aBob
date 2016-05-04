@@ -1,6 +1,6 @@
 WATCH="Apple Watch - 42mm (2.2) [BB87BF38-BF36-48BD-A22E-12F17DE640E3]"
-if [[ "$USER" = "norton" ]]; then
-WATCH="Apple Watch - 42mm (2.1) [0F658FE6-825D-46E9-9984-BE84014F9011]"
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
+WATCH="Apple Watch - 42mm (2.1) [4D7B458A-9B59-43B6-9121-74D256B2E77E]"
 fi
 Watch_Url=http://127.0.0.1:10080/
 DESTINATION_DEVICE='generic/platform=iOS'
@@ -34,9 +34,9 @@ DEVICE="iPhone5c8.1.2;38e22ee28a37f0f5113dfb6ca364dd0847eb80f6"
 UsingDevice="YES"
 else
 #echo "no device found, using simulator: iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]"
-echo "no device found, using simulator: iPhone 6 (8.1)"
+echo "no device found, using simulator: iPhone 6 (8.4)"
 #DEVICE='iPhone 6 (8.1) [FA616278-0F27-4571-8260-B52DA93ACE6C]'
-DEVICE='iPhone 6 (8.1)'
+DEVICE='iPhone 6 (8.4)'
 UsingDevice="NO"
 fi
 fi
@@ -51,7 +51,7 @@ else
 #echo "no device found, using simulator: iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]"
 echo "no device found, using simulator: iPhone 6s (9.2)"
 #DEVICE='iPhone 6s (9.2) [DF2457E1-0649-4B45-8B1B-C3EC0A2A5461]'
-if [[ "$USER" = "norton" ]]; then
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
 DEVICE='iPhone 6s (9.2) ['
 else
 DEVICE='iPhone 6s (9.3) ['
@@ -109,7 +109,7 @@ for d in */ ; do
  APP_NAME=${d2%?}
  
  if [[ "$1" = "compile" ]]; then
- if [[ "$USER" != "bob" ]]; then
+ if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
  macIP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1{print $2}')
  sed -i.bak s/"ibobs-mac-mini.haifa.ibm.com"/"$macIP"/g ${TEST_ROOT}/${APP_NAME}/mfpclient.plist
  fi

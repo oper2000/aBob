@@ -11,7 +11,7 @@ cd $1
 cordova platform add ios
 cordova platform add android
 npm config set registry http://visustar.francelab.fr.ibm.com:8081/nexus/content/repositories/mobile-npm-all/
-if [ "$USER" == "bob" ]
+if [ "$HOSTNAME" == "ibobs-mac-mini.haifa.ibm.com" ]
 then
 	cordova plugin add cordova-plugin-crosswalk-webview
 fi
@@ -20,6 +20,9 @@ cordova  plugin add cordova-plugin-mfp
 
 gsed -i '/app.receivedEvent(.deviceready.);/a\\t\tvar buttonOne = document.getElementById("button1");\n\t\tbuttonOne.addEventListener("click", function(){\n\t\t\ttestSDK();\n\t\t}, false);' ./www/js/index.js
 gsed -i '/Apache Cordova/a\\t\t\t<button type="button" id="button1">Automation Hybrid App!<\/button>' ./www/index.html
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
+gsed -i "s/ibobs-mac-mini.haifa.ibm.com/$(HOSTNAME)/g" ./../hybridTestSources/SDKTest.js
+fi
 cat ./../hybridTestSources/SDKTest.js >> ./www/js/index.js
 
 
@@ -39,7 +42,7 @@ cp ./../hybridTestSources/gradle.properties ./platforms/android/
 cp ./../hybridTestSources/nanohttpd-2.2.0.jar ./platforms/android/libs
 
 mfpdev app register
-if [[ "$USER" != "bob" ]]; then
+if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
 macIP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1{print $2}')
 gsed -i "s/10.0.0.1/$macIP/g" ./config.xml
 else

@@ -12,6 +12,7 @@ device=emulator-5554
 cd $SCRIPTS_PATH
 
 killall emulator64-x86
+killall qemu-system-i386
 $ANDROID_HOME/tools/emulator -avd $TARGET -netspeed full -netdelay none  &
 
 ./hybridTestSources/createHybridTestProj.sh $PROJ_NAME
@@ -48,6 +49,7 @@ then
 	# Kill android emulator
 	# ps -ef | grep emulator64-x86
 	killall emulator64-x86
+	killall qemu-system-i386
 else
   	echo "Error:Simulator did not start successfully"
 fi

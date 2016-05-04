@@ -85,7 +85,7 @@ for d in */ ; do
  for d2 in */ ; do
  if [[ "$1" = "compile" ]]; then
  yes |cp "$(pwd)/../testSuite.txt" "$(pwd)/${d2}app/src/main/assets/testSuite.txt"
- if [[ "$USER" != "bob" ]]; then
+ if [[ "$HOSTNAME" != "ibobs-mac-mini.haifa.ibm.com" ]]; then
  	macIP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1{print $2}')
  	echo $macIP
  	sed -i.bak s/"wlServerHost = ibobs-mac-mini.haifa.ibm.com"/"wlServerHost = $macIP"/g $(pwd)/${d2}app/src/main/assets/mfpclient.properties
