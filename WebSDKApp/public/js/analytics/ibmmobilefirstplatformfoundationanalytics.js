@@ -130,6 +130,6 @@
 		disable: _disable,
 		state: _state,
 		send: _send,
-		event: _event
+		addEvent: _event
 	}
 }));

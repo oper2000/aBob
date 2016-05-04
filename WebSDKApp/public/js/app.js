@@ -123,12 +123,17 @@ function send() {
     ibmmobilefirstplatformfoundationanalytics.send();
 };
 
+function addCustomEvent(customEventLog) {
+	ibmmobilefirstplatformfoundationanalytics.addEvent({'WebPurchases':customEventLog});
+};
+
 return {
     obtainAccessToken: obtainAccessToken,
     login: login,
     logout: logout,
     resourceRequestSecured: resourceRequestSecured,
     log: log,
-    send: send
+    send: send,
+    addCustomEvent: addCustomEvent
   };
 });
