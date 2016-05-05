@@ -24,7 +24,7 @@
 }(this, function () { //logger impl
 
         REQ_SEND_LOGS = '/mfp/api/loguploader',
-        REQ_UPDATE_CONFIG = '/mfp/api/configprofile',
+        REQ_UPDATE_CONFIG = '/mfp/api/clientLogProfile',
         KEY_LOCAL_STORAGE_LOGS = '__WL_WEBLOG_LOGS__',
         KEY_LOCAL_STORAGE_SWAP = '__WL_WEBLOG_SWAP__',
         KEY_LOCAL_STORAGE_ANALYTICS = '__WL_WEBLOG_ANALYTICS__',
@@ -39,7 +39,7 @@
     
     	var metadataHeader = {};
         var startupTime = 0;
-        var appSessionID = "";
+        var appSessionID = '';
         var state = __getStateDefaults();
         
         	// Private variables
@@ -146,6 +146,14 @@
 			var url = this._url;
 			__logOutboundRequest(this);
 
+		        var duration = new Date().getTime() - startupTime;
+		        if (appSessionID == "") {
+		   		logAnalyticsSessionStart();
+		        }
+		        else if (duration > 10000) {
+		   		logAnalyticsSessionStop();
+		        }
+		    	startupTime = new Date().getTime();
 			this.setRequestHeader("x-wl-analytics-tracking-id", _generateUUID());
 			this.setRequestHeader("x-mfp-analytics-metadata", JSON.stringify(metadataHeader));
 
@@ -182,16 +190,6 @@
 	 */
 
 	var __send = function(keys) {
-	
-		var duration = new Date().getTime() - startupTime;
-		   if (appSessionID == "") {
-		   		logAnalyticsSessionStart();
-		   }
-		   else if (duration > 10000) {
-		   		logAnalyticsSessionStop();
-		   }
-		
-		startupTime = new Date().getTime();
 
 		var data = getLogsData(keys);
 		
@@ -201,9 +199,9 @@
         }
                 		
 		__ajax(data, REQ_SEND_LOGS)
-			.then(function (metadata) {
+			.then(function (response) {
 				emptyLogs(keys);
-				__logInboundForSendResponse(metadata);
+				__logInboundForSendResponse(response[0]);
 				console.log('Client logs successfully sent to the server');
 			})
 			.catch(function (err) {
@@ -214,8 +212,6 @@
 	
     function __sendAnalytics() {
         __send([KEY_LOCAL_STORAGE_ANALYTICS]);
- 
-//         xhttp.setRequestHeader("Content-type", "text/plain;charset=UTF-8");
     };
 
     function getLogsData(keys){
@@ -236,15 +232,18 @@
         return JSON.stringify(logdata);
     };	
 
-    var __ajax = function(data,path) {
+    var __ajax = function(data,path,method) {
     	  
     	return new Promise(function (resolve, reject) {
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST', path,true);
+			if (method == null){
+				method = 'POST'
+			}
+			xhr.open(method, path,true);
 			
 			xhr.onload = function () {
 			  if (this.status >= 200 && this.status < 300) {
-				resolve(xhr.networkMetadata);				
+				resolve([xhr.networkMetadata,xhr.response]);				
 			  } else {
 				reject({
 				  status: this.status,
@@ -487,7 +486,7 @@
     			var configurationString = localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG);
     			var configuration = JSON.parse(configurationString);
                 __updateState(configuration);
-                _unsetServerOverrides();
+                __unsetServerOverrides();
     		}
     	};
 
@@ -658,7 +657,7 @@
 		var lines = stack.split('\n');
 		for(var i = 1; i<lines.length; ++i){
 			var line = lines[i];
-			if(line.indexOf("ibmmobilefirstplatfromfoundationlogger") == -1 && line.indexOf("ibmmobilefirstplatfromfoundationanalytics") == -1){
+			if(line.indexOf("ibmmobilefirstplatformfoundationlogger") == -1 && line.indexOf("ibmmobilefirstplatformfoundationanalytics") == -1){
 				return line;
 			}
 		}
@@ -861,7 +860,7 @@
          var logArgArray = __getLogArgArray(args, priority, pkg)
          var state = __state();
 
-		  setTimeout(function () {
+		  //setTimeout(function () {
 			  if (typeof(Storage) !== 'undefined') {
 					var level =  logArgArray[0];
 					var pkg = logArgArray[1];
@@ -883,7 +882,7 @@
 					  __persistLog(logData, KEY_LOCAL_STORAGE_LOGS);
 					}
 			  }
-		  }, 0, logArgArray);
+		  //}, 0, logArgArray);
 
         //Log to the console
         // we use WL.StaticAppProps instead of WL.Client.getEnvironment because the former is
@@ -982,26 +981,22 @@
     };
 
     var _updateConfigFromServer = function() {
-//          var dfd = $.Deferred();
+        
+         var appName = metadataHeader.mfpAppName ;
+         var platform = metadataHeader.os ;
+         var version = metadataHeader.mfpAppVersion;
          
-         __ajax({}, REQ_UPDATE_CONFIG)
-			.then(function (data) {
-                __processUpdateConfig(data);
+//          var appName = 'com.hackaton.ibm.analyticstestapp';
+//          var platform = 'android';
+//          var version = '1.0';
+         var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
+         __ajax({}, getConfigUrl,'GET')
+			.then(function (metadata) {
+                __processUpdateConfig(metadata[1]);
 			})
 			.catch(function (err) {
 			  console.error('call to xhr failed', err.statusText);
 		});
-
-          // __ajax({}, REQ_UPDATE_CONFIG).done(function(data){
-// 
-//                 __processUpdateConfig(data);
-//                 dfd.resolve();
-// 
-//             }).fail(function(){
-//             	dfd.reject();
-//             });
-// 
-//              return dfd.promise();
     };
 
     var __setServerOverrides = function(config) {
@@ -1077,10 +1072,10 @@
     	var meta = {
     	 '$category' : 'appSession',
     	 '$duration' : duration,
-    	 '$$closedBy' : false,
+    	 '$closedBy' : 'user',
     	 '$appSessionID' : appSessionID
     	};
-    	appSessionID = "";
+    	appSessionID = '';
     	_metadata(meta);
     	_ctx({pkg: 'wl.analytics',level : 'ANALYTICS'});
     	__log('appSession','ANALYTICS');

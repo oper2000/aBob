@@ -16,8 +16,8 @@
         width:150px !important;
     }
     .form-line{
-        padding-top:12px;
-        padding-bottom:12px;
+        padding-top:0px;
+        padding-bottom:0px;
     }
     .form-label-right{
         width:150px !important;
@@ -26,6 +26,7 @@
         margin:0;
         padding:0;
         background:false;
+        height: 100px;
     }
 
     .form-all{
@@ -53,7 +54,6 @@
 <body>
 
 <form novalidate="true" class="jotform-form" name="form_61082315715450" id="61082315715450" accept-charset="utf-8">
-  <input name="formID" value="61082315715450" type="hidden">
   <div class="form-all">
     <ul class="form-section page-section">
       <li id="cid_1" class="form-input-wide" data-type="control_head">
@@ -65,57 +65,43 @@
           </div>
         </div>
       </li>
+      
+     <ul class="form-section page-section">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group">
+          <div class="header-text httal htvam">
+            <h3 id="header_1" class="form-header" font-size="4px">
+              Out-Of-The-Box Analytics (Network transactions)
+            </h3>
+          </div>
+        </div>
+      </li>
+      
       <li class="form-line" data-type="control_button" id="id_8">
         <div id="cid_8" class="form-input-wide">
           <div style="text-align:center" class="form-buttons-wrapper">
             <button id="input_8" type="button" class="form-submit-button" onClick="demoApp.obtainAccessToken()">
               Obtain (default token)
             </button>
-          </div>
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_81">
-        <div id="cid_82" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
             <button id="input_82" type="button" class="form-submit-button" onClick="demoApp.login()">
               Login
-            </button>
-          </div>
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_82">
-        <div id="cid_81" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
+            </button>  
             <button id="input_81" type="button" class="form-submit-button" onClick="demoApp.logout()">
               Logout
-            </button>
-          </div>
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_10">
-        <div id="cid_10" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
+            </button>  
             <button id="input_10" type="button" class="form-submit-button" onClick="demoApp.resourceRequestSecured()">
               Make a resource request
-            </button>
+            </button>                                
           </div>
         </div>
       </li>
-      <li class="form-line" data-type="control_button" id="id_6">
-        <div id="cid_6" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
-            <button id="input_6" type="button" class="form-submit-button">
-              Generate Uncaught Error(aka Crash)
-            </button>
-          </div>
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_11">
-        <div id="cid_11" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
-            <button id="input_11" type="button" class="form-submit-button">
-              Log Web Session
-            </button>
+    <ul class="form-section page-section">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group">
+          <div class="header-text httal htvam">
+            <h3 id="header_1" class="form-header" font-size="4px">
+              Log Analytics (Collecting logs)
+            </h3>
           </div>
         </div>
       </li>
@@ -134,12 +120,32 @@
           </div>
         </div>
       </li>
-      <li class="form-line" data-type="control_button" id="id_2">
-        <div id="cid_2" class="form-input-wide">
+    <ul class="form-section page-section">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group">
+          <div class="header-text httal htvam">
+            <h3 id="header_1" class="form-header" font-size="4px">
+              Error Analytics
+            </h3>
+          </div>
+        </div>
+      </li>
+      <li class="form-line" data-type="control_button" id="id_6">
+        <div id="cid_6" class="form-input-wide">
           <div style="text-align:center" class="form-buttons-wrapper">
-            <button id="input_2" type="button" class="form-submit-button" onClick="demoApp.send()">
-              Send Analytics
+            <button id="input_6" type="button" class="form-submit-button">
+              Generate Uncaught Error(aka Crash)
             </button>
+          </div>
+        </div>
+      </li>
+    <ul class="form-section page-section">
+      <li id="cid_1" class="form-input-wide" data-type="control_head">
+        <div class="form-header-group">
+          <div class="header-text httal htvam">
+            <h3 id="header_1" class="form-header" font-size="4px">
+              Custom Events Analytics
+            </h3>
           </div>
         </div>
       </li>
@@ -158,6 +164,24 @@
             </button>
             <button type="button" onclick="demoApp.addCustomEvent('ToothBrush')" class="form-submit-button">
               <img src="icons/toothbrush.png" alt="Buy Toothbrush" style="width:48px;height:48px;">
+            </button>
+          </div>
+        </div>
+      </li>
+    <li class="form-line" data-type="control_button" id="id_11">
+        <div id="cid_11" class="form-input-wide">
+          <div style="text-align:center" class="form-buttons-wrapper">
+            <button id="input_11" type="button" class="form-submit-button">
+              Log Web Session
+            </button>
+          </div>
+        </div>
+      </li>
+    <li class="form-line" data-type="control_button" id="id_2">
+        <div id="cid_2" class="form-input-wide">
+          <div style="text-align:center" class="form-buttons-wrapper">
+            <button id="input_2" type="button" class="form-submit-button" onClick="demoApp.send()">
+              Send
             </button>
           </div>
         </div>
