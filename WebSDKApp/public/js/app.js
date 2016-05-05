@@ -63,10 +63,10 @@ function resourceRequestSecured() {
 
 function login() {
 	var credentials = {
-			user : 'test',
-			password : 'test'
-	};
-	WLAuthorizationManager.login('usernamePassword', credentials).then(function(){
+				username : "a",
+				password : "a"
+			};
+	WLAuthorizationManager.login('UserLogin', credentials).then(function(){
 		console.log('success logging in!');
 	}, function(error){
 		console.log('what?? ' + error);
@@ -74,7 +74,7 @@ function login() {
 };
 
 function logout() {
-	WLAuthorizationManager.logout('usernamePassword').then(function(){
+	WLAuthorizationManager.logout('UserLogin').then(function(){
 		console.log('success logging out!');
 	}, function(error){
 		console.log('what?? ' + error);
