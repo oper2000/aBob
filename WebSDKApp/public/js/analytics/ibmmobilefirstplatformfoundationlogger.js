@@ -760,6 +760,9 @@
 
     var __stringifyArguments = function (args) {
 
+		if (typeof args === 'string' || args instanceof String){
+			return args;
+		}
         var len = args.length,
             i = 0,
             res = [];
@@ -1022,11 +1025,25 @@
 	    var duration = new Date().getTime() - startupTime;
 	    var filename = errorEvt.filename;
 	    var linenumber = errorEvt.lineno;
-	    var errorMessage = errorEvt.message
+	    var errorMessage = errorEvt.message;
+	    var method = 'none';
 	    var stack = [];
 	    if(errorEvt.error != null){
-	    	stack = errorEvt.error.stack;
+	    	var errstack = errorEvt.error.stack;
+	    	stack = errstack.split('\n');
 	    }
+	    var caller = "";
+	    for(var i = 1; i<stack.length; ++i){
+			var line = stack[i];
+			if(line.indexOf("ibmmobilefirstplatformfoundationlogger") == -1 && line.indexOf("ibmmobilefirstplatformfoundationanalytics") == -1){
+				caller = line;
+				break;
+			}
+		}
+		if(caller != ""){
+			var parsed = formatStackLine(caller);
+			method = parsed.method;
+		}
 	    var type = errorEvt.type;
     	var meta = {
     	 '$category' : 'appSession',
@@ -1035,23 +1052,30 @@
     	 '$appSessionID' : appSessionID,
     	 '$class' : 'Object',
     	 '$file' : filename,
-    	 '$method' : 'none',
+    	 '$method' : method,
     	 '$line' : linenumber,
     	 '$src' : 'js',
     	 '$stacktrace' :  stack,
-    	 'exceptionMessage' : errorMessage,
+    	 '$exceptionMessage' : errorMessage,
     	 '$exceptionClass' : type
     	};
-    	/*var logData = {
-      	 'pkg': 'wl.analytics',
-      	 'timestamp': __formatDate(new Date(), '%d-%M-%Y %H:%m:%s:%ms'),
-      	 'level': 'ANALYTICS',
-      	 'msg': 'appSession',
-      	 'metadata': meta
-    	};*/
     	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics',level : 'ANALYTICS'});
+    	_ctx({pkg: 'wl.analytics'});
     	__log('appSession','ANALYTICS');
+
+		var meta2 = {
+    	 '$class' : 'Object',
+    	 '$file' : filename,
+    	 '$method' : method,
+    	 '$line' : linenumber,
+    	 '$src' : 'js',
+    	 '$stacktrace' :  stack,
+    	 '$exceptionMessage' : errorMessage,
+    	 '$exceptionClass' : type
+    	};
+		_metadata(meta2);
+    	_ctx({pkg: 'wl.analytics', level:'FATAL'});
+    	__log('Uncaught Exception','FATAL');
 	};
 	
 	function logAnalyticsSessionStart() {
