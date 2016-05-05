@@ -127,6 +127,10 @@ function addCustomEvent(customEventLog) {
 	ibmmobilefirstplatformfoundationanalytics.addEvent({'WebPurchases':customEventLog});
 };
 
+function crashMe(){
+	throw new Error("it's over 9000!!!");
+}
+
 return {
     obtainAccessToken: obtainAccessToken,
     login: login,
@@ -134,6 +138,7 @@ return {
     resourceRequestSecured: resourceRequestSecured,
     log: log,
     send: send,
-    addCustomEvent: addCustomEvent
+    addCustomEvent: addCustomEvent,
+    crashMe : crashMe
   };
 });
