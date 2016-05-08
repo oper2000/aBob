@@ -1055,9 +1055,6 @@
     	 '$method' : method,
     	 '$line' : linenumber,
     	 '$src' : 'js',
-    	 '$stacktrace' :  stack,
-    	 '$exceptionMessage' : errorMessage,
-    	 '$exceptionClass' : type
     	};
     	_metadata(meta);
     	_ctx({pkg: 'wl.analytics'});
