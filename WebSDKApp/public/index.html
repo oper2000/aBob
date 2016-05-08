@@ -80,15 +80,17 @@
       <li class="form-line" data-type="control_button" id="id_8">
         <div id="cid_8" class="form-input-wide">
           <div style="text-align:center" class="form-buttons-wrapper">
-            <button id="input_8" type="button" class="form-submit-button" onClick="demoApp.obtainAccessToken()">
-              Obtain (default token)
-            </button>
-            <button id="input_82" type="button" class="form-submit-button" onClick="demoApp.login()">
+        	<label id="label_3" for="input_3"> User </label>
+          	<input class=" form-textbox" data-type="input-textbox" id="input_31" name="user_31" size="12" type="text">
+            <button id="input_82" type="button" class="form-submit-button" onClick="demoApp.login(document.getElementById('input_31').value)">
               Login
-            </button>  
+            </button> 
             <button id="input_81" type="button" class="form-submit-button" onClick="demoApp.logout()">
               Logout
             </button>  
+            <button id="input_8" type="button" class="form-submit-button" onClick="demoApp.obtainAccessToken()">
+              Obtain (default token)
+            </button> 
             <button id="input_10" type="button" class="form-submit-button" onClick="demoApp.resourceRequestSecured()">
               Make a resource request
             </button>                                
@@ -168,15 +170,6 @@
           </div>
         </div>
       </li>
-    <li class="form-line" data-type="control_button" id="id_11">
-        <div id="cid_11" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
-            <button id="input_11" type="button" class="form-submit-button">
-              Log Web Session
-            </button>
-          </div>
-        </div>
-      </li>
     <li class="form-line" data-type="control_button" id="id_2">
         <div id="cid_2" class="form-input-wide">
           <div style="text-align:center" class="form-buttons-wrapper">
@@ -185,10 +178,6 @@
             </button>
           </div>
         </div>
-      </li>
-      <li style="display:none">
-        Should be Empty:
-        <input name="website" type="text">
       </li>
     </ul>
   </div>

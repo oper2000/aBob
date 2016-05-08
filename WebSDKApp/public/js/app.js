@@ -61,13 +61,13 @@ function resourceRequestSecured() {
 	})
 }; 
 
-function login() {
+function login(user) {
+	ibmmobilefirstplatformfoundationanalytics.login(user)
 	var credentials = {
 				username : "Michael",
 				password : "Michael"
 			};
 	WLAuthorizationManager.login('UserLogin', credentials).then(function(){
-		ibmmobilefirstplatformfoundationanalytics.login('Michael')
 		console.log('success logging in!');
 	}, function(error){
 		console.log('what?? ' + error);
@@ -129,7 +129,6 @@ function addCustomEvent(customEventLog) {
 };
 
 function crashMe(){
-	alert("Thowing an error");
 	throw new Error("it's over 9000!!!");
 }
 
