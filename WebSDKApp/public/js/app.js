@@ -63,10 +63,11 @@ function resourceRequestSecured() {
 
 function login() {
 	var credentials = {
-				username : "a",
-				password : "a"
+				username : "Michael",
+				password : "Michael"
 			};
 	WLAuthorizationManager.login('UserLogin', credentials).then(function(){
+		ibmmobilefirstplatformfoundationanalytics.login('Michael')
 		console.log('success logging in!');
 	}, function(error){
 		console.log('what?? ' + error);
