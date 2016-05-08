@@ -128,6 +128,7 @@ function addCustomEvent(customEventLog) {
 };
 
 function crashMe(){
+	alert("Thowing an error");
 	throw new Error("it's over 9000!!!");
 }
 
