@@ -102,6 +102,15 @@
 		var currentLoggerState = logger.status();
 		return currentLoggerState.analyticsCapture;		
 	};
+	
+	/**
+	 * Specify current application user.  If you want user-based analytics, you must use this method
+	 * call.  For example, use it when the user logs in. 
+	 *
+	 */
+	function setUserContext(user) {
+		logger._setUserContext(user)
+	};
 
 	/**
     	Send any collected analytics data collected to this point to the MobileFirst Platform Server.
@@ -130,6 +139,7 @@
 		disable: _disable,
 		state: _state,
 		send: _send,
+		setUserContext: setUserContext,
 		addEvent: _event
 	}
 }));

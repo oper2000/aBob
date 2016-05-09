@@ -23,8 +23,8 @@
     }
 }(this, function () { //logger impl
 
-        REQ_SEND_LOGS = '/mfp/api/loguploader',
-        REQ_UPDATE_CONFIG = '/mfp/api/clientLogProfile',
+        REQ_SEND_LOGS = '/api/loguploader',
+        REQ_UPDATE_CONFIG = '/api/clientLogProfile',
         KEY_LOCAL_STORAGE_LOGS = '__WL_WEBLOG_LOGS__',
         KEY_LOCAL_STORAGE_SWAP = '__WL_WEBLOG_SWAP__',
         KEY_LOCAL_STORAGE_ANALYTICS = '__WL_WEBLOG_ANALYTICS__',
@@ -39,7 +39,8 @@
     
     	var metadataHeader = {};
         var startupTime = 0;
-        var appSessionID = '';
+        var appSessionID = _generateAppSessionID('new');
+        var userID = '';
         var state = __getStateDefaults();
         
         	// Private variables
@@ -146,14 +147,14 @@
 			var url = this._url;
 			__logOutboundRequest(this);
 
-		        var duration = new Date().getTime() - startupTime;
-		        if (appSessionID == "") {
+		    var duration = new Date().getTime() - startupTime;
+		    if (isNewSession()) {
 		   		logAnalyticsSessionStart();
-		        }
-		        else if (duration > 10000) {
+		    }
+		    else if (duration > 1800000) {
 		   		logAnalyticsSessionStop();
-		        }
-		    	startupTime = new Date().getTime();
+		    }
+		    startupTime = new Date().getTime();
 			this.setRequestHeader("x-wl-analytics-tracking-id", _generateUUID());
 			this.setRequestHeader("x-mfp-analytics-metadata", JSON.stringify(metadataHeader));
 
@@ -239,7 +240,7 @@
 			if (method == null){
 				method = 'POST'
 			}
-			xhr.open(method, path,true);
+			xhr.open(method, metadataHeader.contextRoot+path,true);
 			
 			xhr.onload = function () {
 			  if (this.status >= 200 && this.status < 300) {
@@ -467,17 +468,17 @@
     		var config = null;
 
     		try{
-    			config = JSON.parse(configString.responseText);
+    			config = JSON.parse(configString);
     		}catch(e){
 
     		}
 
     		if(config !== null){
     			console.log('Matching configuration successfully retrieved from the server.');
-    			var wllogger = config.wllogger;
+    			var wllogger = config.clientLogProfileConfig;
     			if(wllogger !== null){
     		    localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG));
-    				_setServerOverrides(wllogger);
+    				__setServerOverrides(wllogger.clientLogProfiles);
     			}
     		}else{
     			console.log('No matching configurations found from the server. Defaulting to local configuration');
@@ -490,17 +491,17 @@
     		}
     	};
 
-      var __setState = function(state){
-    		if (typeof(Storage) !== 'undefined') {
-    		      var stateString = JSON.stringify(state);
-
-    		      if(__usingLocalConfiguration()){
-    		    	  localStorage.setItem(KEY_LOCAL_STORAGE_CONFIG, stateString);
-    		      }else{
-    		    	  localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, stateString);
-    		      }
-    		}
-      };
+      // var __setState = function(state){
+//     		if (typeof(Storage) !== 'undefined') {
+//     		      var stateString = JSON.stringify(state);
+// 
+//     		      if(__usingLocalConfiguration()){
+//     		    	  localStorage.setItem(KEY_LOCAL_STORAGE_CONFIG, stateString);
+//     		      }else{
+//     		    	  localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, stateString);
+//     		      }
+//     		}
+//       };
 
 
 
@@ -803,15 +804,34 @@
             );
         }
 
-        return true; //Bail out, level is some unknown type
+        return stateLevel!= null; //Bail out, level is some unknown type
     };
 
     var __checkFilters = function (priority, pkg) {
         var currFilters = state.filtersFromServer || state.filters;
         if (__getKeys(currFilters).length > 0) {  // non-empty filters object
-            return __checkLevel(priority, currFilters[pkg]);
+            return __checkLevel(priority, __getCurrentPackageFilterLevel(pkg));
         }
         return false;
+    };
+    
+    var __getCurrentPackageFilterLevel = function(pkg){
+    	var configFilters = state.filtersFromServer || state.filters;
+    	if (pkg == null){
+    		pkg = '';
+    	} 
+		for (var i in configFilters) {
+    		if (configFilters[i].name === pkg || (pkg == '' &&  configFilters[i].name == null)){
+				return configFilters[i].level	;
+    		}
+		}
+		pkg = '';
+		for (var i in configFilters) {
+    		if (configFilters[i].name === pkg || (pkg == '' &&  configFilters[i].name == null)){
+				return configFilters[i].level	;
+    		}
+		}
+		return null;
     };
 
     var __checkLists = function (pkg, whitelistArr, blacklistArr) {
@@ -930,20 +950,18 @@
         this.options = ops || {};
     };
 
-    //Add .debug(), .log(), etc. to LogInstances
-    // $.each(__getKeys(priorities), function (idx, priority) {
-	//         LogInstance.prototype[priority] = function () {
-	//             _ctx(this.options)[priority].apply(this, arguments);
-	//         };
-	//     });
     __getKeys(priorities).forEach(function (idx, priority) {
         LogInstance.prototype[priority] = function () {
             _ctx(this.options)[priority].apply(this, arguments);
         };
     });
 
-    var _create = function (options) {
-        return new LogInstance(options);
+    var _create = function (pkg) {
+    	var newObject = Object.create(this);
+    	newObject.state = this.getState();
+    	newObject.state.pkg = pkg || {};
+    	return newObject;
+//         return new LogInstance(options);
     };
 
     var _config = function(options) {
@@ -987,7 +1005,7 @@
         
          var appName = metadataHeader.mfpAppName ;
          var platform = metadataHeader.os ;
-         var version = metadataHeader.mfpAppVersion;
+         var version = 'none';
          
 //          var appName = 'com.hackaton.ibm.analyticstestapp';
 //          var platform = 'android';
@@ -1002,22 +1020,25 @@
 		});
     };
 
-    var __setServerOverrides = function(config) {
-        var udf;  // undefined
-        state.levelFromServer = udf;
-        state.captureFromServer = udf;
-        state.filtersFromServer = udf;
-        _config({levelFromServer: config.level, captureFromServer: config.capture, filtersFromServer: config.filters});
+    var __setServerOverrides = function(configFilters,level,capture) {
+        _config({levelFromServer: level, captureFromServer: capture, filtersFromServer: configFilters});
     };
     
-    //TBD Appession
-    function _generateAppSessionID() {
+    function _generateAppSessionID(newSession) {
 			var d = new Date().getTime();
-			var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			var r = (d + Math.random()*16)%16 | 0;
-			d = Math.floor(d/16);
-			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-			});
+			var uuid = '';
+			var generate = function(c) {
+				var r = (d + Math.random()*16)%16 | 0;
+				d = Math.floor(d/16);
+				return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+			};
+			if (newSession) {
+				uuid = 'xxxxxxxx-xxxx-4new-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
+			}
+			else {
+				uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
+			}
+
 			return uuid;
 	};
 
@@ -1055,6 +1076,9 @@
     	 '$method' : method,
     	 '$line' : linenumber,
     	 '$src' : 'js',
+    	 '$stacktrace' :  stack,
+    	 '$exceptionMessage' : errorMessage,
+    	 '$exceptionClass' : type
     	};
     	_metadata(meta);
     	_ctx({pkg: 'wl.analytics'});
@@ -1071,8 +1095,28 @@
     	 '$exceptionClass' : type
     	};
 		_metadata(meta2);
-    	_ctx({pkg: 'wl.analytics', level:'FATAL'});
+    	_ctx({pkg: 'wl.analytics'});
     	__log('Uncaught Exception','FATAL');
+    	
+    	//send immediately
+    	_send();
+		__sendAnalytics();
+	};
+	
+	function _setUserContext(user) {
+	    logAnalyticsSessionStop();
+	    userID = user;
+	};
+	
+	function _logUserAnalytics() {
+		var meta = {
+    	'$category' : 'userSwitch',
+    	 '$userID' : userID,
+    	'$appSessionID' : appSessionID
+    	 };
+    	_metadata(meta);
+    	_ctx({pkg: 'wl.analytics'});
+    	__log('appSession','ANALYTICS');
 	};
 	
 	function logAnalyticsSessionStart() {
@@ -1082,24 +1126,27 @@
     	 '$appSessionID' : appSessionID
     	};
     	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics',level : 'ANALYTICS'});
+    	_ctx({pkg: 'wl.analytics'});
     	__log('appSession','ANALYTICS');
 	};
 	
 	function logAnalyticsSessionStop() {
 	    var duration = new Date().getTime() - startupTime;
-
-	    appSessionID = _generateAppSessionID();
+        _logUserAnalytics();
     	var meta = {
     	 '$category' : 'appSession',
     	 '$duration' : duration,
     	 '$closedBy' : 'user',
     	 '$appSessionID' : appSessionID
     	};
-    	appSessionID = '';
+    	appSessionID = _generateAppSessionID('new');
     	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics',level : 'ANALYTICS'});
+    	_ctx({pkg: 'wl.analytics'});
     	__log('appSession','ANALYTICS');
+	};
+	
+	function isNewSession() {
+		return (appSessionID && appSessionID.indexOf('4new') > -1)
 	};
 
     function emptyLogs(keys){
@@ -1107,7 +1154,6 @@
                 localStorage.removeItem(key);
             });
     };
-
 
     function initErrorHandler(){
         if(window.hasErrorHandler == null){
@@ -1120,49 +1166,52 @@
     };
 
     function browserName(){
-	var browserName  = navigator.appName;
-	
-	var nVer = navigator.appVersion;
-    var nAgt = navigator.userAgent;
-    var nameOffset,verOffset,ix;
+		var browserName  = navigator.appName;
+		var nVer = navigator.appVersion;
+    	var nAgt = navigator.userAgent;
+    	var nameOffset,verOffset,ix;
 
-    // In Opera, the true version is after "Opera" or after "Version"
-	if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
-	   browserName = "Opera";
-	}
-	// In MSIE, the true version is after "MSIE" in userAgent
-	else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
-	   browserName = "Microsoft Internet Explorer";
-	}
-	// In Chrome, the true version is after "Chrome" 
-	else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
- 	  browserName = "Chrome";
-	}
-	// In Safari, the true version is after "Safari" or after "Version" 
-	else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
-	   browserName = "Safari";
-	}
-	// In Firefox, the true version is after "Firefox" 
-	else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
-	    browserName = "Firefox";
-	}
-	// In most other browsers, "name/version" is at the end of userAgent 
-	else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < (verOffset=nAgt.lastIndexOf('/')) ) {
-	    browserName = nAgt.substring(nameOffset,verOffset);
+    	// In Opera, the true version is after "Opera" or after "Version"
+		if ((verOffset=nAgt.indexOf("Opera"))!=-1) {
+		   browserName = "Opera";
+		}
+		// In MSIE, the true version is after "MSIE" in userAgent
+		else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+		   browserName = "Microsoft Internet Explorer";
+		}
+		// In Chrome, the true version is after "Chrome" 
+		else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+ 	  		browserName = "Chrome";
+		}
+		// In Safari, the true version is after "Safari" or after "Version" 
+		else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+	   		browserName = "Safari";
+		}
+		// In Firefox, the true version is after "Firefox" 
+		else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+	    	browserName = "Firefox";
+		}
+		// In most other browsers, "name/version" is at the end of userAgent 
+		else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < (verOffset=nAgt.lastIndexOf('/')) ) {
+	    	browserName = nAgt.substring(nameOffset,verOffset);
+		}
+
+		return browserName;
 	}
 
-	return browserName;
-	}
 
-
-    function _init(deviceID, appName, appVersion){
+    function _init(deviceID, appName, contextRoot, appVersion){
     	startupTime = new Date().getTime();
     	initErrorHandler();
+    	metadataHeader.contextRoot = "/mfp";
+    	if (contextRoot != null && contextRoot != ''){
+    		metadataHeader.contextRoot = contextRoot;
+    	}
     	metadataHeader.deviceID = "Undefined";
     	if (deviceID != null && deviceID != ''){
     		metadataHeader.deviceID = deviceID;
     	}
-    	metadataHeader.mfpAppVersion = "1.0";
+    	metadataHeader.mfpAppVersion = "latest";
     	if (appVersion != null && appVersion != ''){
     		metadataHeader.mfpAppVersion = appVersion;
     	}
@@ -1170,7 +1219,10 @@
     	if (appName != null && appName != ''){
     		metadataHeader.mfpAppName = appName;
     	}
-		metadataHeader.os = "web";  // MFP
+    	if (userID == '') {
+    		userID = metadataHeader.deviceID;
+    	}
+		metadataHeader.os = "Web";  // MFP
 		metadataHeader.osVersion =  navigator.platform;  // human-readable o/s version; like "MacIntel"
 		metadataHeader.brand = navigator.appVersion;  // human-readable brand; 
 		metadataHeader.model = browserName();  // human-readable model; like "Chrome"
@@ -1212,6 +1264,7 @@
 
     var PUBLIC_API = {
         create : _create,
+        getState: __state,
         config : _config,
         status : _status,
         updateConfigFromServer: _updateConfigFromServer,
@@ -1219,6 +1272,7 @@
         //internal:
         _init: _init,
         _ctx : _ctx,
+        _setUserContext : _setUserContext,
         _metadata: _metadata,
         _sendAnalytics: __sendAnalytics,  // called by WL.Analytics
         _setServerOverrides: __setServerOverrides,
