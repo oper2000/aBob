@@ -62,7 +62,7 @@ function resourceRequestSecured() {
 }; 
 
 function login(user) {
-	ibmmobilefirstplatformfoundationanalytics.setUser(user)
+	ibmmobilefirstplatformfoundationanalytics.setUserContext(user)
 	var credentials = {
 				username : "Michael",
 				password : "Michael"
