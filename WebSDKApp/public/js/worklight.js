@@ -46,7 +46,7 @@
 
 /**
  * ================================================================= 
- * Source file taken from :: wldeferredjs.web.js
+ * Source file taken from :: wldeferredjs.js
  * ================================================================= 
  */
 
@@ -1705,6 +1705,51 @@ WL.Config = new __WLConfig;
 
 /**
  * ================================================================= 
+ * Source file taken from :: wlproperties.web.js
+ * ================================================================= 
+ */
+
+/*
+ Licensed Materials - Property of IBM
+
+ (C) Copyright 2015 IBM Corp.
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+/*
+ * NOTICE: All server errors MUST be defined with same values in the ErrorCode
+ * java enumeration.
+ */
+var __WLErrorCode = {
+    UNEXPECTED_ERROR: 'UNEXPECTED_ERROR',
+    API_INVOCATION_FAILURE: 'API_INVOCATION_FAILURE',
+    USER_INSTANCE_ACCESS_VIOLATION: 'USER_INSTANCE_ACCESS_VIOLATION',
+    AUTHENTICATION_REQUIRED: 'AUTHENTICATION_REQUIRED',
+    DOMAIN_ACCESS_FORBIDDEN: 'DOMAIN_ACCESS_FORBIDDEN',
+
+    // Client Side Errors
+    UNRESPONSIVE_HOST: 'UNRESPONSIVE_HOST',
+    LOGIN_FAILURE: 'LOGIN_FAILURE',
+    REQUEST_TIMEOUT: 'REQUEST_TIMEOUT',
+    PROCEDURE_ERROR: 'PROCEDURE_ERROR',
+    UNSUPPORTED_VERSION: 'UNSUPPORTED_VERSION',
+    UNSUPPORTED_BROWSER: 'UNSUPPORTED_BROWSER',
+    DISABLED_COOKIES: 'DISABLED_COOKIES',
+    CONNECTION_IN_PROGRESS: 'CONNECTION_IN_PROGRESS',
+    AUTHORIZATION_FAILURE: 'AUTHORIZATION_FAILURE',
+    CHALLENGE_HANDLING_CANCELED: 'CHALLENGE_HANDLING_CANCELED'
+};
+__WL.prototype.ErrorCode = __WLErrorCode;
+WL.ErrorCode = __WLErrorCode;
+
+
+/**
+ * ================================================================= 
  * Source file taken from :: wlIndexDb.js
  * ================================================================= 
  */
@@ -2056,18 +2101,24 @@ __WLClient = function() {
 
         // Init the DBs
         WL.LocalStorageDB.init();
+
+        //init analytics
+        wllogger._init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
+
+        var hasWlCommonInit = window.wlCommonInit !== undefined;
+
+
         WL.IndexDB.init().then(function(){
-            // On success for the user (backwards compatibility)
-            if (window.wlCommonInit !== undefined) {
+            if (hasWlCommonInit) {
                 wlCommonInit();
             }
             dfd.resolve();
-
         });
-        //init analytics
-        wllogger._init(WL.BrowserManager.getWLUniqueID(),appId);
-        
-        return dfd.promise();
+
+        if(!hasWlCommonInit) {
+            // We return a promise only if the user didn't implement wlCommonInit();
+            return dfd.promise();
+        }
     };
 
     this.invokeProcedure = function (invocationData, options) {
@@ -2885,11 +2936,11 @@ __WLBrowserManager = function() {
      * Browser Object that is used for registration
      * @returns {{}}
      */
-    this.getBrowserData = function() {
+    this.getDeviceData = function() {
         var data = {};
         data['id'] = this.getWLUniqueID();
-        data['userAgent'] = getUserAgent();
-        data['platform'] = getPlatform();
+        data['platform'] = getUserAgent();
+        data['hardware'] = getPlatform();
         return data;
     };
 
@@ -4430,7 +4481,7 @@ WL.AuthorizationManager = (function () {
     var WL_AUTHORIZATION_HEADER = 'Authorization';
     var PARAM_CLIENT_ID_KEY = 'client_id';
     var PARAM_SCOPE_KEY = 'scope';
-    var INVALID_CLIENT_ERROR = 'Invalid client ID';
+    var INVALID_CLIENT_ERROR = 'INVALID_CLIENT_ID';
     var AUTHORIZATION_MANAGER_PLUGIN_NAME = 'WLAuthorizationManagerPlugin';
     var CHALLENGE_RESPONSE_KEY = 'challengeResponse';
     var WWW_AUTHENTICATE_HEADER = 'WWW-Authenticate';
@@ -4660,7 +4711,7 @@ WL.AuthorizationManager = (function () {
         if (!__isUndefinedOrNull(error) && typeof (error.status) !== 'undefined' &&
             error.status === 400 && !__isUndefinedOrNull(error.responseJSON) &&
             /*jshint camelcase:false*/
-            error.responseJSON.error === INVALID_CLIENT_ERROR) {
+            error.responseJSON.errorCode === INVALID_CLIENT_ERROR) {
             return true;
         }
 
@@ -4762,6 +4813,10 @@ WL.AuthorizationManager = (function () {
             method: 'POST',
             parameters: params,
             onSuccess: function (response) {
+
+                if(response.status == 200) {
+                    registrationCallbackDfd.resolve(response);
+                }
                 // Get the clientId from the response
                 var locationHeader = response.getHeader("Location");
                 if(__isUndefinedOrNull(locationHeader)) {
@@ -4773,7 +4828,7 @@ WL.AuthorizationManager = (function () {
                 var split = locationHeader.split('/');
                 var clientId = split[split.length -1];
                 __setClientId(clientId);
-                __setClientRegisteredData(WL.BrowserManager.getBrowserData());
+                __setClientRegisteredData(WL.BrowserManager.getDeviceData());
                 registrationCallbackDfd.resolve(response);
             },
             onFailure: function (response) {
@@ -4789,7 +4844,7 @@ WL.AuthorizationManager = (function () {
                 var transport = {
                     status: 500,
                     responseJSON: {
-                        errorCode: 'invocation failure',
+                        errorCode: WL.ErrorCode.API_INVOCATION_FAILURE,
                         errorMsg: ex.message
                     }
                 };
@@ -4825,7 +4880,7 @@ WL.AuthorizationManager = (function () {
                 var transport = {
                     status: 500,
                     responseJSON: {
-                        errorCode: 'invocation failure',
+                        errorCode: WL.ErrorCode.API_INVOCATION_FAILURE,
                         errorMsg: ex.message
                     }
                 };
@@ -4867,7 +4922,7 @@ WL.AuthorizationManager = (function () {
                 var transport = {
                     status: 500,
                     responseJSON: {
-                        errorCode: 'invocation failure',
+                        errorCode: WL.ErrorCode.API_INVOCATION_FAILURE,
                         errorMsg: ex.message
                     }
                 };
@@ -4912,7 +4967,7 @@ WL.AuthorizationManager = (function () {
                 var transport = {
                     status: 500,
                     responseJSON: {
-                        errorCode: 'invocation failure',
+                        errorCode: WL.ErrorCode.API_INVOCATION_FAILURE,
                         errorMsg: ex.message
                     }
                 };
@@ -4944,7 +4999,7 @@ WL.AuthorizationManager = (function () {
                 var transport = {
                     status: 500,
                     responseJSON: {
-                        errorCode: 'invocation failure',
+                        errorCode: WL.ErrorCode.API_INVOCATION_FAILURE,
                         errorMsg: ex.message
                     }
                 };
@@ -5298,7 +5353,7 @@ WL.AuthorizationManager = (function () {
             return true;
         }
         var registeredData = __getClientRegisteredData();
-        var currentData = WL.BrowserManager.getBrowserData();
+        var currentData = WL.BrowserManager.getDeviceData();
         return JSON.stringify(registeredData) !== JSON.stringify(currentData);
     }
 
@@ -5337,7 +5392,7 @@ WL.AuthorizationManager = (function () {
         var dfd = WLJQ.Deferred();
         var params = {};
         var registrationData = {
-            'browser' : WL.BrowserManager.getBrowserData(),
+            'device' : WL.BrowserManager.getDeviceData(),
             'application' : WL.Config.__getApplicationData()
         };
         params['registrationData'] = registrationData;
@@ -7048,6 +7103,6 @@ WL.CertManager = (function () {
     };
 
 }());
-
+	WL.Logger = wllogger;
     return WL;
 }));

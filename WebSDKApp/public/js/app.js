@@ -127,6 +127,9 @@ function send() {
 function addCustomEvent(customEventLog) {
 	ibmmobilefirstplatformfoundationanalytics.addEvent({'WebPurchases':customEventLog});
 };
+function addCustomEventFlow(target) {
+	ibmmobilefirstplatformfoundationanalytics.addEvent({'src':'Landing  Page', 'target' : target});
+};
 
 function crashMe(){
 	throw new Error("it's over 9000!!!");
@@ -140,6 +143,7 @@ return {
     log: log,
     send: send,
     addCustomEvent: addCustomEvent,
+    addCustomEventFlow: addCustomEventFlow,
     crashMe : crashMe
   };
 });
