@@ -3,8 +3,8 @@
 // Require.js allows us to configure shortcut alias
 require.config({
   paths: {
-    ibmmobilefirstplatformfoundationanalytics: '../js/analytics/ibmmobilefirstplatformfoundationanalytics',
-    ibmmobilefirstplatformfoundationlogger: '../js/analytics/ibmmobilefirstplatformfoundationlogger',
+    ibmmfpfanalytics: '../js/analytics/ibmmfpfanalytics',
+    ibmmfpflogger: '../js/analytics/ibmmfpflogger',
     worklight: '../js/worklight',
   }
 

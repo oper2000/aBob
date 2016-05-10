@@ -26,7 +26,7 @@
         margin:0;
         padding:0;
         background:false;
-        height: 100px;
+        height: 10px;
     }
 
     .form-all{
@@ -35,7 +35,7 @@
         width:650px;
         color:#555 !important;
         font-family:"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, sans-serif;
-        font-size:14px;
+        font-size:12px;
     }
     .form-radio-item label, .form-checkbox-item label, .form-grading-label, .form-header{
         color: #555;
@@ -79,7 +79,7 @@
       
       <li class="form-line" data-type="control_button" id="id_8">
         <div id="cid_8" class="form-input-wide">
-          <div style="text-align:center" class="form-buttons-wrapper">
+          <div style="text-align:left" class="form-buttons-wrapper">
         	<label id="label_3" for="input_3"> User </label>
           	<input class=" form-textbox" data-type="input-textbox" id="input_31" name="user_31" size="12" type="text">
             <button id="input_82" type="button" class="form-submit-button" onClick="demoApp.login(document.getElementById('input_31').value)">
@@ -89,10 +89,10 @@
               Logout
             </button>  
             <button id="input_8" type="button" class="form-submit-button" onClick="demoApp.obtainAccessToken()">
-              Obtain (default token)
+              Obtain token
             </button> 
             <button id="input_10" type="button" class="form-submit-button" onClick="demoApp.resourceRequestSecured()">
-              Make a resource request
+              Resource request
             </button>                                
           </div>
         </div>
@@ -111,21 +111,15 @@
         <label class="form-label form-label-left form-label-auto" id="label_3" for="input_3"> Log something </label>
         <div id="cid_3" class="form-input jf-required">
           <input class=" form-textbox" data-type="input-textbox" id="input_3" name="q3_logSomething" size="32" type="text">
-        </div>
-      </li>
-      <li class="form-line" data-type="control_button" id="id_4">
-        <div id="cid_4" class="form-input-wide">
-          <div style="text-align:right" class="form-buttons-wrapper">
             <button id="input_4" type="button" class="form-submit-button" onClick="demoApp.log(document.getElementById('input_3').value)">
               Log
             </button>
-          </div>
         </div>
       </li>
       <li class="form-line" data-type="control_textbox" id="id_3">
-        <label class="form-label form-label-left form-label-auto" id="label_3" for="input_3"> Log something on package </label>        
+        <label class="form-label form-label-left form-label-auto" id="label_3" for="input_3"> Log something with package: </label>        
         <div style="text-align:left" class="form-buttons-wrapper">
-           <select id='selectedPackage'>
+           <select class="form-label form-label-left form-label-auto" id='selectedPackage'>
 			  <option value="com.ibm.error">com.ibm.error</option>
 			  <option value="com.ibm.info">com.ibm.info</option>
 			  <option value="">None</option>
@@ -142,20 +136,16 @@
           </div>
           <div id="cid_3" class="form-input jf-required">
           <input class=" form-textbox" data-type="input-textbox" id="input_for_log" name="q3_logSomething" size="32" type="text">
-        </div>
-        <div id="cid_4" class="form-input-wide">
-          <div style="text-align:right" class="form-buttons-wrapper">
             <button id="input_4" type="button" class="form-submit-button" onClick="demoApp.logWithPackage()">
             OK - log it!
             </button>
-          </div>
         </div>
       </li>
       
       </li>
        <li class="form-line" data-type="control_button" id="id_4">
         <div id="cid_4" class="form-input-wide">
-          <div style="text-align:right" class="form-buttons-wrapper">
+          <div style="text-align:center" class="form-buttons-wrapper">
             <button type="button" class="form-submit-button" onClick="demoApp.updateConfig()">
               Update log config
             </button>           
@@ -167,7 +157,7 @@
         <div class="form-header-group">
           <div class="header-text httal htvam">
             <h3 id="header_1" class="form-header" font-size="4px">
-              Error Analytics
+              Error Analytics (Log uncaught errors)
             </h3>
           </div>
         </div>
@@ -196,7 +186,7 @@
     	  <label class="form-label form-label-center" id="label_3" for="input_3"> Purchase items - click to purchase </label>
           <div style="text-align:center" class="form-buttons-wrapper">
             <button type="button" onclick="demoApp.addCustomEvent('Bread')" class="form-submit-button">
-              <img src="icons/bread.png" alt="Buy Bread" style="width:48px;height:48px;">
+              <img src="icons/mybread.png" alt="Buy Bread" style="width:48px;height:48px;">
             </button>
             <button type="button" onclick="demoApp.addCustomEvent('Chocolate')" class="form-submit-button">
               <img src="icons/chocolate-block-icon.png" alt="Buy Chocolate" style="width:48px;height:48px;">

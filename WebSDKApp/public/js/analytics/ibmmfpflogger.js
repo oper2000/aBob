@@ -18,7 +18,7 @@
         define(factory);
     } else {
         // Browser globals init
-        root.ibmmobilefirstplatformfoundationlogger = factory();
+        root.ibmmfpflogger = factory();
         
     }
 }(this, function () { //logger impl
@@ -39,7 +39,7 @@
     
     	var metadataHeader = {};
         var startupTime = 0;
-        var appSessionID = _generateAppSessionID('new');
+        var appSessionID = generateUUID('new');
         var userID = '';
         var state = __getStateDefaults();
         
@@ -119,22 +119,32 @@
 			console.err(err.message);
 		}
 	})();
+	
+	function generateUUID(newSession) {
+		"use strict";
+
+		var d = new Date().getTime();
+		var uuid = '';
+		var generate = function(c) {
+			var r = (d + Math.random()*16)%16 | 0;
+			d = Math.floor(d/16);
+			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+		};
+		if (newSession) {
+			uuid = 'xxxxxxxx-xxxx-4567-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
+		}
+		else {
+			uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
+		}
+
+		return uuid;
+	};
+	
 	function initXHR(XHR, analytics) {
 		"use strict";
 
 		var open = XHR.prototype.open;
 		var send = XHR.prototype.send;
-
-
-		function _generateUUID() {
-			var d = new Date().getTime();
-			var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			var r = (d + Math.random()*16)%16 | 0;
-			d = Math.floor(d/16);
-			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-			});
-			return uuid;
-		};
 
 		XHR.prototype.open = function(method, url, async, user, pass) {
 			this._url = url;
@@ -155,7 +165,7 @@
 		   		logAnalyticsSessionStop();
 		    }
 		    startupTime = new Date().getTime();
-			this.setRequestHeader("x-wl-analytics-tracking-id", _generateUUID());
+			this.setRequestHeader("x-wl-analytics-tracking-id", generateUUID());
 			this.setRequestHeader("x-mfp-analytics-metadata", JSON.stringify(metadataHeader));
 
 			function onReadyStateChange() {
@@ -183,7 +193,7 @@
 
 			send.call(this, data);
 		}
-	} 
+	}; 
 
 
 	/*
@@ -281,7 +291,7 @@
 				
 				var logMetadata = {
 					'$class':'wl.analytics.xhrInterceptor',
-					'$file':'ibmmobilefirstplatformfoundationlogger.js',
+					'$file':'ibmmfpflogger.js',
 					'$method':'intercept',
 // 					'$line":138,
 					'$src':'javascript'
@@ -506,44 +516,13 @@
 
 
       /*
-    	 * UTILITY METHODS
+    	* UTILITY METHODS
        */
 
-		var __getHeaders = function(){
-			var appName = WL.Client.getAppProperty(WL.AppProp.APP_DISPLAY_NAME);
-			var appVersion = WL.Client.getAppProperty(WL.AppProp.APP_VERSION);
-			var env = WL.StaticAppProps.ENVIRONMENT;
-			var deviceId = 'UNKNOWN';
-			var osversion = 'UNKNOWN';
-			var model = 'UNKNOWN';
-
-			if(typeof window.cordova === 'object' &&
-		  typeof window.device === 'object') {
-				osversion = device.version;
-				model = device.model;
-				deviceId = device.uuid;
-			}
-
-			if(env === 'preview'){
-				env = 'common';
-			}
-
-			var headers = {
-		  'x-wl-clientlog-deviceId' : deviceId,
-		  'x-wl-clientlog-appname' : appName,
-		  'x-wl-clientlog-appversion' : appVersion,
-		  'x-wl-clientlog-osversion' : osversion,
-		  'x-wl-clientlog-env' : env,
-		  'x-wl-clientlog-model' : model
-			};
-
-			return headers;
-		};
-
-		var __fileSizeReached = function(key){
+		function __fileSizeReached(key){
 			var persistedLogs = localStorage.getItem(key);
 			if(persistedLogs === null) {
-		  return false;
+		       return false;
 			}
 
 			var m = encodeURIComponent(persistedLogs).match(/%[89ABab]/g);
@@ -561,10 +540,11 @@
 			return false;
 		};
 
-		var __formatDate = function(date, fmt) {
-		function pad(value) {
-		  return (value.toString().length < 2) ? '0' + value : value;
-		}
+		function __formatDate (date, fmt) {
+			function pad(value) {
+		  		return (value.toString().length < 2) ? '0' + value : value;
+			}
+		
 		return fmt.replace(/%([a-zA-Z])/g, function (m, fmtCode) {
 		  switch (fmtCode) {
 			case 'Y':
@@ -613,12 +593,12 @@
         };
     };
 
-    var __resetState = function () {
+    function __resetState() {
         state = __getStateDefaults();
         return this;
     };
 
-    var __getLogArgArray = function (args, priority, pkg) {
+    function __getLogArgArray(args, priority, pkg) {
 
         var msgStr = __stringifyArguments(args);
         var caller = getCallerLine();
@@ -658,7 +638,7 @@
 		var lines = stack.split('\n');
 		for(var i = 1; i<lines.length; ++i){
 			var line = lines[i];
-			if(line.indexOf("ibmmobilefirstplatformfoundationlogger") == -1 && line.indexOf("ibmmobilefirstplatformfoundationanalytics") == -1){
+			if(line.indexOf("ibmmfpflogger") == -1 && line.indexOf("ibmmfpfanalytics") == -1){
 				return line;
 			}
 		}
@@ -687,12 +667,11 @@
     	};
 	}
 
-    var __insideArray = function (needle, haystack) {
-
+    function __insideArray(needle, haystack) {
         return haystack.indexOf(needle) !== -1;
     };
 
-    var __getKeys = function (obj) {
+    function __getKeys(obj) {
         var arr = [];
 
         for (var key in obj) {
@@ -703,7 +682,7 @@
         return arr;
     };
 
-    var __setState = function (options) {
+    function __setState(options) {
 
         state = {
             enabled : typeof options.enabled === 'boolean' ? options.enabled : state.enabled,
@@ -738,15 +717,12 @@
           }
     };
 
-    var __stringify = function (input) {
+    function __stringify(input) {
 
         if (input instanceof Error) {
-
             return (state.stacktrace) ? printStackTrace({e: input}).join('\n') : input.toString();
         }
-
         else if (typeof input === 'object' && JSON && JSON.stringify) {
-
             try {
                 return (state.pretty) ? JSON.stringify(input, null, ' ') : JSON.stringify(input);
             }
@@ -759,8 +735,7 @@
         }
     };
 
-    var __stringifyArguments = function (args) {
-
+    function __stringifyArguments(args) {
 		if (typeof args === 'string' || args instanceof String){
 			return args;
 		}
@@ -771,25 +746,20 @@
         for (; i < len ; i++) {
             res.push(__stringify(args[i]));
         }
-
         return res.join(' ');
     };
 
     //currentPriority is the priority linked to the current log msg
     //stateLevel can be an Array (whitelist of levels), a string (e.g. 'warn') or a number (200)
-    var __checkLevel = function (currentPriority, stateLevel) {
-
+    function __checkLevel(currentPriority, stateLevel) {
         if (Array.isArray(stateLevel)) {
-
             return  (//Check if current is whitelisted (state)
                 stateLevel.length > 0 &&
                 !__insideArray(currentPriority, stateLevel)
             );
 
         } else if (typeof stateLevel === 'string') {
-
             stateLevel = stateLevel.toLowerCase();//Handle WARN, wArN, etc instead of just warn
-
             return  (//Get numeric value and compare current with state
                 typeof (priorities[currentPriority]) === 'number' &&
                 typeof (priorities[stateLevel]) === 'number' &&
@@ -807,7 +777,7 @@
         return stateLevel!= null; //Bail out, level is some unknown type
     };
 
-    var __checkFilters = function (priority, pkg) {
+    function __checkFilters(priority, pkg) {
         var currFilters = state.filtersFromServer || state.filters;
         if (__getKeys(currFilters).length > 0) {  // non-empty filters object
             return __checkLevel(priority, __getCurrentPackageFilterLevel(pkg));
@@ -815,7 +785,7 @@
         return false;
     };
     
-    var __getCurrentPackageFilterLevel = function(pkg){
+    function __getCurrentPackageFilterLevel(pkg){
     	var configFilters = state.filtersFromServer || state.filters;
     	if (pkg == null){
     		pkg = '';
@@ -834,7 +804,7 @@
 		return null;
     };
 
-    var __checkLists = function (pkg, whitelistArr, blacklistArr) {
+    function __checkLists(pkg, whitelistArr, blacklistArr) {
 
         return (//Package inside Whitelist
             (Array.isArray(whitelistArr) && whitelistArr.length > 0 && !__insideArray(pkg, whitelistArr)) ||
@@ -844,7 +814,7 @@
         );
     };
 
-    var __log = function (args, priority) {
+    function __log(args, priority) {
 
         //TODO check if env is IE and then set console.trace = console.debug;
 		state = __state();
@@ -956,7 +926,7 @@
         };
     });
 
-    var _create = function (pkg) {
+    function _create(pkg) {
     	var newObject = Object.create(this);
     	newObject.state = this.getState();
     	newObject.state.pkg = pkg || {};
@@ -964,35 +934,21 @@
 //         return new LogInstance(options);
     };
 
-    var _config = function(options) {
+    function _config(options) {
         __setState(__extend({},options || {}, {enabled: true}));
         return this;
     };
 
-    var _status = function () {
-
-//         var dfd = $.Deferred();
-        // var onSuccess = function(currentNativeSettings) {
-//             state = __extend({},state, currentNativeSettings);
-//             dfd.resolve(state);
-//         };
-//         dfd.resolve(state);
-
-        state = __extend({},state, currentNativeSettings);
-
-		return state;
-    };
-
-    var _ctx = function (options) {
+    function _ctx(options) {
         state = __extend({},state, options || {});
         return this;
     };
 
-    var _send = function () {
+    function _send() {
         return __send([KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
     };
 
-    var _metadata = function (obj) {
+    function _metadata(obj) {
 
         if (typeof obj === 'object') {
             state.metadata = obj;
@@ -1001,12 +957,15 @@
         return this;
     };
 
-    var _updateConfigFromServer = function() {
+    function _updateConfigFromServer() {
         
          var appName = metadataHeader.mfpAppName ;
          var platform = metadataHeader.os ;
          var version = 'none';
          
+//          var appName = 'com.hackaton.ibm.analyticstestapp';
+//          var platform = 'android';
+//          var version = '1.0';
          var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
          __ajax({}, getConfigUrl,'GET')
 			.then(function (metadata) {
@@ -1017,27 +976,9 @@
 		});
     };
 
-    var __setServerOverrides = function(configFilters,level,capture) {
+    function __setServerOverrides(configFilters,level,capture) {
         _config({levelFromServer: level, captureFromServer: capture, filtersFromServer: configFilters});
     };
-    
-    function _generateAppSessionID(newSession) {
-			var d = new Date().getTime();
-			var uuid = '';
-			var generate = function(c) {
-				var r = (d + Math.random()*16)%16 | 0;
-				d = Math.floor(d/16);
-				return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-			};
-			if (newSession) {
-				uuid = 'xxxxxxxx-xxxx-4new-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
-			}
-			else {
-				uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generate);
-			}
-
-			return uuid;
-	};
 
 	function logAnalyticsCrash(errorEvt) {
 	    var duration = new Date().getTime() - startupTime;
@@ -1053,7 +994,7 @@
 	    var caller = "";
 	    for(var i = 1; i<stack.length; ++i){
 			var line = stack[i];
-			if(line.indexOf("ibmmobilefirstplatformfoundationlogger") == -1 && line.indexOf("ibmmobilefirstplatformfoundationanalytics") == -1){
+			if(line.indexOf("ibmmfpflogger") == -1 && line.indexOf("ibmmfpfanalytics") == -1){
 				caller = line;
 				break;
 			}
@@ -1117,7 +1058,7 @@
 	};
 	
 	function logAnalyticsSessionStart() {
-	    appSessionID = _generateAppSessionID();
+	    appSessionID = generateUUID();
     	var meta = {
     	 '$category' : 'appSession',
     	 '$appSessionID' : appSessionID
@@ -1136,14 +1077,14 @@
     	 '$closedBy' : 'user',
     	 '$appSessionID' : appSessionID
     	};
-    	appSessionID = _generateAppSessionID('new');
+    	appSessionID = generateUUID('new');
     	_metadata(meta);
     	_ctx({pkg: 'wl.analytics'});
     	__log('appSession','ANALYTICS');
 	};
 	
 	function isNewSession() {
-		return (appSessionID && appSessionID.indexOf('4new') > -1)
+		return (appSessionID && appSessionID.indexOf('4567') > -1)
 	};
 
     function emptyLogs(keys){
@@ -1231,7 +1172,7 @@
 
     };
 
-	var __unsetServerOverrides = function() {
+	function __unsetServerOverrides() {
 		var udf;  // undefined
 		state.levelFromServer = udf;
 		state.captureFromServer = udf;

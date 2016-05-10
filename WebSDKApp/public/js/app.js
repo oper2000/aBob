@@ -1,9 +1,9 @@
 
 define([
-  'ibmmobilefirstplatformfoundationanalytics',
-  'ibmmobilefirstplatformfoundationlogger',
+  'ibmmfpfanalytics',
+  'ibmmfpflogger',
   'worklight',
-], function(ibmmobilefirstplatformfoundationanalytics, ibmmobilefirstplatformfoundationlogger, WL){
+], function(ibmmfpfanalytics, ibmmfpflogger, WL){
   
 var wlInitOptions = {'mfpContextRoot' : '/mfp' , 'applicationId' : 'com.sampleone.bankApp'};
 
@@ -62,7 +62,7 @@ function resourceRequestSecured() {
 }; 
 
 function login(user) {
-	ibmmobilefirstplatformfoundationanalytics.setUserContext(user)
+	ibmmfpfanalytics.setUserContext(user)
 	var credentials = {
 				username : "Michael",
 				password : "Michael"
@@ -115,28 +115,28 @@ function submitUsernamePasswordChallenge(challengeHandler) {
 };
 
 function log(msg) {
-    ibmmobilefirstplatformfoundationlogger.info(msg);
-    ibmmobilefirstplatformfoundationlogger.error('error', msg);
+    ibmmfpflogger.info(msg);
+    ibmmfpflogger.error('error', msg);
 };
 
 
 function send() {
-    ibmmobilefirstplatformfoundationanalytics.send();
+    ibmmfpfanalytics.send();
 };
 
 function addCustomEvent(customEventLog) {
-	ibmmobilefirstplatformfoundationanalytics.addEvent({'WebPurchases':customEventLog});
+	ibmmfpfanalytics.addEvent({'WebPurchases':customEventLog});
 };
 function addCustomEventFlow(target) {
-	ibmmobilefirstplatformfoundationanalytics.addEvent({'src':'Landing  Page', 'target' : target});
+	ibmmfpfanalytics.addEvent({'src':'Landing  Page', 'target' : target});
 };
 
 function updateConfigFromServer() {
-    ibmmobilefirstplatformfoundationlogger.updateConfigFromServer();
+    ibmmfpflogger.updateConfigFromServer();
 };
 
 function resetConfig() {
-    ibmmobilefirstplatformfoundationlogger.__resetState();
+    ibmmfpflogger.__resetState();
 };
 function logWithPackage(){
 	//get the package get the level.	
@@ -144,7 +144,7 @@ function logWithPackage(){
 	var level = document.getElementById('selectedLevel').value;
 	var msg = document.getElementById('input_for_log').value;
 
-	var logger = ibmmobilefirstplatformfoundationlogger.create(pkg);
+	var logger = ibmmfpflogger.create(pkg);
 	switch(level) {
     case 'trace':
     	logger.trace(msg);

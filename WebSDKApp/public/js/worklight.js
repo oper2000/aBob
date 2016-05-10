@@ -22,22 +22,22 @@
 
     if (typeof define === 'function' && define.amd) {
 
-        if (require.specified('ibmmobilefirstplatformfoundationlogger')) {
-            wllogger = 'ibmmobilefirstplatformfoundationlogger';
+        if (require.specified('ibmmfpflogger')) {
+            wllogger = 'ibmmfpflogger';
         }
-        if (require.specified('ibmmobilefirstplatformfoundationanalytics')) {
-            wlanalytics = 'ibmmobilefirstplatformfoundationanalytics';
+        if (require.specified('ibmmfpfanalytics')) {
+            wlanalytics = 'ibmmfpfanalytics';
         }
         define([wllogger, wlanalytics], factory);
 
     } else {
-        if (!root.ibmmobilefirstplatformfoundationlogger) {
-            root.ibmmobilefirstplatformfoundationlogger = wllogger;
+        if (!root.ibmmfpflogger) {
+            root.ibmmfpflogger = wllogger;
         }
-        if (!root.ibmmobilefirstplatformfoundationanalytics) {
-            root.ibmmobilefirstplatformfoundationanalytics = wlanalytics;
+        if (!root.ibmmfpfnalytics) {
+            root.ibmmfpfanalytics = wlanalytics;
         }
-        root.WL = factory(root.ibmmobilefirstplatformfoundationlogger, root.ibmmobilefirstplatformfoundationanalytics);
+        root.WL = factory(root.ibmmfpflogger, root.ibmmfpfanalytics);
 
     }
 }(this, function(wllogger, wlanalytics) {

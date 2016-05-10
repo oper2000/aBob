@@ -22,19 +22,19 @@
     "use strict";
     if (typeof define === 'function' && define.amd) {
         // AMD init. 
-       if (require.specified("ibmmobilefirstplatformfoundationlogger")) {
-        	define(['ibmmobilefirstplatformfoundationlogger'], factory);
+       if (require.specified("ibmmfpflogger")) {
+        	define(['ibmmfpflogger'], factory);
         }
         else { //dependency is not loaded, using empty impl
         	define({}, factory);
         }
     } else {
         // Browser globals init
-        if (!root.ibmmobilefirstplatformfoundationlogger) { //dependency not founded, using empty impl
-        	root.ibmmobilefirstplatformfoundationanalytics = factory({});
+        if (!root.ibmmfpflogger) { //dependency not founded, using empty impl
+        	root.ibmmfpfanalytics = factory({});
         }
         else {
-        	root.ibmmobilefirstplatformfoundationanalytics = factory(root.ibmmobilefirstplatformfoundationlogger);
+        	root.ibmmfpfanalytics = factory(root.ibmmfpflogger);
         }
     }
 }(this, function (logger) { //analytics impl
@@ -64,7 +64,7 @@
 		logger.config({analyticsCapture: false});
 		
 	};
-	
+
 	/**
     	Collect custom events data.
 	*/
@@ -74,9 +74,12 @@
 			for(var key in msg){
 				name=key;
 			}
+			logger.getState().metadata = msg;
+			logger.create(_PKG_NAME).analytics(name);
 		}
-		logger.getState().metadata = msg;
-		logger.create(_PKG_NAME).analytics(name || '');
+		else {
+			logger.create(_PKG_NAME).analytics(msg)
+		}		
 	}
 	
 	
