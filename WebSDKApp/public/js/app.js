@@ -131,6 +131,45 @@ function addCustomEventFlow(target) {
 	ibmmobilefirstplatformfoundationanalytics.addEvent({'src':'Landing  Page', 'target' : target});
 };
 
+function updateConfigFromServer() {
+    ibmmobilefirstplatformfoundationlogger.updateConfigFromServer();
+};
+
+function resetConfig() {
+    ibmmobilefirstplatformfoundationlogger.__resetState();
+};
+function logWithPackage(){
+	//get the package get the level.	
+	var pkg = document.getElementById('selectedPackage').value;
+	var level = document.getElementById('selectedLevel').value;
+	var msg = document.getElementById('input_for_log').value;
+
+	var logger = ibmmobilefirstplatformfoundationlogger.create(pkg);
+	switch(level) {
+    case 'trace':
+    	logger.trace(msg);
+        break;
+    case 'debug':
+    	logger.debug(msg);
+        break;
+    case 'log':
+    	logger.log(msg);
+        break;
+    case 'info':
+    	logger.info(msg);
+        break;
+    case 'warn':
+    	logger.warn(msg);
+        break;
+    case 'error':
+    	logger.error(msg);
+        break;
+    case 'fatal':
+    	logger.fatal(msg);
+        break;                    
+	}
+}
+
 function crashMe(){
 	throw new Error("it's over 9000!!!");
 }
@@ -144,6 +183,9 @@ return {
     send: send,
     addCustomEvent: addCustomEvent,
     addCustomEventFlow: addCustomEventFlow,
+    updateConfig:updateConfigFromServer,
+    resetConfig:resetConfig,
+    logWithPackage:logWithPackage,
     crashMe : crashMe
   };
 });

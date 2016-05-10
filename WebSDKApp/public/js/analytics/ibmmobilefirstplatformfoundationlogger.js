@@ -1007,9 +1007,6 @@
          var platform = metadataHeader.os ;
          var version = 'none';
          
-//          var appName = 'com.hackaton.ibm.analyticstestapp';
-//          var platform = 'android';
-//          var version = '1.0';
          var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
          __ajax({}, getConfigUrl,'GET')
 			.then(function (metadata) {
@@ -1222,7 +1219,7 @@
     	if (userID == '') {
     		userID = metadataHeader.deviceID;
     	}
-		metadataHeader.os = "Web";  // MFP
+		metadataHeader.os = "web";  // MFP
 		metadataHeader.osVersion =  navigator.platform;  // human-readable o/s version; like "MacIntel"
 		metadataHeader.brand = navigator.appVersion;  // human-readable brand; 
 		metadataHeader.model = browserName();  // human-readable model; like "Chrome"
@@ -1266,7 +1263,6 @@
         create : _create,
         getState: __state,
         config : _config,
-        status : _status,
         updateConfigFromServer: _updateConfigFromServer,
         send: _send,
         //internal:

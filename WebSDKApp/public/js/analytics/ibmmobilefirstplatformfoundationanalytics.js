@@ -64,21 +64,6 @@
 		logger.config({analyticsCapture: false});
 		
 	};
-
-	/**
-    	Logs a message with contextual data.
-	 */
-	var _log = function (msg, name) {
-		if(typeof name === 'undefined'){
-			name = '';
-		}
-			
-		if (typeof msg === 'object') {
-			logger._metadata(msg)._ctx({pkg: _PKG_NAME}).analytics(name || '');
-		} else {
-			logger._ctx({pkg: _PKG_NAME}).analytics(msg, name);
-		}
-	};
 	
 	/**
     	Collect custom events data.
@@ -90,7 +75,8 @@
 				name=key;
 			}
 		}
-		_log(msg,name);
+		logger.getState().metadata = msg;
+		logger.create(_PKG_NAME).analytics(name || '');
 	}
 	
 	
@@ -99,7 +85,7 @@
 		Returns the current state of WL.Analytics
 	 */
 	var _state = function () {
-		var currentLoggerState = logger.status();
+		var currentLoggerState = logger.getState();
 		return currentLoggerState.analyticsCapture;		
 	};
 	
@@ -119,18 +105,6 @@
 		// returns a promise
 		logger.send();
 		return logger._sendAnalytics();
-	};
-
-	/**
-    Get tracking id for sending requests
-	 */
-	var __getTrackingId = function () {
-		function s4() {
-			return Math.floor((1 + Math.random()) * 0x10000)
-			.toString(16)
-			.substring(1);
-		}
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 	};
 
 	//public API

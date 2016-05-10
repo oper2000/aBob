@@ -122,6 +122,46 @@
           </div>
         </div>
       </li>
+      <li class="form-line" data-type="control_textbox" id="id_3">
+        <label class="form-label form-label-left form-label-auto" id="label_3" for="input_3"> Log something on package </label>        
+        <div style="text-align:left" class="form-buttons-wrapper">
+           <select id='selectedPackage'>
+			  <option value="com.ibm.error">com.ibm.error</option>
+			  <option value="com.ibm.info">com.ibm.info</option>
+			  <option value="">None</option>
+			</select>
+			<select id='selectedLevel'>		
+			  <option value="trace">trace</option>
+			  <option value="debug">debug</option>
+			  <option value="log">log</option>
+			  <option value="info">info</option>
+			  <option value="warn">warn</option>
+			  <option value="error">error</option>
+			  <option value="fatal">fatal</option>
+			</select>
+          </div>
+          <div id="cid_3" class="form-input jf-required">
+          <input class=" form-textbox" data-type="input-textbox" id="input_for_log" name="q3_logSomething" size="32" type="text">
+        </div>
+        <div id="cid_4" class="form-input-wide">
+          <div style="text-align:right" class="form-buttons-wrapper">
+            <button id="input_4" type="button" class="form-submit-button" onClick="demoApp.logWithPackage()">
+            OK - log it!
+            </button>
+          </div>
+        </div>
+      </li>
+      
+      </li>
+       <li class="form-line" data-type="control_button" id="id_4">
+        <div id="cid_4" class="form-input-wide">
+          <div style="text-align:right" class="form-buttons-wrapper">
+            <button type="button" class="form-submit-button" onClick="demoApp.updateConfig()">
+              Update log config
+            </button>           
+          </div>
+        </div>
+      </li>
     <ul class="form-section page-section">
       <li id="cid_1" class="form-input-wide" data-type="control_head">
         <div class="form-header-group">
