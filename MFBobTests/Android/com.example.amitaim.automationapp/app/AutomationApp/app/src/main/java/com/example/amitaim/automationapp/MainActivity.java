@@ -9,7 +9,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.amitaim.automationapp.Tests.AutomaticTest;
-import com.worklight.common.WLAnalytics;
 import com.worklight.common.WLConfig;
 import com.worklight.wlclient.api.WLClient;
 
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        WLAnalytics.init(getApplication());
+
         setContentView(R.layout.activity_main);
         TableLayout layout1 = (TableLayout) findViewById(R.id.tableItemId);
 

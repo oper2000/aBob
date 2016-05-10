@@ -3,7 +3,6 @@ package com.example.amitaim.automationapp.Tests;
 
 import com.example.amitaim.automationapp.AndroidChallengeHandler;
 import com.example.amitaim.automationapp.MainActivity;
-import com.worklight.common.WLAnalytics;
 import com.worklight.common.WLConfig;
 import com.worklight.wlclient.auth.AccessToken;
 import com.worklight.wlclient.HttpClientManager;
@@ -46,14 +45,6 @@ public class GetTokenTest extends AutomaticTest {
         public void onSuccess(AccessToken accessToken) {
             MainActivity.AutomationServer.result = "Success";
             WLAuthorizationManagerInternal.getInstance().clearRegistration();
-            try {
-                int i = 5/0;
-
-            }
-            catch (Throwable t) {
-                WLAnalytics.logAppCrash(t);
-            }
-            WLAnalytics.send();
             return;
         }
 
