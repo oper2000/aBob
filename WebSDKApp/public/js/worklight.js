@@ -12,35 +12,38 @@
  */
 
 /**
- * This file is a wrapper for the web sdk which is in target/jslibexpanded/app/web/worklight.js
- * Its purpose is to make the web sdk as an AMD module.
+ * This file is a wrapper for the web SDK which is in target/jslibexpanded/app/web/worklight.js
+ * Its purpose is to make the web SDK as an AMD module.
+ *
+ * There is a placeholder in this file which will be replaced with the web sdk during the build of client-javascript.
+ * The replacement is defined in expandjslib.xml inside buildEnv_web target
+ * After the replacement the file will be renamed to worklight.js
  */
 
 (function (root, factory) {
-    var wllogger = {hello: function() {console.log('dummy call');}};
     var wlanalytics = {hello: function() {console.log('dummy call');}};
 
+    // scripts which are AMD defined by calling define function
+    // if 'define' is in our global name space then we expose our web SDK as an AMD module with one dependency: wlanalytics.
     if (typeof define === 'function' && define.amd) {
 
-        if (require.specified('ibmmfpflogger')) {
-            wllogger = 'ibmmfpflogger';
-        }
         if (require.specified('ibmmfpfanalytics')) {
             wlanalytics = 'ibmmfpfanalytics';
         }
-        define([wllogger, wlanalytics], factory);
+        define([wlanalytics], factory);
 
     } else {
-        if (!root.ibmmfpflogger) {
-            root.ibmmfpflogger = wllogger;
-        }
-        if (!root.ibmmfpfnalytics) {
+        // not using 'define', so we expose our web sdk (WL) to the global name space.
+        // if wlanalytics is not in the global name space, we use dummy implementation for them
+
+        if (!root.ibmmfpfanalytics) {
             root.ibmmfpfanalytics = wlanalytics;
         }
-        root.WL = factory(root.ibmmfpflogger, root.ibmmfpfanalytics);
-
+        root.WL = factory(root.ibmmfpfanalytics);
     }
-}(this, function(wllogger, wlanalytics) {
+
+}(this, function(wlanalytics) {
+
     
     
 
@@ -2103,7 +2106,7 @@ __WLClient = function() {
         WL.LocalStorageDB.init();
 
         //init analytics
-        wllogger._init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
+        wlanalytics.logger._init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
 
         var hasWlCommonInit = window.wlCommonInit !== undefined;
 
@@ -2142,7 +2145,7 @@ __WLClient = function() {
                 if (!transport.responseJSON || (transport.responseJSON && !transport.responseJSON.isSuccessful)) {
                     var failResponse = new WL.Response(transport, options.invocationContext);
                     failResponse.errorCode = WL.ErrorCode.PROCEDURE_ERROR;
-                    failResponse.errorMsg = WL.ClientMessages.serverError;
+                    failResponse.errorMsg = 'Procedure invocation error.';
                     failResponse.invocationResult = transport.responseJSON;
                     if (!failResponse.invocationResult) {
                     }
@@ -2201,7 +2204,12 @@ __WLClient = function() {
     this.removeGlobalHeader = function (headerName) {};
 
 
-    this.setHeartBeatInterval = function (interval) {};
+    this.setHeartBeatInterval = function (interval) {
+        WL.Validators.validateArguments(['number'], arguments, 'WL.Client.setHeartBeatInterval');
+        if (typeof(WL.AuthorizationManager) !== 'undefined' && WL.AuthorizationManager !== null) {
+            WL.AuthorizationManager.__sendHeartBeat(interval);
+        }
+    };
 
 
     this.removeGlobalHeader = function (headerName) {};
@@ -2632,7 +2640,7 @@ __WLClient = function() {
                         status : 0,
                         responseJSON : {
                             errorCode: WL.ErrorCode.CHALLENGE_HANDLING_CANCELED,
-                            errorMsg: WL.ClientMessages.challengeHandlingCanceled
+                            errorMsg: 'Challenge handler operation was cancelled.'
                         }
                     };
 
@@ -2740,20 +2748,20 @@ WL.JWT = WLJSX.Class.create({
 
 /*jshint strict:false, maxparams:4*/
 WL.AccessToken = WLJSX.Class.create({
-    token : null,
+    value : null,
     expiration : 0,
     scope : null,
-    asAuthorizationRequestHeaderField : null,
+    asAuthorizationRequestHeader : null,
     asFormEncodedBodyParameter : null,
 
     initialize : function(token, expiration, scope) {
         var currentTime = new Date().getTime();
-        this.token = token;
+        this.value = token;
 
         // Expiration is in seconds, we transform to millis and add current time
         this.expiration = currentTime + (expiration * 1000);
         this.scope = scope;
-        this.asAuthorizationRequestHeaderField = 'Bearer ' + token;
+        this.asAuthorizationRequestHeader = 'Bearer ' + token;
         this.asFormEncodedBodyParameter = 'access_token=' + token;
     }
 });
@@ -4482,7 +4490,6 @@ WL.AuthorizationManager = (function () {
     var PARAM_CLIENT_ID_KEY = 'client_id';
     var PARAM_SCOPE_KEY = 'scope';
     var INVALID_CLIENT_ERROR = 'INVALID_CLIENT_ID';
-    var AUTHORIZATION_MANAGER_PLUGIN_NAME = 'WLAuthorizationManagerPlugin';
     var CHALLENGE_RESPONSE_KEY = 'challengeResponse';
     var WWW_AUTHENTICATE_HEADER = 'WWW-Authenticate';
     var MFP_CONFLICT_HEADER = 'MFP-Conflict';
@@ -4653,8 +4660,7 @@ WL.AuthorizationManager = (function () {
                         function(){
                             startAuthorizationProcess(scope);
                         },
-                        function(error) {
-                            processClientInstanceCallbacks(error, false);
+                        function() {
                             __deleteAuthData();
                         });
                 }
@@ -4821,6 +4827,7 @@ WL.AuthorizationManager = (function () {
                 var locationHeader = response.getHeader("Location");
                 if(__isUndefinedOrNull(locationHeader)) {
                     // If we get an error, we reject the promise
+                    processClientInstanceCallbacks(response, false);
                     registrationCallbackDfd.reject(new WL.Response(response));
                     return;
                 }
@@ -4829,15 +4836,18 @@ WL.AuthorizationManager = (function () {
                 var clientId = split[split.length -1];
                 __setClientId(clientId);
                 __setClientRegisteredData(WL.BrowserManager.getDeviceData());
+                processClientInstanceCallbacks(response, true);
                 registrationCallbackDfd.resolve(response);
             },
             onFailure: function (response) {
                 if (!__isUndefinedOrNull(response)) {
                     WL.Logger.debug('Authorization request failed with response: ' + response.responseText);
                 }
+                processClientInstanceCallbacks(response, false);
                 registrationCallbackDfd.reject(new WL.Response(response));
             },
             onAuthRequestFailure: function (response) {
+                processClientInstanceCallbacks(response, false);
                 registrationCallbackDfd.reject(response);
             },
             onAuthException: function (response, ex) {
@@ -4848,6 +4858,7 @@ WL.AuthorizationManager = (function () {
                         errorMsg: ex.message
                     }
                 };
+                processClientInstanceCallbacks(response, false);
                 var failResponse = new WL.Response(transport, null);
                 registrationCallbackDfd.reject(failResponse);
             },
@@ -5168,7 +5179,7 @@ WL.AuthorizationManager = (function () {
         if (__isUndefinedOrNull(authenticationHeader)) {
             return null;
         }
-        return WLAuthorizationManager.__getAuthorizationScope(authenticationHeader[WWW_AUTHENTICATE_HEADER]);
+        return WL.AuthorizationManager.__getAuthorizationScope(authenticationHeader[WWW_AUTHENTICATE_HEADER]);
     };
 
     var __isInvalidToken = function (transport) {
@@ -5177,11 +5188,35 @@ WL.AuthorizationManager = (function () {
     };
 
     var __sendHeartBeat = function (intervalInSecs) {
-        cordova.exec(
-            function () {},
-            function () {},
-            AUTHORIZATION_MANAGER_PLUGIN_NAME, 'setHeartBeatInterval', [intervalInSecs]
-        );
+        setInterval(__HeartBeatTask, intervalInSecs);
+    };
+
+    var __HeartBeatTask = function () {
+        var id = __getClientId();
+        if (__isUndefinedOrNull(id)) {
+            WL.Logger.warn('Could not send heartbeat, heartbeat is sent only after client is registered');
+        }
+        else {
+            var jwt = new WL.JWT();
+            WL.CertManager.signJWS(jwt, {'kid' : __getClientId()}).then(function(signedData){
+                var params = {
+                    'client_assertion' : signedData,
+                    'client_assertion_type' : 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+                };
+                var options = {
+                    method: 'POST',
+                    contentType : 'application/x-www-form-urlencoded',
+                    parameters: params,
+                    onSuccess: function (response) {
+                        WL.Logger.debug('Heartbeat sent successfully');
+                    },
+                    onFailure: function (error) {
+                        WL.Logger.debug('Failed to send heartbeat. Response:  ' + JSON.stringify(error));
+                    }
+                };
+                makeRequest('preauth/v1/heartbeat', options, false);
+            });
+        }
     };
 
     var __isUndefinedOrNull = function (object) {
@@ -5257,7 +5292,7 @@ WL.AuthorizationManager = (function () {
             shouldProcessCallbacksOnError = false; // do not process callbacks, because request will be sent again
 
             // call the native to delete the old authentication data
-            WLAuthorizationManager.__deleteAuthData()
+            WL.AuthorizationManager.__deleteAuthData()
                 .then(
                     function () {
                         // register the client again
@@ -5474,8 +5509,6 @@ WL.AuthorizationManager = (function () {
     };
 
 }());
-
-window.WLAuthorizationManager = WL.AuthorizationManager;
 
 /**
  * ================================================================= 
@@ -6129,7 +6162,7 @@ WL.Device = new __WLDevice();
  limitations under the License.
  */
 
-/*globals WL, WL_, WLJQ, WLAuthorizationManager*/
+/*globals WL, WL_, WLJQ, WL.AuthorizationManager*/
 /*jshint maxparams:4*/
 WL.ResourceRequest = function (_url, _method, _options) {
     /*jshint strict:false*/
@@ -6600,7 +6633,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
                         failResponse.status = 0;
                     }
 
-                    if (typeof (WLAuthorizationManager) !== 'undefined' && isAuthorizationRequired(transport) && (transport.status !== 409 && attempt < maxRequestAttempts || transport.status === 409 && conflictAttemptCounter < MAX_CONFLICT_ATTEMPTS)) {
+                    if (typeof (WL.AuthorizationManager) !== 'undefined' && isAuthorizationRequired(transport) && (transport.status !== 409 && attempt < maxRequestAttempts || transport.status === 409 && conflictAttemptCounter < MAX_CONFLICT_ATTEMPTS)) {
                         processResponse(transport);
                     } else {
                         // it's not OAuth error or number of attempts is exceeded; fail the request with last error, which will be propagated up
@@ -6614,7 +6647,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
             if (isUndefinedOrNull(transport)) {
                 return false;
             }
-            return WLAuthorizationManager.isAuthorizationRequired(transport.status, transport.getAllResponseHeaders());
+            return WL.AuthorizationManager.isAuthorizationRequired(transport.status, transport.getAllResponseHeaders());
         };
 
         var processResponse = function(transport) {
@@ -6622,19 +6655,19 @@ WL.ResourceRequest = function (_url, _method, _options) {
             if (transport.status === 409) {
                 resendRequest(attempt, ++conflictAttemptCounter);
             } else if (transport.status === 403) {
-                currentResourceRequest.scope = WLAuthorizationManager.getResourceScope(transport.getAllResponseHeaders());
+                currentResourceRequest.scope = WL.AuthorizationManager.getResourceScope(transport.getAllResponseHeaders());
                 if (!WL.Validators.isNullOrUndefined(currentResourceRequest.scope)) {
-                    WLAuthorizationManager.__cacheScopeByResource(transport, currentResourceRequest.scope);
+                    WL.AuthorizationManager.__cacheScopeByResource(transport, currentResourceRequest.scope);
                     resendRequest(++attempt, conflictAttemptCounter);
                 }
-            } else if (WLAuthorizationManager.__isInvalidToken(transport)) {
-                WLAuthorizationManager.clearAccessToken({
+            } else if (WL.AuthorizationManager.__isInvalidToken(transport)) {
+                WL.AuthorizationManager.clearAccessToken({
                     scope: currentResourceRequest.scope
                 });
                 resendRequest(++attempt, conflictAttemptCounter);
             } else {
                 // We got 401 we need cache the resource to empty scope so that next time the request will be sent with default access token.
-                WLAuthorizationManager.__cacheScopeByResource(transport, '');
+                WL.AuthorizationManager.__cacheScopeByResource(transport, '');
                 resendRequest(++attempt, conflictAttemptCounter);
             }
         };
@@ -6649,12 +6682,12 @@ WL.ResourceRequest = function (_url, _method, _options) {
                 });
         };
 
-        if (typeof (WLAuthorizationManager) !== 'undefined') {
+        if (typeof (WL.AuthorizationManager) !== 'undefined') {
             // If user provided scope for this resource use it, else get scope from cache.
             if (!WL.Validators.isNullOrUndefined(currentResourceRequest.scope)) {
                 obtainAccessTokenAndSendRequest(currentResourceRequest.scope);
             } else {
-                var cachedScope = WLAuthorizationManager.__getCachedScopeByResource(xhr);
+                var cachedScope = WL.AuthorizationManager.__getCachedScopeByResource(xhr);
                 currentResourceRequest.scope = cachedScope;
                 obtainAccessTokenAndSendRequest(cachedScope);
             }
@@ -6664,11 +6697,11 @@ WL.ResourceRequest = function (_url, _method, _options) {
         /*jshint latedef:false*/
         function obtainAccessTokenAndSendRequest(scope) {
             if (!WL.Validators.isNullOrUndefined(scope)) {
-                WLAuthorizationManager.obtainAccessToken(scope).then(
+                WL.AuthorizationManager.obtainAccessToken(scope).then(
                     function (accessToken) {
                         // Send request with accessToken as authorization header.
                         if (!WL.Validators.isNullOrUndefined(accessToken)) {
-                            xhr.setRequestHeader(WLAuthorizationManager.WL_AUTHORIZATION_HEADER, accessToken.asAuthorizationRequestHeaderField);
+                            xhr.setRequestHeader(WL.AuthorizationManager.WL_AUTHORIZATION_HEADER, accessToken.asAuthorizationRequestHeader);
                         }
                         sendRequest();
                     },
@@ -6676,7 +6709,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
                         if (error.status === 500) {
                             // if error status is 500 then it is necessary to delete resource to scope mapping.
                             // Because the scope mapping for this resource might have changed.
-                            WLAuthorizationManager.__deleteCachedScopeByResource(xhr);
+                            WL.AuthorizationManager.__deleteCachedScopeByResource(xhr);
                                     // Unable to retrieve accessToken, fail the request; the failure will be propagated up the chain
                                     currentResourceRequest.scope = null;
                                     dfd.reject(error);
@@ -6773,8 +6806,6 @@ WL.ResourceRequest = function (_url, _method, _options) {
         return true;
     }
 }
-
-window.WLResourceRequest = WL.ResourceRequest;
 
 WL.ResourceRequest.GET = 'GET';
 WL.ResourceRequest.POST = 'POST';
@@ -7103,6 +7134,10 @@ WL.CertManager = (function () {
     };
 
 }());
-	WL.Logger = wllogger;
+
+    // Exposing WLResourceRequest and WLAuthorizationManager to the global name space is for backward compatibility and for consistency to hybrid client
+    window.WLResourceRequest = WL.ResourceRequest;
+    window.WLAuthorizationManager = WL.AuthorizationManager;
+	WL.Logger = wlanalytics.logger;
     return WL;
 }));

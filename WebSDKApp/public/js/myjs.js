@@ -4,7 +4,6 @@
 require.config({
   paths: {
     ibmmfpfanalytics: '../js/analytics/ibmmfpfanalytics',
-    ibmmfpflogger: '../js/analytics/ibmmfpflogger',
     worklight: '../js/worklight',
   }
 

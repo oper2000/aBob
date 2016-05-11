@@ -1,9 +1,8 @@
 
 define([
   'ibmmfpfanalytics',
-  'ibmmfpflogger',
   'worklight',
-], function(ibmmfpfanalytics, ibmmfpflogger, WL){
+], function(ibmmfpfanalytics, WL){
   
 var wlInitOptions = {'mfpContextRoot' : '/mfp' , 'applicationId' : 'com.sampleone.bankApp'};
 
@@ -115,8 +114,8 @@ function submitUsernamePasswordChallenge(challengeHandler) {
 };
 
 function log(msg) {
-    ibmmfpflogger.info(msg);
-    ibmmfpflogger.error('error', msg);
+    ibmmfpfanalytics.logger.info(msg);
+    ibmmfpfanalytics.logger.error('error', msg);
 };
 
 
@@ -132,11 +131,11 @@ function addCustomEventFlow(target) {
 };
 
 function updateConfigFromServer() {
-    ibmmfpflogger.updateConfigFromServer();
+    ibmmfpfanalytics.logger.updateConfigFromServer();
 };
 
 function resetConfig() {
-    ibmmfpflogger.__resetState();
+    ibmmfpfanalytics.logger.__resetState();
 };
 function logWithPackage(){
 	//get the package get the level.	
@@ -144,7 +143,7 @@ function logWithPackage(){
 	var level = document.getElementById('selectedLevel').value;
 	var msg = document.getElementById('input_for_log').value;
 
-	var logger = ibmmfpflogger.pkg(pkgName);
+	var logger = ibmmfpfanalytics.logger.pkg(pkgName);
 	switch(level) {
     case 'trace':
     	logger.trace(msg);
