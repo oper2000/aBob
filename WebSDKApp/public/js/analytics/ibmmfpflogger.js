@@ -221,8 +221,8 @@
 
 	};
 	
-    function __sendAnalytics() {
-        __send([KEY_LOCAL_STORAGE_ANALYTICS]);
+    function __sendAll() {
+        __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
     };
 
     function getLogsData(keys){
@@ -920,11 +920,11 @@
         this.options = ops || {};
     };
 
-    __getKeys(priorities).forEach(function (idx, priority) {
-        LogInstance.prototype[priority] = function () {
-            _ctx(this.options)[priority].apply(this, arguments);
-        };
-    });
+ //    __getKeys(priorities).forEach(function (idx, priority) {
+//         LogInstance.prototype[priority] = function () {
+//             _ctx(this.options)[priority].apply(this, arguments);
+//         };
+//     });
 
     function _create(pkg) {
     	var newObject = Object.create(this);
@@ -933,16 +933,25 @@
     	return newObject;
 //         return new LogInstance(options);
     };
+    
+    function _pkg(pkgName) {
+
+		if (state.pkg != null){
+		    state.pkg = pkgName;
+		}    	
+    	return this;
+    };
+
 
     function _config(options) {
         __setState(__extend({},options || {}, {enabled: true}));
         return this;
     };
 
-    function _ctx(options) {
-        state = __extend({},state, options || {});
-        return this;
-    };
+//     function _ctx(options) {
+//         state = __extend({},state, options || {});
+//         return this;
+//     };
 
     function _send() {
         return __send([KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
@@ -1018,8 +1027,8 @@
     	 '$exceptionMessage' : errorMessage,
     	 '$exceptionClass' : type
     	};
-    	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics'});
+    	state.metadata = meta;
+    	_pkg('wl.analytics');
     	__log('appSession','ANALYTICS');
 
 		var meta2 = {
@@ -1032,13 +1041,12 @@
     	 '$exceptionMessage' : errorMessage,
     	 '$exceptionClass' : type
     	};
-		_metadata(meta2);
-    	_ctx({pkg: 'wl.analytics'});
+		state.metadata = meta2;
+    	_pkg('wl.analytics');
     	__log('Uncaught Exception','FATAL');
     	
     	//send immediately
-    	_send();
-		__sendAnalytics();
+    	__sendAll();
 	};
 	
 	function _setUserContext(user) {
@@ -1052,8 +1060,8 @@
     	 '$userID' : userID,
     	'$appSessionID' : appSessionID
     	 };
-    	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics'});
+    	state.metadata = meta;
+    	_pkg('wl.analytics');
     	__log('appSession','ANALYTICS');
 	};
 	
@@ -1063,8 +1071,8 @@
     	 '$category' : 'appSession',
     	 '$appSessionID' : appSessionID
     	};
-    	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics'});
+    	state.metadata = meta;
+    	_pkg('wl.analytics');
     	__log('appSession','ANALYTICS');
 	};
 	
@@ -1078,8 +1086,8 @@
     	 '$appSessionID' : appSessionID
     	};
     	appSessionID = generateUUID('new');
-    	_metadata(meta);
-    	_ctx({pkg: 'wl.analytics'});
+    	state.metadata = meta;
+    	_pkg('wl.analytics');
     	__log('appSession','ANALYTICS');
 	};
 	
@@ -1201,19 +1209,15 @@
 
 
     var PUBLIC_API = {
-        create : _create,
+		pkg: _pkg,
         getState: __state,
         config : _config,
         updateConfigFromServer: _updateConfigFromServer,
         send: _send,
         //internal:
         _init: _init,
-        _ctx : _ctx,
         _setUserContext : _setUserContext,
-        _metadata: _metadata,
-        _sendAnalytics: __sendAnalytics,  // called by WL.Analytics
-        _setServerOverrides: __setServerOverrides,
-        _unsetServerOverrides: __unsetServerOverrides,
+        _sendAll:__sendAll,
         //testing:
         __resetState : __resetState  // back to the defaults
         

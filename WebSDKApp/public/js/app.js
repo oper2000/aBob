@@ -140,11 +140,11 @@ function resetConfig() {
 };
 function logWithPackage(){
 	//get the package get the level.	
-	var pkg = document.getElementById('selectedPackage').value;
+	var pkgName = document.getElementById('selectedPackage').value;
 	var level = document.getElementById('selectedLevel').value;
 	var msg = document.getElementById('input_for_log').value;
 
-	var logger = ibmmfpflogger.create(pkg);
+	var logger = ibmmfpflogger.pkg(pkgName);
 	switch(level) {
     case 'trace':
     	logger.trace(msg);

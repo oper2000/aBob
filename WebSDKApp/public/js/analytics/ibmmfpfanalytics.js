@@ -75,10 +75,10 @@
 				name=key;
 			}
 			logger.getState().metadata = msg;
-			logger.create(_PKG_NAME).analytics(name);
+			logger.pkg(_PKG_NAME).analytics(name);
 		}
 		else {
-			logger.create(_PKG_NAME).analytics(msg)
+			logger.pkg(_PKG_NAME).analytics(msg)
 		}		
 	}
 	
@@ -106,8 +106,7 @@
 	 */
 	var _send = function () {
 		// returns a promise
-		logger.send();
-		return logger._sendAnalytics();
+		return logger._sendAll();
 	};
 
 	//public API
