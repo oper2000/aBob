@@ -13,8 +13,8 @@
 
 
 /**
- Everything delegates to ibmmobilefirstplatfromfoundationlogger, but we keep the 
- ibmmobilefirstplatformfoundationanalytics API to make it clear
+ Everything delegates to ibmmfpflogger, but we keep the 
+ ibmmfpfanalytics API to make it clear
  to callers the difference in purpose of logger (debug) vs. analytics.
  */
 

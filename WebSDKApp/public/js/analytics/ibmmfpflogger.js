@@ -220,16 +220,15 @@
 		});
 
 	};
-	
-    function __sendAll() {
-        __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
-    };
 
     function getLogsData(keys){
         var persistedLogs = '';
         keys.forEach(function(key){
             var value = localStorage.getItem(key);
             if(value !== null){
+            	if (persistedLogs !== ''){
+            		persistedLogs += ',';
+            	}
                 persistedLogs += value;
             }
         });
@@ -595,6 +594,9 @@
 
     function __resetState() {
         state = __getStateDefaults();
+        localStorage.removeItem('__WL_WEBLOG_LOGS__');
+        localStorage.removeItem('__WL_WEBLOG_ANALYTICS__');
+        localStorage.removeItem('__WL_WEBLOG_CONFIG__');        
         return this;
     };
 
@@ -816,6 +818,7 @@
 
     function __log(args, priority) {
 
+		priority = priority.toLowerCase();
         //TODO check if env is IE and then set console.trace = console.debug;
 		state = __state();
         var str = '',
@@ -915,24 +918,6 @@
         }
 
     };
-
-    var LogInstance = function (ops) {
-        this.options = ops || {};
-    };
-
- //    __getKeys(priorities).forEach(function (idx, priority) {
-//         LogInstance.prototype[priority] = function () {
-//             _ctx(this.options)[priority].apply(this, arguments);
-//         };
-//     });
-
-    function _create(pkg) {
-    	var newObject = Object.create(this);
-    	newObject.state = this.getState();
-    	newObject.state.pkg = pkg || {};
-    	return newObject;
-//         return new LogInstance(options);
-    };
     
     function _pkg(pkgName) {
 
@@ -942,28 +927,17 @@
     	return this;
     };
 
-
     function _config(options) {
         __setState(__extend({},options || {}, {enabled: true}));
         return this;
     };
 
-//     function _ctx(options) {
-//         state = __extend({},state, options || {});
-//         return this;
-//     };
-
     function _send() {
         return __send([KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
     };
-
-    function _metadata(obj) {
-
-        if (typeof obj === 'object') {
-            state.metadata = obj;
-        }
-
-        return this;
+    
+	function __sendAll() {
+        __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
     };
 
     function _updateConfigFromServer() {
@@ -972,9 +946,6 @@
          var platform = metadataHeader.os ;
          var version = 'none';
          
-//          var appName = 'com.hackaton.ibm.analyticstestapp';
-//          var platform = 'android';
-//          var version = '1.0';
          var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
          __ajax({}, getConfigUrl,'GET')
 			.then(function (metadata) {
@@ -1206,7 +1177,6 @@
 					arguments[0][key] = arguments[i][key];
 		return arguments[0];
 	};
-
 
     var PUBLIC_API = {
 		pkg: _pkg,
