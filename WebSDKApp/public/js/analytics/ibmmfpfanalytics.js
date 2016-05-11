@@ -72,7 +72,7 @@
 		var name = '';
 		if (typeof msg === 'object') {
 			for(var key in msg){
-				name=key;
+				name+=key + ' ';
 			}
 			logger.getState().metadata = msg;
 			logger.pkg(_PKG_NAME).analytics(name);
