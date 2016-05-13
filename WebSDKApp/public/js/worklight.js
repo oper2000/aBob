@@ -2106,7 +2106,7 @@ __WLClient = function() {
         WL.LocalStorageDB.init();
 
         //init analytics
-        wlanalytics.logger._init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
+        wlanalytics.init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
 
         var hasWlCommonInit = window.wlCommonInit !== undefined;
 

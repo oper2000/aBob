@@ -1182,11 +1182,8 @@
 
     logger = {
 		pkg: _pkg,
-        getState: __state,
-        config : _config,
+        state: __state,
         updateConfigFromServer: _updateConfigFromServer,
-        //internal:
-        _init: _init,
         //testing:
         __resetState : __resetState  // back to the defaults
         
@@ -1209,18 +1206,14 @@
     Turns on the capture of analytics data.
 	 */
 	var _enable = function () {
-
-		logger.config({analyticsCapture: true});
-
+		_config({analyticsCapture: true});
 	};
 
 	/**
 		Turns off the capture of analytics data.
 	 */
 	var _disable = function () {
-
-		logger.config({analyticsCapture: false});
-		
+		_config({analyticsCapture: false});
 	};
 
 	/**
@@ -1232,7 +1225,7 @@
 			for(var key in msg){
 				name+=key + ' ';
 			}
-			logger.getState().metadata = msg;
+			logger.state().metadata = msg;
 			logger.pkg(_ANSALYTICS_PKG_NAME).analytics(name);
 		}
 		else {
@@ -1244,21 +1237,14 @@
 		Returns the current state of WL.Analytics
 	 */
 	var _state = function () {
-		var currentLoggerState = logger.getState();
+		var currentLoggerState = logger.state();
 		return currentLoggerState.analyticsCapture;		
 	};
 	
-	/**
-	 * Specify current application user.  If you want user-based analytics, you must use this method
-	 * call.  For example, use it when the user logs in. 
-	 *
-	 */
-	function setUserContext(user) {
-		logger._setUserContext(user)
-	};
 
 	//public API
 	return {
+	    init: _init,
 		enable : _enable,
 		disable: _disable,
 		state: _state,
