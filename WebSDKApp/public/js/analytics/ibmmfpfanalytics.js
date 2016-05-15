@@ -38,6 +38,8 @@
         sendLogsTimeBuffer = 0;
         var LEFT_BRACKET = '[';
     	var RIGHT_BRACKET = '] '; //There's a space at the end.
+    	var _ANSALYTICS_PKG_NAME = 'wl.analytics';
+
     
     	var metadataHeader = {};
         var startupTime = 0;
@@ -933,10 +935,6 @@
         __setState(__extend({},options || {}, {enabled: true}));
         return this;
     };
-
-    function _send() {
-        return __send([KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
-    };
     
     function __sendAll() {
         __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
@@ -1194,13 +1192,6 @@
             __log([].slice.call(arguments), idx);
         };
     });
-
-    
-	var
-
-	//Constants
-	_ANSALYTICS_PKG_NAME = 'wl.analytics';
-	
 
 	/**
     Turns on the capture of analytics data.
