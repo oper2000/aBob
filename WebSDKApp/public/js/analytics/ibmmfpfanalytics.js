@@ -38,6 +38,7 @@
         sendLogsTimeBuffer = 0;
         var LEFT_BRACKET = '[';
     	var RIGHT_BRACKET = '] '; //There's a space at the end.
+    	var _ANSALYTICS_PKG_NAME = 'wl.analytics';
     
     	var metadataHeader = {};
         var startupTime = 0;
@@ -142,6 +143,10 @@
 		return uuid;
 	};
 	
+	var getTrackingId = function () {
+		return generateUUID();
+	};
+	
 	function initXHR(XHR, analytics) {
 		"use strict";
 
@@ -157,25 +162,26 @@
 			var self = this;
 			var oldOnReadyStateChange;
 			var url = this._url;
-			__logOutboundRequest(this);
-
-		    var duration = new Date().getTime() - startupTime;
-		    if (isNewSession()) {
-		   		logAnalyticsSessionStart();
-		    }
-		    else if (duration > 1800000) {
-		   		logAnalyticsSessionStop();
-		    }
-		    startupTime = new Date().getTime();
-			this.setRequestHeader("x-wl-analytics-tracking-id", generateUUID());
-			this.setRequestHeader("x-mfp-analytics-metadata", JSON.stringify(metadataHeader));
+			var track = logOutboundRequest(this);
+			if (track) {
+		    	var duration = new Date().getTime() - startupTime;
+		    	if (isNewSession()) {
+		   			logAnalyticsSessionStart();
+		    	}
+		    	else if (duration > 1800000) {
+		   			logAnalyticsSessionStop();
+		    	}
+		    	startupTime = new Date().getTime();
+				this.setRequestHeader("x-wl-analytics-tracking-id", this.trackingId);
+				this.setRequestHeader("x-mfp-analytics-metadata", JSON.stringify(metadataHeader));
+			}
 
 			function onReadyStateChange() {
 				if(self.readyState == 4 /* complete */) {
 					/* This is where you can put code that you want to execute post-complete*/
 					/* URL is kept in this._url */
-					__logInboundResponse(this);
-					console.log('Called successfully to server using xhr');
+					logInboundResponse(this);
+					console.log('analytics: Call issued to ' + this._url);
 				}
 
 				if(oldOnReadyStateChange) {
@@ -207,42 +213,21 @@
 		var data = getLogsData(keys);
 		
 		if(data == null || data == ''  ){
-             console.log('There are no persisted logs to send.');
+             console.log('analytics: There are no persisted logs to send.');
              return;
         }
                 		
 		__ajax(data, REQ_SEND_LOGS)
 			.then(function (response) {
 				emptyLogs(keys);
-				__logInboundForSendResponse(response[0]);
-				console.log('Client logs successfully sent to the server');
+				//logInboundForSendResponse(response[0]);
+				console.log('analytics: Client logs successfully sent to the server');
 			})
 			.catch(function (err) {
-			  console.error('call to xhr failed', err.statusText);
+			  console.error('analytics: Call Failed to call the server' , err.statusText);
 		});
 
-	};
-
-    function getLogsData(keys){
-        var persistedLogs = '';
-        keys.forEach(function(key){
-            var value = localStorage.getItem(key);
-            if(value !== null){
-            	if (persistedLogs !== ''){
-            		persistedLogs += ',';
-            	}
-                persistedLogs += value;
-            }
-        });
-		if (persistedLogs == ''){
-            return '';
-        }
-
-        var logdata = {
-            __logdata : persistedLogs
-        };
-        return JSON.stringify(logdata);
-    };	
+	};	
 
     var __ajax = function(data,path,method) {
     	  
@@ -275,13 +260,15 @@
     	  
       };
       
-      var __logOutboundRequest = function (request) {
-		
+       logOutboundRequest = function (request) {
 			try{
-				request.trackingId = __getTrackingId();
-				pendingTrackingIDs[request.trackingId] = 1;
+			    if (!request.trackingId) {
+					request.trackingId = getTrackingId();
+				}
+				else {
+					return false;
+				}
 				var outboundTimestamp = new Date().getTime();
-// 				var url = 'http://localhost:9080/' + request._url;//__getFullURL(global, request._url);TODO
 	
 				var metadata = {
 // 					'$path': url, //$path for legacy reasons
@@ -309,23 +296,20 @@
 				};
 				
     			__persistLog(logData, KEY_LOCAL_STORAGE_ANALYTICS);
+    			return true;
 				
 			}catch(e){
 				// Do nothing
 			}
 	};
 	
-		/**
-	Log inbound network response
-	*/
-	var __logInboundResponse = function (request) {
+
+	var logInboundResponse = function (request) {
 		
 			try{
 				var trackingId = request.trackingId;
 				
-				if(pendingTrackingIDs.hasOwnProperty(trackingId)){
-					delete pendingTrackingIDs[trackingId];
-					
+				if(trackingId){					
 					var inboundTimestamp = new Date().getTime();
 					var numBytes = 0;
 					var responseText = '';//response.responseJSON;TODO
@@ -369,8 +353,7 @@
 	};
 	
 	
-	var __logInboundForSendResponse = function (metadata) {
-		
+	var logInboundForSendResponse = function (metadata) {
 			try{
 				
 				var logData = {
@@ -383,59 +366,30 @@
 				__persistLog(logData, KEY_LOCAL_STORAGE_ANALYTICS);
 				
 			}catch(e){
-// 				alert(e);
-				// Do nothing
+				console.error('analytics: Failed to log event');
 			}
 	};
 	
-	
-  var __setTrackingId = function (id) {
-    pendingTrackingIDs[id] = 1;
-  };
-  
-  	/**
-    Get tracking id for sending requests
-	 */
-	var __getTrackingId = function () {
-		function s4() {
-			return Math.floor((1 + Math.random()) * 0x10000)
-			.toString(16)
-			.substring(1);
-		}
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-	};
+    function getLogsData(keys){
+        var persistedLogs = '';
+        keys.forEach(function(key){
+            var value = localStorage.getItem(key);
+            if(value !== null){
+            	if (persistedLogs !== ''){
+            		persistedLogs += ',';
+            	}
+                persistedLogs += value;
+            }
+        });
+		if (persistedLogs == ''){
+            return '';
+        }
 
- 	var __getFullURL = function (global, path) {
-
-		if (typeof path === 'string' &&
-			path.indexOf('http') === -1 &&
-			global &&
-			typeof global.location === 'object' &&
-			typeof global.location.protocol === 'string' &&
-			typeof global.location.hostname === 'string' &&
-			typeof global.location.port === 'string' &&
-			global.location.protocol.indexOf('file') === -1
-		) {
-			//Path does not contain 'http',
-			//meaning a full url was NOT passed.
-
-			path = [
-				global.location.protocol,
-				'//',
-				global.location.hostname,
-				':',
-				global.location.port,
-				path
-			].join('');
-
-			if (path.indexOf('?') !== -1) {
-				path = path.split('?')[0];
-			}
-
-		}
-
-		return path;
-	};
+        var logdata = {
+            __logdata : persistedLogs
+        };
+        return JSON.stringify(logdata);
+    };
 
       var __persistLog = function(log, key){
     		if(__fileSizeReached(key)){
@@ -459,7 +413,7 @@
     		try{
     			localStorage.setItem(key, persistedLogs);
     		}catch(e){
-    			console.log('Local storage capacity reached. Client logs will not be persisted');
+    			console.log('analytics: Local storage capacity reached. Client logs will not be persisted');
     		}
     	};
 
@@ -469,7 +423,7 @@
     			localStorage.setItem(KEY_LOCAL_STORAGE_SWAP, currentLogs);
     			localStorage.removeItem(KEY_LOCAL_STORAGE_LOGS);
     		}catch(e){
-    			console.log('Local storage capacity reached. WL.Logger will delete old logs to make room for new ones.');
+    			console.log('analytics: Local storage capacity reached. WL.Logger will delete old logs to make room for new ones.');
     			localStorage.removeItem(KEY_LOCAL_STORAGE_LOGS);
     			localStorage.removeItem(KEY_LOCAL_STORAGE_SWAP);
     		}
@@ -485,14 +439,14 @@
     		}
 
     		if(config !== null){
-    			console.log('Matching configuration successfully retrieved from the server.');
+    			console.log('analytics: Matching configuration successfully retrieved from the server.');
     			var wllogger = config.clientLogProfileConfig;
     			if(wllogger !== null){
     		    localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG));
     				__setServerOverrides(wllogger.clientLogProfiles);
     			}
     		}else{
-    			console.log('No matching configurations found from the server. Defaulting to local configuration');
+    			console.log('analytics: No matching configurations found from the server. Defaulting to local configuration');
     			localStorage.removeItem(KEY_REMOTE_STORAGE_CONFIG);
 
     			var configurationString = localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG);
@@ -933,10 +887,6 @@
         __setState(__extend({},options || {}, {enabled: true}));
         return this;
     };
-
-    function _send() {
-        return __send([KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
-    };
     
     function __sendAll() {
         __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
@@ -954,7 +904,7 @@
                 __processUpdateConfig(metadata[1]);
 			})
 			.catch(function (err) {
-			  console.error('call to xhr failed', err.statusText);
+			  console.error('analytics: Failed to call the server', err.statusText);
 		});
     };
 
@@ -1194,14 +1144,7 @@
             __log([].slice.call(arguments), idx);
         };
     });
-
-    
-	var
-
-	//Constants
-	_ANSALYTICS_PKG_NAME = 'wl.analytics';
 	
-
 	/**
     Turns on the capture of analytics data.
 	 */
