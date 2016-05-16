@@ -137,6 +137,9 @@ function updateConfigFromServer() {
 function resetConfig() {
     ibmmfpfanalytics.logger.__resetState();
 };
+function capture(cap) {
+    ibmmfpfanalytics.logger.capture(cap);
+};
 function logWithPackage(){
 	//get the package get the level.	
 	var pkgName = document.getElementById('selectedPackage').value;
@@ -185,6 +188,7 @@ return {
     updateConfig:updateConfigFromServer,
     resetConfig:resetConfig,
     logWithPackage:logWithPackage,
-    crashMe : crashMe
+    crashMe : crashMe,
+    capture:capture
   };
 });

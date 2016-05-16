@@ -1122,6 +1122,10 @@
 		}
    };
        
+    function capture(captureLogs) {
+		_config({capture: captureLogs});
+    }; 
+      
     function __extend(){
 		for(var i=1; i<arguments.length; i++)
 			for(var key in arguments[i])
@@ -1133,6 +1137,7 @@
     logger = {
 		pkg: _pkg,
         state: __state,
+        capture: capture,
         updateConfigFromServer: _updateConfigFromServer,
         //testing:
         __resetState : __resetState  // back to the defaults
