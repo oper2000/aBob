@@ -224,6 +224,7 @@
 		if(data == null || data == ''  ){
              console.log('analytics: There are no persisted logs to send.');
              resolve('There were no persisted logs to send');
+             return;
         }
                 		
 		__ajax(data, REQ_SEND_LOGS)
