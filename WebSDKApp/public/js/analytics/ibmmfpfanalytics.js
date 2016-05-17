@@ -160,6 +160,12 @@
 
 		XHR.prototype.send = function(data) {
 			var self = this;
+			
+			if (!state.allDomains && (!metadataHeader.contextRoot || this._url.indexOf(metadataHeader.contextRoot) == -1)) {
+				send.call(this, data);
+				return;
+			}
+			
 			var oldOnReadyStateChange;
 			var url = this._url;
 			var track = logOutboundRequest(this);
@@ -209,12 +215,15 @@
 	 */
 
 	var __send = function(keys) {
-
+	
+	
+	return new Promise(function (resolve, reject) {
+		
 		var data = getLogsData(keys);
 		
 		if(data == null || data == ''  ){
              console.log('analytics: There are no persisted logs to send.');
-             return;
+             resolve('There were no persisted logs to send');
         }
                 		
 		__ajax(data, REQ_SEND_LOGS)
@@ -222,12 +231,15 @@
 				emptyLogs(keys);
 				//logInboundForSendResponse(response[0]);
 				console.log('analytics: Client logs successfully sent to the server');
+				resolve('Log was successfully sent');
 			})
 			.catch(function (err) {
 			  console.error('analytics: Call Failed to call the server' , err.statusText);
-		});
-
-	};	
+			  reject('analytics: Call Failed to call the server' + err.statusText);
+			});
+	  	});
+    	  
+      };
 
     var __ajax = function(data,path,method) {
     	  
@@ -544,6 +556,7 @@
             capture : udf,
             captureFromServer : udf,
             analyticsCapture : udf,
+            allDomains : udf,
             maxFileSize : udf
         };
     };
@@ -592,17 +605,22 @@
 
 
 	function getCallerLine(){
-		var stack = new Error().stack;
+		try {
+      		throw new Error();
+    	} catch(e) {
+      		var stack = e.stack;
+    	}
 		var lines = stack.split('\n');
 		for(var i = 1; i<lines.length; ++i){
 			var line = lines[i];
-			if(line.indexOf(line.indexOf("ibmmfpfanalytics") == -1)){
+			if(line.indexOf("ibmmfpfanalytics") == -1){
 				return line;
 			}
 		}
 		return "";
 		
 	}
+	
 	function formatStackLine(stackLine){
 		var formats = [/^\x20+at\x20(?:([^(]+)\x20\()?(.*?)(?::(\d+):(\d+))?\)?$/, /^([^@]*)@(\S*):(\d+)$/];
 		var method = "";
@@ -661,6 +679,7 @@
             capture : typeof options.capture === 'boolean' ? options.capture : state.capture,
             captureFromServer : typeof options.captureFromServer === 'boolean' ? options.captureFromServer : state.captureFromServer,
             analyticsCapture : typeof options.analyticsCapture === 'boolean' ? options.analyticsCapture : state.analyticsCapture,
+            allDomains : typeof options.allDomains === 'boolean' ? options.allDomains : state.allDomains,
             maxFileSize : typeof options.maxFileSize === 'number' && options.maxFileSize % 1 === 0 ? options.maxFileSize : state.maxFileSize
         };
 
@@ -889,23 +908,27 @@
     };
     
     function __sendAll() {
-        __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
+        return __send([KEY_LOCAL_STORAGE_ANALYTICS,KEY_LOCAL_STORAGE_LOGS, KEY_LOCAL_STORAGE_SWAP]);
     };
 
     function _updateConfigFromServer() {
-        
-         var appName = metadataHeader.mfpAppName ;
-         var platform = metadataHeader.os ;
-         var version = 'none';
+    
+		return new Promise(function (resolve, reject) {
+		
+			 var appName = metadataHeader.mfpAppName ;
+			 var platform = metadataHeader.os ;
+			 var version = 'none';
+		 
+			 var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
+			 __ajax({}, getConfigUrl,'GET')
+				.then(function (metadata) {
+					resolve(metadata);
+				})
+				.catch(function (err) {
+				  reject('analytics: Failed to call the server', err.statusText);
+			});
          
-         var getConfigUrl = REQ_UPDATE_CONFIG + '/' + appName + '/' + platform + '/' + version + '?isAjaxRequest=true';
-         __ajax({}, getConfigUrl,'GET')
-			.then(function (metadata) {
-                __processUpdateConfig(metadata[1]);
-			})
-			.catch(function (err) {
-			  console.error('analytics: Failed to call the server', err.statusText);
-		});
+       });
     };
 
     function __setServerOverrides(configFilters,level,capture) {
@@ -1199,7 +1222,8 @@
 		send: __sendAll,
 		setUserContext: _setUserContext,
 		addEvent: _event,
-		logger: logger
+		logger: logger,
+		_config:_config
 	}
 
 }));

@@ -120,7 +120,13 @@ function log(msg) {
 
 
 function send() {
-    ibmmfpfanalytics.send();
+    ibmmfpfanalytics.send()
+    .then(function (response) {
+    		console.log(response);
+    })
+    .catch(function (error) {
+    	console.log(error);
+    });
 };
 
 function addCustomEvent(customEventLog) {
@@ -131,7 +137,13 @@ function addCustomEventFlow(target) {
 };
 
 function updateConfigFromServer() {
-    ibmmfpfanalytics.logger.updateConfigFromServer();
+    ibmmfpfanalytics.logger.updateConfigFromServer()
+    .then(function (response) {
+    		console.log(response);
+    })
+    .catch(function (error) {
+    	console.log(error);
+    });
 };
 
 function resetConfig() {
