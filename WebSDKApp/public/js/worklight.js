@@ -21,16 +21,18 @@
  */
 
 (function (root, factory) {
-    var wlanalytics = {hello: function() {console.log('dummy call');}};
+    var wlanalytics = dummyanalytics();//This function is being injected later on the "skeleton.placeholder" below
 
     // scripts which are AMD defined by calling define function
     // if 'define' is in our global name space then we expose our web SDK as an AMD module with one dependency: wlanalytics.
     if (typeof define === 'function' && define.amd) {
 
-        if (require.specified('ibmmfpfanalytics')) {
-            wlanalytics = 'ibmmfpfanalytics';
-        }
-        define([wlanalytics], factory);
+        if (!require.specified('ibmmfpfanalytics')) {
+			define("ibmmfpfanalytics",function() {
+      			return dummyanalytics();
+			});            
+		}
+        define(['ibmmfpfanalytics'], factory);
 
     } else {
         // not using 'define', so we expose our web sdk (WL) to the global name space.
@@ -41,6 +43,50 @@
         }
         root.WL = factory(root.ibmmfpfanalytics);
     }
+    
+    
+    function dummyanalytics() {
+
+	  	logger = {
+			pkg: _apiLoggerMissing,
+			state: _apiLoggerMissing,
+			capture: _apiLoggerMissing,
+			enable: _apiLoggerMissing,
+			updateConfigFromServer: _apiLoggerMissing,
+			trace      : _apiLoggerMissing,
+			debug      : _apiLoggerMissing,
+			log        : _apiLoggerMissing,
+			info       : _apiLoggerMissing,
+			warn       : _apiLoggerMissing,
+			error      : _apiLoggerMissing,
+			fatal      : _apiLoggerMissing
+			      
+		};	
+	   return {
+			init: _apiAnalyticsMissing,
+			enable : _apiAnalyticsMissing,
+			state: _apiAnalyticsMissing,
+			send: _apiAnalyticsMissing,
+			setUserContext: _apiAnalyticsMissing,
+			addEvent: _apiAnalyticsMissing,
+			logger: logger
+		}
+		function _apiAnalyticsMissing(message){
+			var textMssg = '';
+			if (typeof message === 'string'){
+				textMssg = ' message sent: ' + message;
+			}		
+			console.log("analytics:call to ibmmfpfanalytics is ignored - missing implementation." +  textMssg);
+		};
+	
+		function _apiLoggerMissing(message){
+			var textMssg = '';
+			if (typeof message === 'string'){
+				textMssg = ' message sent: ' + message;
+			}
+			console.log("analytics:call to ibmmfpfanalytics.logger is ignored - missing implementation." + textMssg);
+		};
+	};
 
 }(this, function(wlanalytics) {
 
@@ -51,6 +97,25 @@
  * ================================================================= 
  * Source file taken from :: wldeferredjs.js
  * ================================================================= 
+ */
+
+/*
+ Licensed Materials - Property of IBM
+
+ (C) Copyright 2016 IBM Corp.
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+/**
+ * @license
+ * deferred-js https://github.com/warpdesign/deferred-js#licence
+ * Copyright 2012 © Nicolas Ramz
+ * Released under the MIT license
  */
 
 (function(global) {
@@ -388,6 +453,624 @@
 //                  Victor Homyakov <victor-homyakov@users.sourceforge.net> (2010)
 // https://github.com/eriwen/javascript-stacktrace/blob/v0.5.0/stacktrace.js
 function printStackTrace(e){e=e||{guess:true};var t=e.e||null,n=!!e.guess;var r=new printStackTrace.implementation,i=r.run(t);return n?r.guessAnonymousFunctions(i):i}if(typeof module!=="undefined"&&module.exports){module.exports=printStackTrace}printStackTrace.implementation=function(){};printStackTrace.implementation.prototype={run:function(e,t){e=e||this.createException();t=t||this.mode(e);if(t==="other"){return this.other(arguments.callee)}else{return this[t](e)}},createException:function(){try{this.undef()}catch(e){return e}},mode:function(e){if(e["arguments"]&&e.stack){return"chrome"}else if(e.stack&&e.sourceURL){return"safari"}else if(e.stack&&e.number){return"ie"}else if(typeof e.message==="string"&&typeof window!=="undefined"&&window.opera){if(!e.stacktrace){return"opera9"}if(e.message.indexOf("\n")>-1&&e.message.split("\n").length>e.stacktrace.split("\n").length){return"opera9"}if(!e.stack){return"opera10a"}if(e.stacktrace.indexOf("called from line")<0){return"opera10b"}return"opera11"}else if(e.stack){return"firefox"}return"other"},instrumentFunction:function(e,t,n){e=e||window;var r=e[t];e[t]=function(){n.call(this,printStackTrace().slice(4));return e[t]._instrumented.apply(this,arguments)};e[t]._instrumented=r},deinstrumentFunction:function(e,t){if(e[t].constructor===Function&&e[t]._instrumented&&e[t]._instrumented.constructor===Function){e[t]=e[t]._instrumented}},chrome:function(e){var t=(e.stack+"\n").replace(/^\S[^\(]+?[\n$]/gm,"").replace(/^\s+(at eval )?at\s+/gm,"").replace(/^([^\(]+?)([\n$])/gm,"{anonymous}()@$1$2").replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm,"{anonymous}()@$1").split("\n");t.pop();return t},safari:function(e){return e.stack.replace(/\[native code\]\n/m,"").replace(/^(?=\w+Error\:).*$\n/m,"").replace(/^@/gm,"{anonymous}()@").split("\n")},ie:function(e){var t=/^.*at (\w+) \(([^\)]+)\)$/gm;return e.stack.replace(/at Anonymous function /gm,"{anonymous}()@").replace(/^(?=\w+Error\:).*$\n/m,"").replace(t,"$1@$2").split("\n")},firefox:function(e){return e.stack.replace(/(?:\n@:0)?\s+$/m,"").replace(/^[\(@]/gm,"{anonymous}()@").split("\n")},opera11:function(e){var t="{anonymous}",n=/^.*line (\d+), column (\d+)(?: in (.+))? in (\S+):$/;var r=e.stacktrace.split("\n"),i=[];for(var s=0,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){var a=u[4]+":"+u[1]+":"+u[2];var f=u[3]||"global code";f=f.replace(/<anonymous function: (\S+)>/,"$1").replace(/<anonymous function>/,t);i.push(f+"@"+a+" -- "+r[s+1].replace(/^\s+/,""))}}return i},opera10b:function(e){var t=/^(.*)@(.+):(\d+)$/;var n=e.stacktrace.split("\n"),r=[];for(var i=0,s=n.length;i<s;i++){var o=t.exec(n[i]);if(o){var u=o[1]?o[1]+"()":"global code";r.push(u+"@"+o[2]+":"+o[3])}}return r},opera10a:function(e){var t="{anonymous}",n=/Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;var r=e.stacktrace.split("\n"),i=[];for(var s=0,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){var a=u[3]||t;i.push(a+"()@"+u[2]+":"+u[1]+" -- "+r[s+1].replace(/^\s+/,""))}}return i},opera9:function(e){var t="{anonymous}",n=/Line (\d+).*script (?:in )?(\S+)/i;var r=e.message.split("\n"),i=[];for(var s=2,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){i.push(t+"()@"+u[2]+":"+u[1]+" -- "+r[s+1].replace(/^\s+/,""))}}return i},other:function(e){var t="{anonymous}",n=/function\s*([\w\-$]+)?\s*\(/i,r=[],i,s,o=10;while(e&&e["arguments"]&&r.length<o){i=n.test(e.toString())?RegExp.$1||t:t;s=Array.prototype.slice.call(e["arguments"]||[]);r[r.length]=i+"("+this.stringifyArguments(s)+")";e=e.caller}return r},stringifyArguments:function(e){var t=[];var n=Array.prototype.slice;for(var r=0;r<e.length;++r){var i=e[r];if(i===undefined){t[r]="undefined"}else if(i===null){t[r]="null"}else if(i.constructor){if(i.constructor===Array){if(i.length<3){t[r]="["+this.stringifyArguments(i)+"]"}else{t[r]="["+this.stringifyArguments(n.call(i,0,1))+"..."+this.stringifyArguments(n.call(i,-1))+"]"}}else if(i.constructor===Object){t[r]="#object"}else if(i.constructor===Function){t[r]="#function"}else if(i.constructor===String){t[r]='"'+i+'"'}else if(i.constructor===Number){t[r]=i}}}return t.join(",")},sourceCache:{},ajax:function(e){var t=this.createXMLHTTPObject();if(t){try{t.open("GET",e,false);t.send(null);return t.responseText}catch(n){}}return""},createXMLHTTPObject:function(){var e,t=[function(){return new XMLHttpRequest},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml3.XMLHTTP")},function(){return new ActiveXObject("Microsoft.XMLHTTP")}];for(var n=0;n<t.length;n++){try{e=t[n]();this.createXMLHTTPObject=t[n];return e}catch(r){}}},isSameDomain:function(e){return typeof location!=="undefined"&&e.indexOf(location.hostname)!==-1},getSource:function(e){if(!(e in this.sourceCache)){this.sourceCache[e]=this.ajax(e).split("\n")}return this.sourceCache[e]},guessAnonymousFunctions:function(e){for(var t=0;t<e.length;++t){var n=/\{anonymous\}\(.*\)@(.*)/,r=/^(.*?)(?::(\d+))(?::(\d+))?(?: -- .+)?$/,i=e[t],s=n.exec(i);if(s){var o=r.exec(s[1]);if(o){var u=o[1],a=o[2],f=o[3]||0;if(u&&this.isSameDomain(u)&&a){var l=this.guessAnonymousFunction(u,a,f);e[t]=i.replace("{anonymous}",l)}}}}return e},guessAnonymousFunction:function(e,t,n){var r;try{r=this.findFunctionName(this.getSource(e),t)}catch(i){r="getSource failed with url: "+e+", exception: "+i.toString()}return r},findFunctionName:function(e,t){var n=/function\s+([^(]*?)\s*\(([^)]*)\)/;var r=/['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*function\b/;var i=/['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*(?:eval|new Function)\b/;var s="",o,u=Math.min(t,20),a,f;for(var l=0;l<u;++l){o=e[t-l-1];f=o.indexOf("//");if(f>=0){o=o.substr(0,f)}if(o){s=o+s;a=r.exec(s);if(a&&a[1]){return a[1]}a=n.exec(s);if(a&&a[1]){return a[1]}a=i.exec(s);if(a&&a[1]){return a[1]}}}return"(?)"}}
+
+
+/**
+ * ================================================================= 
+ * Source file taken from :: webcrypto-shim.js
+ * ================================================================= 
+ */
+
+/*
+ Licensed Materials - Property of IBM
+
+ (C) Copyright 2016 IBM Corp.
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+
+/**
+ * @file Web Cryptography API shim
+ * @author Artem S Vybornov <vybornov@gmail.com>
+ * @license MIT
+ */
+!function ( global ) {
+    'use strict';
+
+    if ( typeof Promise !== 'function' )
+        throw "Promise support required";
+
+    var _crypto = global.crypto || global.msCrypto;
+    if ( !_crypto ) return;
+
+    var _subtle = _crypto.subtle || _crypto.webkitSubtle;
+    if ( !_subtle ) return;
+
+    var _Crypto     = global.Crypto || _crypto.constructor || Object,
+        _SubtleCrypto = global.SubtleCrypto || _subtle.constructor || Object,
+        _CryptoKey  = global.CryptoKey || global.Key || Object;
+
+    var isIE    = !!global.msCrypto,
+        isWebkit = !!_crypto.webkitSubtle;
+    if ( !isIE && !isWebkit ) return;
+
+    function s2a ( s ) {
+        return btoa(s).replace(/\=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+    }
+
+    function a2s ( s ) {
+        s += '===', s = s.slice( 0, -s.length % 4 );
+        return atob( s.replace(/-/g, '+').replace(/_/g, '/') );
+    }
+
+    function s2b ( s ) {
+        var b = new Uint8Array(s.length);
+        for ( var i = 0; i < s.length; i++ ) b[i] = s.charCodeAt(i);
+        return b;
+    }
+
+    function b2s ( b ) {
+        if ( b instanceof ArrayBuffer ) b = new Uint8Array(b);
+        return String.fromCharCode.apply( String, b );
+    }
+
+    function alg ( a ) {
+        var r = { 'name': (a.name || a || '').toUpperCase().replace('V','v') };
+        switch ( r.name ) {
+            case 'SHA-1':
+            case 'SHA-256':
+            case 'SHA-384':
+            case 'SHA-512':
+                break;
+            case 'AES-CBC':
+            case 'AES-GCM':
+            case 'AES-KW':
+                if ( a.length ) r['length'] = a.length;
+                break;
+            case 'HMAC':
+                if ( a.hash ) r['hash'] = alg(a.hash);
+                if ( a.length ) r['length'] = a.length;
+                break;
+            case 'RSAES-PKCS1-v1_5':
+                if ( a.publicExponent ) r['publicExponent'] = new Uint8Array(a.publicExponent);
+                if ( a.modulusLength ) r['modulusLength'] = a.modulusLength;
+                break;
+            case 'RSASSA-PKCS1-v1_5':
+            case 'RSA-OAEP':
+                if ( a.hash ) r['hash'] = alg(a.hash);
+                if ( a.publicExponent ) r['publicExponent'] = new Uint8Array(a.publicExponent);
+                if ( a.modulusLength ) r['modulusLength'] = a.modulusLength;
+                break;
+            default:
+                throw new SyntaxError("Bad algorithm name");
+        }
+        return r;
+    };
+
+    function jwkAlg ( a ) {
+        return {
+            'HMAC': {
+                'SHA-1': 'HS1',
+                'SHA-256': 'HS256',
+                'SHA-384': 'HS384',
+                'SHA-512': 'HS512'
+            },
+            'RSASSA-PKCS1-v1_5': {
+                'SHA-1': 'RS1',
+                'SHA-256': 'RS256',
+                'SHA-384': 'RS384',
+                'SHA-512': 'RS512'
+            },
+            'RSAES-PKCS1-v1_5': {
+                '': 'RSA1_5'
+            },
+            'RSA-OAEP': {
+                'SHA-1': 'RSA-OAEP',
+                'SHA-256': 'RSA-OAEP-256'
+            },
+            'AES-KW': {
+                '128': 'A128KW',
+                '192': 'A192KW',
+                '256': 'A256KW'
+            },
+            'AES-GCM': {
+                '128': 'A128GCM',
+                '192': 'A192GCM',
+                '256': 'A256GCM'
+            },
+            'AES-CBC': {
+                '128': 'A128CBC',
+                '192': 'A192CBC',
+                '256': 'A256CBC'
+            }
+        }[a.name][ ( a.hash || {} ).name || a.length || '' ];
+    }
+
+    function b2jwk ( k ) {
+        if ( k instanceof ArrayBuffer || k instanceof Uint8Array ) k = JSON.parse( decodeURIComponent( escape( b2s(k) ) ) );
+        var jwk = { 'kty': k.kty, 'alg': k.alg, 'ext': k.ext || k.extractable };
+        switch ( jwk.kty ) {
+            case 'oct':
+                jwk.k = k.k;
+            case 'RSA':
+                [ 'n', 'e', 'd', 'p', 'q', 'dp', 'dq', 'qi', 'oth' ].forEach( function ( x ) { if ( x in k ) jwk[x] = k[x] } );
+                break;
+            default:
+                throw new TypeError("Unsupported key type");
+        }
+        return jwk;
+    }
+
+    function jwk2b ( k ) {
+        var jwk = b2jwk(k);
+        if ( isIE ) jwk['extractable'] = jwk.ext, delete jwk.ext;
+        return s2b( unescape( encodeURIComponent( JSON.stringify(jwk) ) ) ).buffer;
+    }
+
+    function pkcs2jwk ( k ) {
+        var info = b2der(k), prv = false;
+        if ( info.length > 2 ) prv = true, info.shift(); // remove version from PKCS#8 PrivateKeyInfo structure
+        var jwk = { 'ext': true };
+        switch ( info[0][0] ) {
+            case '1.2.840.113549.1.1.1':
+                var rsaComp = [ 'n', 'e', 'd', 'p', 'q', 'dp', 'dq', 'qi' ],
+                    rsaKey  = b2der( info[1] );
+                if ( prv ) rsaKey.shift(); // remove version from PKCS#1 RSAPrivateKey structure
+                for ( var i = 0; i < rsaKey.length; i++ ) {
+                    if ( !rsaKey[i][0] ) rsaKey[i] = rsaKey[i].subarray(1);
+                    jwk[ rsaComp[i] ] = s2a( b2s( rsaKey[i] ) );
+                }
+                jwk['kty'] = 'RSA';
+                break;
+            default:
+                throw new TypeError("Unsupported key type");
+        }
+        return jwk;
+    }
+
+    function jwk2pkcs ( k ) {
+        var key, info = [ [ '', null ] ], prv = false;
+        switch ( k.kty ) {
+            case 'RSA':
+                var rsaComp = [ 'n', 'e', 'd', 'p', 'q', 'dp', 'dq', 'qi' ],
+                    rsaKey = [];
+                for ( var i = 0; i < rsaComp.length; i++ ) {
+                    if ( !( rsaComp[i] in k ) ) break;
+                    var b = rsaKey[i] = s2b( a2s( k[ rsaComp[i] ] ) );
+                    if ( b[0] & 0x80 ) rsaKey[i] = new Uint8Array(b.length + 1), rsaKey[i].set( b, 1 );
+                }
+                if ( rsaKey.length > 2 ) prv = true, rsaKey.unshift( new Uint8Array([0]) ); // add version to PKCS#1 RSAPrivateKey structure
+                info[0][0] = '1.2.840.113549.1.1.1';
+                key = rsaKey;
+                break;
+            default:
+                throw new TypeError("Unsupported key type");
+        }
+        info.push( new Uint8Array( der2b(key) ).buffer );
+        if ( !prv ) info[1] = { 'tag': 0x03, 'value': info[1] };
+        else info.unshift( new Uint8Array([0]) ); // add version to PKCS#8 PrivateKeyInfo structure
+        return new Uint8Array( der2b(info) ).buffer;
+    }
+
+    var oid2str = { 'KoZIhvcNAQEB': '1.2.840.113549.1.1.1' },
+        str2oid = { '1.2.840.113549.1.1.1': 'KoZIhvcNAQEB' };
+
+    function b2der ( buf, ctx ) {
+        if ( buf instanceof ArrayBuffer ) buf = new Uint8Array(buf);
+        if ( !ctx ) ctx = { pos: 0, end: buf.length };
+
+        if ( ctx.end - ctx.pos < 2 || ctx.end > buf.length ) throw new RangeError("Malformed DER");
+
+        var tag = buf[ctx.pos++],
+            len = buf[ctx.pos++];
+
+        if ( len >= 0x80 ) {
+            len &= 0x7f;
+            if ( ctx.end - ctx.pos < len ) throw new RangeError("Malformed DER");
+            for ( var xlen = 0; len--; ) xlen <<= 8, xlen |= buf[ctx.pos++];
+            len = xlen;
+        }
+
+        if ( ctx.end - ctx.pos < len ) throw new RangeError("Malformed DER");
+
+        var rv;
+
+        switch ( tag ) {
+            case 0x02: // Universal Primitive INTEGER
+                rv = buf.subarray( ctx.pos, ctx.pos += len );
+                break;
+            case 0x03: // Universal Primitive BIT STRING
+                if ( buf[ctx.pos++] ) throw new Error( "Unsupported bit string" );
+                len--;
+            case 0x04: // Universal Primitive OCTET STRING
+                rv = new Uint8Array( buf.subarray( ctx.pos, ctx.pos += len ) ).buffer;
+                break;
+            case 0x05: // Universal Primitive NULL
+                rv = null;
+                break;
+            case 0x06: // Universal Primitive OBJECT IDENTIFIER
+                var oid = btoa( b2s( buf.subarray( ctx.pos, ctx.pos += len ) ) );
+                if ( !( oid in oid2str ) ) throw new Error( "Unsupported OBJECT ID " + oid );
+                rv = oid2str[oid];
+                break;
+            case 0x30: // Universal Constructed SEQUENCE
+                rv = [];
+                for ( var end = ctx.pos + len; ctx.pos < end; ) rv.push( b2der( buf, ctx ) );
+                break;
+            default:
+                throw new Error( "Unsupported DER tag 0x" + tag.toString(16) );
+        }
+
+        return rv;
+    }
+
+    function der2b ( val, buf ) {
+        if ( !buf ) buf = [];
+
+        var tag = 0, len = 0,
+            pos = buf.length + 2;
+
+        buf.push( 0, 0 ); // placeholder
+
+        if ( val instanceof Uint8Array ) {  // Universal Primitive INTEGER
+            tag = 0x02, len = val.length;
+            for ( var i = 0; i < len; i++ ) buf.push( val[i] );
+        }
+        else if ( val instanceof ArrayBuffer ) { // Universal Primitive OCTET STRING
+            tag = 0x04, len = val.byteLength, val = new Uint8Array(val);
+            for ( var i = 0; i < len; i++ ) buf.push( val[i] );
+        }
+        else if ( val === null ) { // Universal Primitive NULL
+            tag = 0x05, len = 0;
+        }
+        else if ( typeof val === 'string' && val in str2oid ) { // Universal Primitive OBJECT IDENTIFIER
+            var oid = s2b( atob( str2oid[val] ) );
+            tag = 0x06, len = oid.length;
+            for ( var i = 0; i < len; i++ ) buf.push( oid[i] );
+        }
+        else if ( val instanceof Array ) { // Universal Constructed SEQUENCE
+            for ( var i = 0; i < val.length; i++ ) der2b( val[i], buf );
+            tag = 0x30, len = buf.length - pos;
+        }
+        else if ( typeof val === 'object' && val.tag === 0x03 && val.value instanceof ArrayBuffer ) { // Tag hint
+            val = new Uint8Array(val.value), tag = 0x03, len = val.byteLength;
+            buf.push(0); for ( var i = 0; i < len; i++ ) buf.push( val[i] );
+            len++;
+        }
+        else {
+            throw new Error( "Unsupported DER value " + val );
+        }
+
+        if ( len >= 0x80 ) {
+            var xlen = len, len = 4;
+            buf.splice( pos, 0, (xlen >> 24) & 0xff, (xlen >> 16) & 0xff, (xlen >> 8) & 0xff, xlen & 0xff );
+            while ( len > 1 && !(xlen >> 24) ) xlen <<= 8, len--;
+            if ( len < 4 ) buf.splice( pos, 4 - len );
+            len |= 0x80;
+        }
+
+        buf.splice( pos - 2, 2, tag, len );
+
+        return buf;
+    }
+
+    function CryptoKey ( key, alg, ext, use ) {
+        Object.defineProperties( this, {
+            _key: {
+                value: key
+            },
+            type: {
+                value: key.type,
+                enumerable: true
+            },
+            extractable: {
+                value: (ext === undefined) ? key.extractable : ext,
+                enumerable: true
+            },
+            algorithm: {
+                value: (alg === undefined) ? key.algorithm : alg,
+                enumerable: true
+            },
+            usages: {
+                value: (use === undefined) ? key.usages : use,
+                enumerable: true
+            }
+        });
+    }
+
+    function isPubKeyUse ( u ) {
+        return u === 'verify' || u === 'encrypt' || u === 'wrapKey';
+    }
+
+    function isPrvKeyUse ( u ) {
+        return u === 'sign' || u === 'decrypt' || u === 'unwrapKey';
+    }
+
+    [ 'generateKey', 'importKey', 'unwrapKey' ]
+        .forEach( function ( m ) {
+            var _fn = _subtle[m];
+
+            _subtle[m] = function ( a, b, c ) {
+                var args = [].slice.call(arguments),
+                    ka, kx, ku;
+
+                switch ( m ) {
+                    case 'generateKey':
+                        ka = alg(a), kx = b, ku = c;
+                        break;
+                    case 'importKey':
+                        ka = alg(c), kx = args[3], ku = args[4];
+                        if ( a === 'jwk' ) {
+                            b = b2jwk(b);
+                            if ( !b.alg ) b.alg = jwkAlg(ka);
+                            if ( !b.key_ops ) b.key_ops = ( b.kty !== 'oct' ) ? ( 'd' in b ) ? ku.filter(isPrvKeyUse) : ku.filter(isPubKeyUse) : ku.slice();
+                            args[1] = jwk2b(b);
+                        }
+                        break;
+                    case 'unwrapKey':
+                        ka = args[4], kx = args[5], ku = args[6];
+                        args[2] = c._key;
+                        break;
+                }
+
+                if ( m === 'generateKey' && ka.name === 'HMAC' && ka.hash ) {
+                    ka.length = ka.length || { 'SHA-1': 512, 'SHA-256': 512, 'SHA-384': 1024, 'SHA-512': 1024 }[ka.hash.name];
+                    return _subtle.importKey( 'raw', _crypto.getRandomValues( new Uint8Array( (ka.length+7)>>3 ) ), ka, kx, ku );
+                }
+
+                if ( isWebkit && m === 'generateKey' && ka.name === 'RSASSA-PKCS1-v1_5' && ( !ka.modulusLength || ka.modulusLength >= 2048 ) ) {
+                    a = alg(a), a.name = 'RSAES-PKCS1-v1_5', delete a.hash;
+                    return _subtle.generateKey( a, true, [ 'encrypt', 'decrypt' ] )
+                        .then( function ( k ) {
+                            return Promise.all([
+                                _subtle.exportKey( 'jwk', k.publicKey ),
+                                _subtle.exportKey( 'jwk', k.privateKey )
+                            ]);
+                        })
+                        .then( function ( keys ) {
+                            keys[0].alg = keys[1].alg = jwkAlg(ka);
+                            keys[0].key_ops = ku.filter(isPubKeyUse), keys[1].key_ops = ku.filter(isPrvKeyUse);
+                            return Promise.all([
+                                _subtle.importKey( 'jwk', keys[0], ka, kx, keys[0].key_ops ),
+                                _subtle.importKey( 'jwk', keys[1], ka, kx, keys[1].key_ops )
+                            ]);
+                        })
+                        .then( function ( keys ) {
+                            return {
+                                publicKey: keys[0],
+                                privateKey: keys[1]
+                            };
+                        });
+                }
+
+                if ( ( isWebkit || ( isIE && ( ka.hash || {} ).name === 'SHA-1' ) )
+                        && m === 'importKey' && a === 'jwk' && ka.name === 'HMAC' && b.kty === 'oct' ) {
+                    return _subtle.importKey( 'raw', s2b( a2s(b.k) ), c, args[3], args[4] );
+                }
+
+                if ( isWebkit && m === 'importKey' && ( a === 'spki' || a === 'pkcs8' ) ) {
+                    return _subtle.importKey( 'jwk', pkcs2jwk(b), c, args[3], args[4] );
+                }
+
+                if ( isIE && m === 'unwrapKey' ) {
+                    return _subtle.decrypt( args[3], c, b )
+                        .then( function ( k ) {
+                            return _subtle.importKey( a, k, args[4], args[5], args[6] );
+                        });
+                }
+
+                var op;
+                try {
+                    op = _fn.apply( _subtle, args );
+                }
+                catch ( e ) {
+                    return Promise.reject(e);
+                }
+
+                if ( isIE ) {
+                    op = new Promise( function ( res, rej ) {
+                        op.onabort =
+                        op.onerror =    function ( e ) { rej(e)               };
+                        op.oncomplete = function ( r ) { res(r.target.result) };
+                    });
+                }
+
+                op = op.then( function ( k ) {
+                    if ( ka.name === 'HMAC' ) {
+                        if ( !ka.length ) ka.length = 8 * k.algorithm.length;
+                    }
+                    if ( ka.name.search('RSA') == 0 ) {
+                        if ( !ka.modulusLength ) ka.modulusLength = (k.publicKey || k).algorithm.modulusLength;
+                        if ( !ka.publicExponent ) ka.publicExponent = (k.publicKey || k).algorithm.publicExponent;
+                    }
+                    if ( k.publicKey && k.privateKey ) {
+                        k = {
+                            publicKey: new CryptoKey( k.publicKey, ka, kx, ku.filter(isPubKeyUse) ),
+                            privateKey: new CryptoKey( k.privateKey, ka, kx, ku.filter(isPrvKeyUse) )
+                        };
+                    }
+                    else {
+                        k = new CryptoKey( k, ka, kx, ku );
+                    }
+                    return k;
+                });
+
+                return op;
+            }
+        });
+
+    [ 'exportKey', 'wrapKey' ]
+        .forEach( function ( m ) {
+            var _fn = _subtle[m];
+
+            _subtle[m] = function ( a, b, c ) {
+                var args = [].slice.call(arguments);
+
+                switch ( m ) {
+                    case 'exportKey':
+                        args[1] = b._key;
+                        break;
+                    case 'wrapKey':
+                        args[1] = b._key, args[2] = c._key;
+                        break;
+                }
+
+                if ( ( isWebkit || ( isIE && ( b.algorithm.hash || {} ).name === 'SHA-1' ) )
+                        && m === 'exportKey' && a === 'jwk' && b.algorithm.name === 'HMAC' ) {
+                    args[0] = 'raw';
+                }
+
+                if ( isWebkit && m === 'exportKey' && ( a === 'spki' || a === 'pkcs8' ) ) {
+                    args[0] = 'jwk';
+                }
+
+                if ( isIE && m === 'wrapKey' ) {
+                    return _subtle.exportKey( a, b )
+                        .then( function ( k ) {
+                            if ( a === 'jwk' ) k = s2b( unescape( encodeURIComponent( JSON.stringify( b2jwk(k) ) ) ) );
+                            return  _subtle.encrypt( args[3], c, k );
+                        });
+                }
+
+                var op;
+                try {
+                    op = _fn.apply( _subtle, args );
+                }
+                catch ( e ) {
+                    return Promise.reject(e);
+                }
+
+                if ( isIE ) {
+                    op = new Promise( function ( res, rej ) {
+                        op.onabort =
+                        op.onerror =    function ( e ) { rej(e)               };
+                        op.oncomplete = function ( r ) { res(r.target.result) };
+                    });
+                }
+
+                if ( m === 'exportKey' && a === 'jwk' ) {
+                    op = op.then( function ( k ) {
+                        if ( ( isWebkit || ( isIE && ( b.algorithm.hash || {} ).name === 'SHA-1' ) )
+                                && b.algorithm.name === 'HMAC') {
+                            return { 'kty': 'oct', 'alg': jwkAlg(b.algorithm), 'key_ops': b.usages.slice(), 'ext': true, 'k': s2a( b2s(k) ) };
+                        }
+                        k = b2jwk(k);
+                        if ( !k.alg ) k['alg'] = jwkAlg(b.algorithm);
+                        if ( !k.key_ops ) k['key_ops'] = ( b.type === 'public' ) ? b.usages.filter(isPubKeyUse) : ( b.type === 'private' ) ? b.usages.filter(isPrvKeyUse) : b.usages.slice();
+                        return k;
+                    });
+                }
+
+                if ( isWebkit && m === 'exportKey' && ( a === 'spki' || a === 'pkcs8' ) ) {
+                    op = op.then( function ( k ) {
+                        k = jwk2pkcs( b2jwk(k) );
+                        return k;
+                    });
+                }
+
+                return op;
+            }
+        });
+
+    [ 'encrypt', 'decrypt', 'sign', 'verify' ]
+        .forEach( function ( m ) {
+            var _fn = _subtle[m];
+
+            _subtle[m] = function ( a, b, c, d ) {
+                if ( isIE && ( !c.byteLength || ( d && !d.byteLength ) ) )
+                    throw new Error("Empy input is not allowed");
+
+                var args = [].slice.call(arguments),
+                    ka = alg(a);
+
+                if ( isIE && m === 'decrypt' && ka.name === 'AES-GCM' ) {
+                    var tl = a.tagLength >> 3;
+                    args[2] = (c.buffer || c).slice( 0, c.byteLength - tl ),
+                    a.tag = (c.buffer || c).slice( c.byteLength - tl );
+                }
+
+                args[1] = b._key;
+
+                var op;
+                try {
+                    op = _fn.apply( _subtle, args );
+                }
+                catch ( e ) {
+                    return Promise.reject(e);
+                }
+
+                if ( isIE ) {
+                    op = new Promise( function ( res, rej ) {
+                        op.onabort =
+                        op.onerror = function ( e ) {
+                            rej(e);
+                        };
+
+                        op.oncomplete = function ( r ) {
+                            var r = r.target.result;
+
+                            if ( m === 'encrypt' && r instanceof AesGcmEncryptResult ) {
+                                var c = r.ciphertext, t = r.tag;
+                                r = new Uint8Array( c.byteLength + t.byteLength );
+                                r.set( new Uint8Array(c), 0 );
+                                r.set( new Uint8Array(t), c.byteLength );
+                                r = r.buffer;
+                            }
+
+                            res(r);
+                        };
+                    });
+                }
+
+                return op;
+            }
+        });
+
+    if ( isIE ) {
+        var _digest = _subtle.digest;
+
+        _subtle['digest'] = function ( a, b ) {
+            if ( !b.byteLength )
+                throw new Error("Empy input is not allowed");
+
+            var op;
+            try {
+                op = _digest.call( _subtle, a, b );
+            }
+            catch ( e ) {
+                return Promise.reject(e);
+            }
+
+            op = new Promise( function ( res, rej ) {
+                op.onabort =
+                op.onerror =    function ( e ) { rej(e)               };
+                op.oncomplete = function ( r ) { res(r.target.result) };
+            });
+
+            return op;
+        };
+
+        global.crypto = Object.create( _crypto, {
+            getRandomValues: { value: function ( a ) { return _crypto.getRandomValues(a) } },
+            subtle:          { value: _subtle }
+        });
+
+        global.CryptoKey = CryptoKey;
+    }
+
+    if ( isWebkit ) {
+        _crypto.subtle = _subtle;
+
+        global.Crypto = _Crypto;
+        global.SubtleCrypto = _SubtleCrypto;
+        global.CryptoKey = CryptoKey;
+    }
+}(this);
 
 
 /**
@@ -1619,7 +2302,19 @@ WL.Validators = {
     },
 	isNullOrUndefined: function (object) {
 		return object === null || typeof object === 'undefined';
-	}
+	},
+	isString: function (object) {
+	    return (typeof (object) === 'string');
+	},
+    isBoolean: function (object) {
+        return (typeof (object) === 'boolean');
+    },
+    isNumber: function (object) {
+        return (typeof (object) === 'number');
+    },
+    isArray: function (object) {
+        return Array.isArray(object);
+    }
 };
 
 
@@ -4660,8 +5355,9 @@ WL.AuthorizationManager = (function () {
                         function(){
                             startAuthorizationProcess(scope);
                         },
-                        function() {
+                        function(error) {
                             __deleteAuthData();
+                            rejectAllCallbacks(error);
                         });
                 }
             }
@@ -4776,12 +5472,12 @@ WL.AuthorizationManager = (function () {
 
     var clientInstanceIdCallbacks = [];
 
-    function processClientInstanceCallbacks(response, isSuccess) {
+    function processClientInstanceCallbacks(wlresponse, isSuccess) {
         var objectsToNotify = clientInstanceIdCallbacks.slice();
         clientInstanceIdCallbacks = [];
 
         for (var i = 0; i < objectsToNotify.length; i++) {
-            isSuccess ? objectsToNotify[i].resolve(response) : objectsToNotify[i].reject(response);
+            isSuccess ? objectsToNotify[i].resolve(wlresponse) : objectsToNotify[i].reject(wlresponse);
         }
 
     }
@@ -4827,8 +5523,7 @@ WL.AuthorizationManager = (function () {
                 var locationHeader = response.getHeader("Location");
                 if(__isUndefinedOrNull(locationHeader)) {
                     // If we get an error, we reject the promise
-                    processClientInstanceCallbacks(response, false);
-                    registrationCallbackDfd.reject(new WL.Response(response));
+                    processClientInstanceCallbacks(new WL.Response(response), false);
                     return;
                 }
                 // Extract clientID
@@ -4837,18 +5532,15 @@ WL.AuthorizationManager = (function () {
                 __setClientId(clientId);
                 __setClientRegisteredData(WL.BrowserManager.getDeviceData());
                 processClientInstanceCallbacks(response, true);
-                registrationCallbackDfd.resolve(response);
             },
             onFailure: function (response) {
                 if (!__isUndefinedOrNull(response)) {
                     WL.Logger.debug('Authorization request failed with response: ' + response.responseText);
                 }
-                processClientInstanceCallbacks(response, false);
-                registrationCallbackDfd.reject(new WL.Response(response));
+                processClientInstanceCallbacks(new WL.Response(response), false);
             },
             onAuthRequestFailure: function (response) {
-                processClientInstanceCallbacks(response, false);
-                registrationCallbackDfd.reject(response);
+                processClientInstanceCallbacks(new WL.Response(response), false);
             },
             onAuthException: function (response, ex) {
                 var transport = {
@@ -4858,9 +5550,8 @@ WL.AuthorizationManager = (function () {
                         errorMsg: ex.message
                     }
                 };
-                processClientInstanceCallbacks(response, false);
                 var failResponse = new WL.Response(transport, null);
-                registrationCallbackDfd.reject(failResponse);
+                processClientInstanceCallbacks(response, false);
             },
             optionalHeaders: {}
         };
@@ -5298,12 +5989,12 @@ WL.AuthorizationManager = (function () {
                         // register the client again
                         __invokeInstanceRegistration()
                             .then(
-                                function (newClientId) {
+                                function () {
                                     // the registration returns the new client id.
                                     // update all callbacks in queue with the new client id
-                                    updateClientIds(newClientId);
+                                    updateClientIds(__getClientId());
                                     // resend the request
-                                    tryAgainObject.retryFunction(newClientId, scope, tryAgainObject);
+                                    tryAgainObject.retryFunction(scope, tryAgainObject);
                                 },
                                 function (error) {
                                     rejectAllCallbacks(error);
@@ -6307,7 +6998,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
         }
 
         if (headerValue !== null) {
-            if (WL_.isArray(headerValue)) {
+            if (WL.Validators.isArray(headerValue)) {
                 return headerValue;
             } else {
                 return [headerValue];
@@ -6346,7 +7037,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
             headerValue = __getFirstHeaderByNameNoCase(name).value;
         }
 
-        if (WL_.isArray(headerValue)) {
+        if (WL.Validators.isArray(headerValue)) {
             return headerValue[0];
         }
         return headerValue;
@@ -6369,7 +7060,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
             if (true) { // thanks jshint
                 var headerValue = requestHeaders[headerName];
 
-                if (WL_.isArray(headerValue)) {
+                if (WL.Validators.isArray(headerValue)) {
                     /*jshint maxdepth:4*/
                     if (headerValue.length > 0 && !isArrayOfSimpleTypes(headerValue)) {
                         // complex type detected within array of values - throw error
@@ -6385,7 +7076,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
         for (var key in requestHeaders) {
             if (true) { // thanks jshint
                 var headerValueTemp = requestHeaders[key];
-                if (WL_.isArray(headerValueTemp)) {
+                if (WL.Validators.isArray(headerValueTemp)) {
                     for (var item in headerValueTemp) {
                         /*jshint maxdepth:5*/
                         if (true) { // thanks jshint
@@ -6440,7 +7131,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
         if (existingHeaderValue === null) {
             headers[name] = value;
         } else {
-            if (WL_.isArray(existingHeaderValue)) {
+            if (WL.Validators.isArray(existingHeaderValue)) {
                 for (var idx in existingHeaderValue) {
                     /*jshint maxdepth:4*/
                     if (existingHeaderValue[idx].toString() === value.toString()) {
@@ -6794,7 +7485,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
     }
 
     function isSimpleType(value) {
-        return (WL_.isString(value) || WL_.isNumber(value) || WL_.isBoolean(value));
+        return (WL.Validators.isString(value) || WL.Validators.isNumber(value) || WL.Validators.isBoolean(value));
     }
 
     function isArrayOfSimpleTypes(object) {
