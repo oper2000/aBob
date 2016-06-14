@@ -1,0 +1,7 @@
+{
+  "applicationKey": {
+    "applicationId": "com.sampleone.bankApp",
+    "clientPlatform":"web",
+    "displayName" : "helloBank"
+  }
+} 
