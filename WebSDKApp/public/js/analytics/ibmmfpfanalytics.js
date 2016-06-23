@@ -235,8 +235,8 @@
 				resolve('Log was successfully sent');
 			})
 			.catch(function (err) {
-			  console.error('analytics: Call Failed to call the server' , err.statusText);
-			  reject('analytics: Call Failed to call the server' + err.statusText);
+			  console.error('analytics: Call failed, server returned: ' , err.statusText);
+			  reject('analytics: Call failed, server returned: ' + err.statusText);
 			});
 	  	});
     	  
@@ -454,7 +454,9 @@
     			console.log('analytics: Matching configuration successfully retrieved from the server.');
     			var wllogger = config.clientLogProfileConfig;
     			if(wllogger !== null){
-    		    localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG));
+    		    	localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, localStorage.getItem(KEY_LOCAL_STORAGE_CONFIG));
+    		    	state.levelFromServer = null;
+    		    	state.filtersFromServer = null;
     				__setServerOverrides(wllogger.clientLogProfiles);
     			}
     		}else{
@@ -468,24 +470,296 @@
     		}
     	};
 
-      // var __setState = function(state){
-//     		if (typeof(Storage) !== 'undefined') {
-//     		      var stateString = JSON.stringify(state);
-// 
-//     		      if(__usingLocalConfiguration()){
-//     		    	  localStorage.setItem(KEY_LOCAL_STORAGE_CONFIG, stateString);
-//     		      }else{
-//     		    	  localStorage.setItem(KEY_REMOTE_STORAGE_CONFIG, stateString);
-//     		      }
-//     		}
-//       };
-
-
-
       /*
     	* UTILITY METHODS
        */
 
+	   function printStackTrace(e) {
+		   e = e || {
+			   guess: true
+		   };
+		   var t = e.e || null,
+			   n = !!e.guess;
+		   var r = new printStackTrace.implementation,
+			   i = r.run(t);
+		   return n ? r.guessAnonymousFunctions(i) : i
+	   }
+	   if (typeof module !== "undefined" && module.exports) {
+		   module.exports = printStackTrace
+	   }
+	   printStackTrace.implementation = function() {};
+	   printStackTrace.implementation.prototype = {
+		   run: function(e, t) {
+			   e = e || this.createException();
+			   t = t || this.mode(e);
+			   if (t === "other") {
+				   return this.other(arguments.callee)
+			   } else {
+				   return this[t](e)
+			   }
+		   },
+		   createException: function() {
+			   try {
+				   this.undef()
+			   } catch (e) {
+				   return e
+			   }
+		   },
+		   mode: function(e) {
+			   if (e["arguments"] && e.stack) {
+				   return "chrome"
+			   } else if (e.stack && e.sourceURL) {
+				   return "safari"
+			   } else if (e.stack && e.number) {
+				   return "ie"
+			   } else if (typeof e.message === "string" && typeof window !== "undefined" && window.opera) {
+				   if (!e.stacktrace) {
+					   return "opera9"
+				   }
+				   if (e.message.indexOf("\n") > -1 && e.message.split("\n").length > e.stacktrace.split("\n").length) {
+					   return "opera9"
+				   }
+				   if (!e.stack) {
+					   return "opera10a"
+				   }
+				   if (e.stacktrace.indexOf("called from line") < 0) {
+					   return "opera10b"
+				   }
+				   return "opera11"
+			   } else if (e.stack) {
+				   return "firefox"
+			   }
+			   return "other"
+		   },
+		   instrumentFunction: function(e, t, n) {
+			   e = e || window;
+			   var r = e[t];
+			   e[t] = function() {
+				   n.call(this, printStackTrace().slice(4));
+				   return e[t]._instrumented.apply(this, arguments)
+			   };
+			   e[t]._instrumented = r
+		   },
+		   deinstrumentFunction: function(e, t) {
+			   if (e[t].constructor === Function && e[t]._instrumented && e[t]._instrumented.constructor === Function) {
+				   e[t] = e[t]._instrumented
+			   }
+		   },
+		   chrome: function(e) {
+			   var t = (e.stack + "\n").replace(/^\S[^\(]+?[\n$]/gm, "").replace(/^\s+(at eval )?at\s+/gm, "").replace(/^([^\(]+?)([\n$])/gm, "{anonymous}()@$1$2").replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm, "{anonymous}()@$1").split("\n");
+			   t.pop();
+			   return t
+		   },
+		   safari: function(e) {
+			   return e.stack.replace(/\[native code\]\n/m, "").replace(/^(?=\w+Error\:).*$\n/m, "").replace(/^@/gm, "{anonymous}()@").split("\n")
+		   },
+		   ie: function(e) {
+			   var t = /^.*at (\w+) \(([^\)]+)\)$/gm;
+			   return e.stack.replace(/at Anonymous function /gm, "{anonymous}()@").replace(/^(?=\w+Error\:).*$\n/m, "").replace(t, "$1@$2").split("\n")
+		   },
+		   firefox: function(e) {
+			   return e.stack.replace(/(?:\n@:0)?\s+$/m, "").replace(/^[\(@]/gm, "{anonymous}()@").split("\n")
+		   },
+		   opera11: function(e) {
+			   var t = "{anonymous}",
+				   n = /^.*line (\d+), column (\d+)(?: in (.+))? in (\S+):$/;
+			   var r = e.stacktrace.split("\n"),
+				   i = [];
+			   for (var s = 0, o = r.length; s < o; s += 2) {
+				   var u = n.exec(r[s]);
+				   if (u) {
+					   var a = u[4] + ":" + u[1] + ":" + u[2];
+					   var f = u[3] || "global code";
+					   f = f.replace(/<anonymous function: (\S+)>/, "$1").replace(/<anonymous function>/, t);
+					   i.push(f + "@" + a + " -- " + r[s + 1].replace(/^\s+/, ""))
+				   }
+			   }
+			   return i
+		   },
+		   opera10b: function(e) {
+			   var t = /^(.*)@(.+):(\d+)$/;
+			   var n = e.stacktrace.split("\n"),
+				   r = [];
+			   for (var i = 0, s = n.length; i < s; i++) {
+				   var o = t.exec(n[i]);
+				   if (o) {
+					   var u = o[1] ? o[1] + "()" : "global code";
+					   r.push(u + "@" + o[2] + ":" + o[3])
+				   }
+			   }
+			   return r
+		   },
+		   opera10a: function(e) {
+			   var t = "{anonymous}",
+				   n = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+			   var r = e.stacktrace.split("\n"),
+				   i = [];
+			   for (var s = 0, o = r.length; s < o; s += 2) {
+				   var u = n.exec(r[s]);
+				   if (u) {
+					   var a = u[3] || t;
+					   i.push(a + "()@" + u[2] + ":" + u[1] + " -- " + r[s + 1].replace(/^\s+/, ""))
+				   }
+			   }
+			   return i
+		   },
+		   opera9: function(e) {
+			   var t = "{anonymous}",
+				   n = /Line (\d+).*script (?:in )?(\S+)/i;
+			   var r = e.message.split("\n"),
+				   i = [];
+			   for (var s = 2, o = r.length; s < o; s += 2) {
+				   var u = n.exec(r[s]);
+				   if (u) {
+					   i.push(t + "()@" + u[2] + ":" + u[1] + " -- " + r[s + 1].replace(/^\s+/, ""))
+				   }
+			   }
+			   return i
+		   },
+		   other: function(e) {
+			   var t = "{anonymous}",
+				   n = /function\s*([\w\-$]+)?\s*\(/i,
+				   r = [],
+				   i, s, o = 10;
+			   while (e && e["arguments"] && r.length < o) {
+				   i = n.test(e.toString()) ? RegExp.$1 || t : t;
+				   s = Array.prototype.slice.call(e["arguments"] || []);
+				   r[r.length] = i + "(" + this.stringifyArguments(s) + ")";
+				   e = e.caller
+			   }
+			   return r
+		   },
+		   stringifyArguments: function(e) {
+			   var t = [];
+			   var n = Array.prototype.slice;
+			   for (var r = 0; r < e.length; ++r) {
+				   var i = e[r];
+				   if (i === undefined) {
+					   t[r] = "undefined"
+				   } else if (i === null) {
+					   t[r] = "null"
+				   } else if (i.constructor) {
+					   if (i.constructor === Array) {
+						   if (i.length < 3) {
+							   t[r] = "[" + this.stringifyArguments(i) + "]"
+						   } else {
+							   t[r] = "[" + this.stringifyArguments(n.call(i, 0, 1)) + "..." + this.stringifyArguments(n.call(i, -1)) + "]"
+						   }
+					   } else if (i.constructor === Object) {
+						   t[r] = "#object"
+					   } else if (i.constructor === Function) {
+						   t[r] = "#function"
+					   } else if (i.constructor === String) {
+						   t[r] = '"' + i + '"'
+					   } else if (i.constructor === Number) {
+						   t[r] = i
+					   }
+				   }
+			   }
+			   return t.join(",")
+		   },
+		   sourceCache: {},
+		   ajax: function(e) {
+			   var t = this.createXMLHTTPObject();
+			   if (t) {
+				   try {
+					   t.open("GET", e, false);
+					   t.send(null);
+					   return t.responseText
+				   } catch (n) {}
+			   }
+			   return ""
+		   },
+		   createXMLHTTPObject: function() {
+			   var e, t = [function() {
+				   return new XMLHttpRequest
+			   }, function() {
+				   return new ActiveXObject("Msxml2.XMLHTTP")
+			   }, function() {
+				   return new ActiveXObject("Msxml3.XMLHTTP")
+			   }, function() {
+				   return new ActiveXObject("Microsoft.XMLHTTP")
+			   }];
+			   for (var n = 0; n < t.length; n++) {
+				   try {
+					   e = t[n]();
+					   this.createXMLHTTPObject = t[n];
+					   return e
+				   } catch (r) {}
+			   }
+		   },
+		   isSameDomain: function(e) {
+			   return typeof location !== "undefined" && e.indexOf(location.hostname) !== -1
+		   },
+		   getSource: function(e) {
+			   if (!(e in this.sourceCache)) {
+				   this.sourceCache[e] = this.ajax(e).split("\n")
+			   }
+			   return this.sourceCache[e]
+		   },
+		   guessAnonymousFunctions: function(e) {
+			   for (var t = 0; t < e.length; ++t) {
+				   var n = /\{anonymous\}\(.*\)@(.*)/,
+					   r = /^(.*?)(?::(\d+))(?::(\d+))?(?: -- .+)?$/,
+					   i = e[t],
+					   s = n.exec(i);
+				   if (s) {
+					   var o = r.exec(s[1]);
+					   if (o) {
+						   var u = o[1],
+							   a = o[2],
+							   f = o[3] || 0;
+						   if (u && this.isSameDomain(u) && a) {
+							   var l = this.guessAnonymousFunction(u, a, f);
+							   e[t] = i.replace("{anonymous}", l)
+						   }
+					   }
+				   }
+			   }
+			   return e
+		   },
+		   guessAnonymousFunction: function(e, t, n) {
+			   var r;
+			   try {
+				   r = this.findFunctionName(this.getSource(e), t)
+			   } catch (i) {
+				   r = "getSource failed with url: " + e + ", exception: " + i.toString()
+			   }
+			   return r
+		   },
+		   findFunctionName: function(e, t) {
+			   var n = /function\s+([^(]*?)\s*\(([^)]*)\)/;
+			   var r = /['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*function\b/;
+			   var i = /['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*(?:eval|new Function)\b/;
+			   var s = "",
+				   o, u = Math.min(t, 20),
+				   a, f;
+			   for (var l = 0; l < u; ++l) {
+				   o = e[t - l - 1];
+				   f = o.indexOf("//");
+				   if (f >= 0) {
+					   o = o.substr(0, f)
+				   }
+				   if (o) {
+					   s = o + s;
+					   a = r.exec(s);
+					   if (a && a[1]) {
+						   return a[1]
+					   }
+					   a = n.exec(s);
+					   if (a && a[1]) {
+						   return a[1]
+					   }
+					   a = i.exec(s);
+					   if (a && a[1]) {
+						   return a[1]
+					   }
+				   }
+			   }
+			   return "(?)"
+		   }
+	   };
+   
 		function __fileSizeReached(key){
 			var persistedLogs = localStorage.getItem(key);
 			if(persistedLogs === null) {
@@ -546,8 +820,6 @@
             callback : '',
             tag : {level: false, pkg: true},
             pkg : '',
-            whitelist : [],  // @deprecated since version 6.2; use filters instead
-            blacklist : [],  // @deprecated since version 6.2; use filters instead
             filters : udf,
             filtersFromServer: udf,
             level : 'trace',
@@ -557,7 +829,8 @@
             captureFromServer : udf,
             analyticsCapture : udf,
             allDomains : udf,
-            maxFileSize : udf
+            maxFileSize : udf,
+            autoSendLogs: true
         };
     };
 
@@ -605,14 +878,9 @@
 
 
 	function getCallerLine(){
-		try {
-      		throw new Error();
-    	} catch(e) {
-      		var stack = e.stack;
-    	}
-		var lines = stack.split('\n');
-		for(var i = 1; i<lines.length; ++i){
-			var line = lines[i];
+		var stack = printStackTrace();
+		for(var i = 1; i<stack.length; ++i){
+			var line = stack[i];
 			if(line.indexOf("ibmmfpfanalytics") == -1){
 				return line;
 			}
@@ -621,7 +889,7 @@
 		
 	}
 	function formatStackLine(stackLine){
-		var formats = [/^\x20+at\x20(?:([^(]+)\x20\()?(.*?)(?::(\d+):(\d+))?\)?$/, /^([^@]*)@(\S*):(\d+)$/];
+		var formats = [/^\x20*at\x20([^(]+)\x20\(?(.*?)(?::(\d+):(\d+))?\)$/,/^([^@]*)@(.*?)(?::(\d+):(\d+))?\)?$/,/^\x20+at\x20(.*?)(?::(\d+))?$/,/^(.*?)(?::(\d+):(\d+))?$/];
 		var method = "";
 		var file = "";
 		var linenumber = "";
@@ -634,7 +902,16 @@
 			method = parsed[1];
 			file = parsed[2];
 			linenumber = parsed[3];
-		} 
+		}else{
+			parsed = stackLine.match(formats[2]);
+			if( parsed == null){
+				parsed = stackLine.match(formats[3]);
+			}
+			if(parsed != null){
+				file = parsed[1];
+				linenumber = parsed[2];
+			}
+		}
     	return {
       		method: method,
       		file: file,
@@ -668,8 +945,6 @@
             callback : options.callback || state.callback,
             tag : __extend({},{level: false, pkg: true}, options.tag || state.tag),
             pkg : options.pkg || state.pkg,
-            whitelist : options.whitelist || state.whitelist,  // @deprecated in 6.2; use filters instead
-            blacklist : options.blacklist || state.blacklist,  // @deprecated in 6.2; use filters instead
             filters : options.filters === null || typeof options.filters === 'object' ? options.filters : state.filters,  // {'jsonstore': 'WARN', 'otherPkg': 'DEBUG'}
             filtersFromServer : typeof options.filtersFromServer === 'object' ? options.filtersFromServer : state.filtersFromServer,
             level : options.level || state.level,
@@ -679,7 +954,8 @@
             captureFromServer : typeof options.captureFromServer === 'boolean' ? options.captureFromServer : state.captureFromServer,
             analyticsCapture : typeof options.analyticsCapture === 'boolean' ? options.analyticsCapture : state.analyticsCapture,
             allDomains : typeof options.allDomains === 'boolean' ? options.allDomains : state.allDomains,
-            maxFileSize : typeof options.maxFileSize === 'number' && options.maxFileSize % 1 === 0 ? options.maxFileSize : state.maxFileSize
+            maxFileSize : typeof options.maxFileSize === 'number' && options.maxFileSize % 1 === 0 ? options.maxFileSize : state.maxFileSize,
+            autoSendLogs : typeof options.autoSendLogs === 'boolean' ? options.autoSendLogs : state.autoSendLogs
         };
 
          if (typeof(Storage) !== 'undefined') {
@@ -726,7 +1002,7 @@
     };
 
     //currentPriority is the priority linked to the current log msg
-    //stateLevel can be an Array (whitelist of levels), a string (e.g. 'warn') or a number (200)
+    //stateLevel can be a string (e.g. 'warn') or a number (200)
     function __checkLevel(currentPriority, stateLevel) {
         if (Array.isArray(stateLevel)) {
             return  (//Check if current is whitelisted (state)
@@ -750,13 +1026,15 @@
             );
         }
 
-        return stateLevel!= null; //Bail out, level is some unknown type
+        return true; //Bail out, level is some unknown type
     };
 
-    function __checkFilters(priority, pkg) {
+    function __checkLoggingLevel(priority, pkg) {
         var currFilters = state.filtersFromServer || state.filters;
         if (__getKeys(currFilters).length > 0) {  // non-empty filters object
             return __checkLevel(priority, __getCurrentPackageFilterLevel(pkg));
+        }else{
+        	return __checkLevel(priority, state.levelFromServer || state.level);
         }
         return false;
     };
@@ -767,27 +1045,11 @@
     		pkg = '';
     	} 
 		for (var i in configFilters) {
-    		if (configFilters[i].name === pkg || (pkg == '' &&  configFilters[i].name == null)){
-				return configFilters[i].level	;
-    		}
-		}
-		pkg = '';
-		for (var i in configFilters) {
-    		if (configFilters[i].name === pkg || (pkg == '' &&  configFilters[i].name == null)){
+    		if (configFilters[i].name === pkg){
 				return configFilters[i].level	;
     		}
 		}
 		return null;
-    };
-
-    function __checkLists(pkg, whitelistArr, blacklistArr) {
-
-        return (//Package inside Whitelist
-            (Array.isArray(whitelistArr) && whitelistArr.length > 0 && !__insideArray(pkg, whitelistArr)) ||
-
-            //Package inside Blacklist
-            (Array.isArray(blacklistArr) && blacklistArr.length > 0 && __insideArray(pkg, blacklistArr))
-        );
     };
 
     function __log(args, priority) {
@@ -801,10 +1063,8 @@
         state.pkg = ''; //clear pkg from state obj
 
         if (!state.enabled ||
-            __checkFilters(priority, pkg) ||
-            __checkLists(pkg, state.whitelist, state.blacklist) ||
-            __checkLevel(priority, state.levelFromServer || state.level)) {
-
+            __checkLoggingLevel(priority, pkg)) {
+             state.metadata = {}; //clear metadata obj
             return;
         }
 
@@ -933,7 +1193,19 @@
     };
 
     function __setServerOverrides(configFilters,level,capture) {
-        _config({levelFromServer: level, captureFromServer: capture, filtersFromServer: configFilters});
+    	var updatedConfigFilters = null;
+    	for (i = 0; i < configFilters.length; i++) { 
+			if (configFilters[i].name == null || configFilters[i].name == ''){
+				level = configFilters[i].level;
+			}else{
+				if (updatedConfigFilters == null){
+					updatedConfigFilters = [configFilters[i]];
+				}else{
+					updatedConfigFilters.push(configFilters[i]);
+				}
+			}		
+        }        
+        _config({levelFromServer: level, captureFromServer: capture, filtersFromServer: updatedConfigFilters});
     };
 
 	function logAnalyticsCrash(errorEvt) {
@@ -990,7 +1262,7 @@
     	};
 		state.metadata = meta2;
     	_pkg('wl.analytics');
-    	__log('Uncaught Exception','FATAL');
+    	__log('analytics: detected an error (Uncaught Exception)','FATAL');
     	
     	//send immediately
     	__sendAll();
@@ -1052,7 +1324,6 @@
         if(window.hasErrorHandler == null){
             window.addEventListener('error', function (evt) {
                 logAnalyticsCrash(evt);
-                evt.preventDefault();
             });
             window.hasErrorHandler = true;
         }
@@ -1161,6 +1432,7 @@
 					arguments[0][key] = arguments[i][key];
 		return arguments[0];
 	};
+	
 
     logger = {
 		pkg: _pkg,
@@ -1211,6 +1483,24 @@
 		return currentLoggerState.analyticsCapture;		
 	};
 	
+	var  _processAutomaticTrigger = function(){
+		  var currentTime = Date.now();
+		  var elapsedTime = currentTime - sendLogsTimeBuffer;
+		  
+		  var autoSend =__state().autoSendLogs;
+
+		  if(elapsedTime > BUFFER_TIME_IN_MILLISECONDS){
+			  if(autoSend){
+				  __sendAll();
+			  }
+
+			  sendLogsTimeBuffer = currentTime;
+		  }
+	  }
+	
+  	function _setAutoSendLogs(autoSend) {
+		_config({autoSendLogs: typeof(autoSend) === "boolean" ? autoSend : true});
+  	};
 
 	//public API
 	return {
@@ -1221,9 +1511,9 @@
 		setUserContext: _setUserContext,
 		addEvent: _event,
 		logger: logger,
+		setAutoSendLogs: _setAutoSendLogs,
+        processAutomaticTrigger: _processAutomaticTrigger,
 		_config:_config
 	}
 
 }));
-
-function printStackTrace(e){e=e||{guess:true};var t=e.e||null,n=!!e.guess;var r=new printStackTrace.implementation,i=r.run(t);return n?r.guessAnonymousFunctions(i):i}if(typeof module!=="undefined"&&module.exports){module.exports=printStackTrace}printStackTrace.implementation=function(){};printStackTrace.implementation.prototype={run:function(e,t){e=e||this.createException();t=t||this.mode(e);if(t==="other"){return this.other(arguments.callee)}else{return this[t](e)}},createException:function(){try{this.undef()}catch(e){return e}},mode:function(e){if(e["arguments"]&&e.stack){return"chrome"}else if(e.stack&&e.sourceURL){return"safari"}else if(e.stack&&e.number){return"ie"}else if(typeof e.message==="string"&&typeof window!=="undefined"&&window.opera){if(!e.stacktrace){return"opera9"}if(e.message.indexOf("\n")>-1&&e.message.split("\n").length>e.stacktrace.split("\n").length){return"opera9"}if(!e.stack){return"opera10a"}if(e.stacktrace.indexOf("called from line")<0){return"opera10b"}return"opera11"}else if(e.stack){return"firefox"}return"other"},instrumentFunction:function(e,t,n){e=e||window;var r=e[t];e[t]=function(){n.call(this,printStackTrace().slice(4));return e[t]._instrumented.apply(this,arguments)};e[t]._instrumented=r},deinstrumentFunction:function(e,t){if(e[t].constructor===Function&&e[t]._instrumented&&e[t]._instrumented.constructor===Function){e[t]=e[t]._instrumented}},chrome:function(e){var t=(e.stack+"\n").replace(/^\S[^\(]+?[\n$]/gm,"").replace(/^\s+(at eval )?at\s+/gm,"").replace(/^([^\(]+?)([\n$])/gm,"{anonymous}()@$1$2").replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm,"{anonymous}()@$1").split("\n");t.pop();return t},safari:function(e){return e.stack.replace(/\[native code\]\n/m,"").replace(/^(?=\w+Error\:).*$\n/m,"").replace(/^@/gm,"{anonymous}()@").split("\n")},ie:function(e){var t=/^.*at (\w+) \(([^\)]+)\)$/gm;return e.stack.replace(/at Anonymous function /gm,"{anonymous}()@").replace(/^(?=\w+Error\:).*$\n/m,"").replace(t,"$1@$2").split("\n")},firefox:function(e){return e.stack.replace(/(?:\n@:0)?\s+$/m,"").replace(/^[\(@]/gm,"{anonymous}()@").split("\n")},opera11:function(e){var t="{anonymous}",n=/^.*line (\d+), column (\d+)(?: in (.+))? in (\S+):$/;var r=e.stacktrace.split("\n"),i=[];for(var s=0,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){var a=u[4]+":"+u[1]+":"+u[2];var f=u[3]||"global code";f=f.replace(/<anonymous function: (\S+)>/,"$1").replace(/<anonymous function>/,t);i.push(f+"@"+a+" -- "+r[s+1].replace(/^\s+/,""))}}return i},opera10b:function(e){var t=/^(.*)@(.+):(\d+)$/;var n=e.stacktrace.split("\n"),r=[];for(var i=0,s=n.length;i<s;i++){var o=t.exec(n[i]);if(o){var u=o[1]?o[1]+"()":"global code";r.push(u+"@"+o[2]+":"+o[3])}}return r},opera10a:function(e){var t="{anonymous}",n=/Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;var r=e.stacktrace.split("\n"),i=[];for(var s=0,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){var a=u[3]||t;i.push(a+"()@"+u[2]+":"+u[1]+" -- "+r[s+1].replace(/^\s+/,""))}}return i},opera9:function(e){var t="{anonymous}",n=/Line (\d+).*script (?:in )?(\S+)/i;var r=e.message.split("\n"),i=[];for(var s=2,o=r.length;s<o;s+=2){var u=n.exec(r[s]);if(u){i.push(t+"()@"+u[2]+":"+u[1]+" -- "+r[s+1].replace(/^\s+/,""))}}return i},other:function(e){var t="{anonymous}",n=/function\s*([\w\-$]+)?\s*\(/i,r=[],i,s,o=10;while(e&&e["arguments"]&&r.length<o){i=n.test(e.toString())?RegExp.$1||t:t;s=Array.prototype.slice.call(e["arguments"]||[]);r[r.length]=i+"("+this.stringifyArguments(s)+")";e=e.caller}return r},stringifyArguments:function(e){var t=[];var n=Array.prototype.slice;for(var r=0;r<e.length;++r){var i=e[r];if(i===undefined){t[r]="undefined"}else if(i===null){t[r]="null"}else if(i.constructor){if(i.constructor===Array){if(i.length<3){t[r]="["+this.stringifyArguments(i)+"]"}else{t[r]="["+this.stringifyArguments(n.call(i,0,1))+"..."+this.stringifyArguments(n.call(i,-1))+"]"}}else if(i.constructor===Object){t[r]="#object"}else if(i.constructor===Function){t[r]="#function"}else if(i.constructor===String){t[r]='"'+i+'"'}else if(i.constructor===Number){t[r]=i}}}return t.join(",")},sourceCache:{},ajax:function(e){var t=this.createXMLHTTPObject();if(t){try{t.open("GET",e,false);t.send(null);return t.responseText}catch(n){}}return""},createXMLHTTPObject:function(){var e,t=[function(){return new XMLHttpRequest},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml3.XMLHTTP")},function(){return new ActiveXObject("Microsoft.XMLHTTP")}];for(var n=0;n<t.length;n++){try{e=t[n]();this.createXMLHTTPObject=t[n];return e}catch(r){}}},isSameDomain:function(e){return typeof location!=="undefined"&&e.indexOf(location.hostname)!==-1},getSource:function(e){if(!(e in this.sourceCache)){this.sourceCache[e]=this.ajax(e).split("\n")}return this.sourceCache[e]},guessAnonymousFunctions:function(e){for(var t=0;t<e.length;++t){var n=/\{anonymous\}\(.*\)@(.*)/,r=/^(.*?)(?::(\d+))(?::(\d+))?(?: -- .+)?$/,i=e[t],s=n.exec(i);if(s){var o=r.exec(s[1]);if(o){var u=o[1],a=o[2],f=o[3]||0;if(u&&this.isSameDomain(u)&&a){var l=this.guessAnonymousFunction(u,a,f);e[t]=i.replace("{anonymous}",l)}}}}return e},guessAnonymousFunction:function(e,t,n){var r;try{r=this.findFunctionName(this.getSource(e),t)}catch(i){r="getSource failed with url: "+e+", exception: "+i.toString()}return r},findFunctionName:function(e,t){var n=/function\s+([^(]*?)\s*\(([^)]*)\)/;var r=/['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*function\b/;var i=/['"]?([$_A-Za-z][$_A-Za-z0-9]*)['"]?\s*[:=]\s*(?:eval|new Function)\b/;var s="",o,u=Math.min(t,20),a,f;for(var l=0;l<u;++l){o=e[t-l-1];f=o.indexOf("//");if(f>=0){o=o.substr(0,f)}if(o){s=o+s;a=r.exec(s);if(a&&a[1]){return a[1]}a=n.exec(s);if(a&&a[1]){return a[1]}a=i.exec(s);if(a&&a[1]){return a[1]}}}return"(?)"}}

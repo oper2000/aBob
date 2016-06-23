@@ -48,18 +48,18 @@
     function dummyanalytics() {
 
 	  	logger = {
-			pkg: _apiLoggerMissing,
-			state: _apiLoggerMissing,
-			capture: _apiLoggerMissing,
-			enable: _apiLoggerMissing,
-			updateConfigFromServer: _apiLoggerMissing,
-			trace      : _apiLoggerMissing,
-			debug      : _apiLoggerMissing,
-			log        : _apiLoggerMissing,
-			info       : _apiLoggerMissing,
-			warn       : _apiLoggerMissing,
-			error      : _apiLoggerMissing,
-			fatal      : _apiLoggerMissing
+			pkg: _apiAnalyticsMissing,
+			state: _apiAnalyticsMissing,
+			capture: _apiAnalyticsMissing,
+			enable: _apiAnalyticsMissing,
+			updateConfigFromServer: _apiAnalyticsMissing,
+			trace      : _apiAnalyticsMissing,
+			debug      : _apiAnalyticsMissing,
+			log        : _apiAnalyticsMissing,
+			info       : _apiAnalyticsMissing,
+			warn       : _apiAnalyticsMissing,
+			error      : _apiAnalyticsMissing,
+			fatal      : _apiAnalyticsMissing
 			      
 		};	
 	   return {
@@ -74,17 +74,9 @@
 		function _apiAnalyticsMissing(message){
 			var textMssg = '';
 			if (typeof message === 'string'){
-				textMssg = ' message sent: ' + message;
+				textMssg = ' (message sent: ' + message + ')';
 			}		
-			console.log("analytics:call to ibmmfpfanalytics is ignored - missing implementation." +  textMssg);
-		};
-	
-		function _apiLoggerMissing(message){
-			var textMssg = '';
-			if (typeof message === 'string'){
-				textMssg = ' message sent: ' + message;
-			}
-			console.log("analytics:call to ibmmfpfanalytics.logger is ignored - missing implementation." + textMssg);
+			console.log("Sending analytics data to the MobileFirst Analytics server is ignored. Are you sure the MobileFirst Analytics JavaScript file is included in your project?." +  textMssg);
 		};
 	};
 
@@ -2273,13 +2265,8 @@ WL.Validators = {
 		if (!this.isValidationEnabled || typeof url === 'undefined' || url == null) {
 			return;
 		}
-		var pattern = new RegExp('^(https?:\/\/)?'+ // protocol
-			'((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+ // domain name
-			'((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
-			'(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
-			'(\?[;&a-z\d%_.~+=-]*)?'+ // query string
-			'(\#[-a-z\d_]*)?$','i'); // fragment locater
-		if(!pattern.test(str)) {
+		var pattern = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+		if(!url.match(pattern)) {
 			this.logAndThrow("Invalid URL : " + url, callerName);
 		}
 	},
@@ -2771,10 +2758,18 @@ WL.LocalStorageDB = new __WLLocalStorageDB;
 __WLClient = function() {
 
     this.__chMap = {};
+    this.__globalHeaders = {};
     var userInfo = {};
-    
+
     var isConnecting = false;
-    this.addGlobalHeader = function (headerName, headerValue) {};
+
+    this.addGlobalHeader = function (headerName, headerValue) {
+        this.__globalHeaders[headerName] = headerValue;
+    };
+
+    this.__getGlobalHeaders = function(onSuccess){
+        return this.__globalHeaders;
+    };
 
 
     this.getEnvironment = function () {
@@ -2785,32 +2780,23 @@ __WLClient = function() {
     this.init = function (initOptions) {
         var dfd = WLJQ.Deferred();
 
-        WL.Validators.enableValidation();
-
-        var mfpContextRoot = initOptions['mfpContextRoot'];
-        WL.Validators.validateDefined(mfpContextRoot, 'init');
-
-        var appId = initOptions['applicationId'];
-        WL.Validators.validateDefined(appId, 'init');
-
-        // Pass to config
-        WL.Config.__setContext(mfpContextRoot);
-        WL.Config.__setApplicationName(appId);
+        setInitParams(initOptions);
 
         // Init the DBs
         WL.LocalStorageDB.init();
 
-        //init analytics
-        wlanalytics.init(WL.BrowserManager.getWLUniqueID(),appId,mfpContextRoot);
+        // init analytics - analytics is defined in AMDWrapper.js
+        wlanalytics.init(WL.BrowserManager.getWLUniqueID(),WL.Config.__getApplicationName(), WL.Config.__getContext());
 
         var hasWlCommonInit = window.wlCommonInit !== undefined;
-
-
-        WL.IndexDB.init().then(function(){
-            if (hasWlCommonInit) {
-                wlCommonInit();
-            }
-            dfd.resolve();
+        //Call to load localized user visible messages based on device locale.
+        WL.Utils.setLocalization().always(function () {
+            WL.IndexDB.init().then(function(){
+                if (hasWlCommonInit) {
+                    wlCommonInit();
+                }
+                dfd.resolve();
+            });
         });
 
         if(!hasWlCommonInit) {
@@ -2818,6 +2804,20 @@ __WLClient = function() {
             return dfd.promise();
         }
     };
+
+    function setInitParams(params) {
+        WL.Validators.enableValidation();
+
+        var mfpContextRoot = params['mfpContextRoot'];
+        WL.Validators.validateDefined(mfpContextRoot, 'init');
+
+        var appId = params['applicationId'];
+        WL.Validators.validateDefined(appId, 'init');
+
+        // Pass to config
+        WL.Config.__setContext(mfpContextRoot);
+        WL.Config.__setApplicationName(appId);
+    }
 
     this.invokeProcedure = function (invocationData, options) {
         WL.Validators.validateOptions({
@@ -2893,11 +2893,9 @@ __WLClient = function() {
 
     this.pinTrustedCertificatePublicKey = function(certificateFilename){};
 
-    this.reloadApp = function () {};
-
-
-    this.removeGlobalHeader = function (headerName) {};
-
+    this.reloadApp = function () {
+        document.location.reload();
+    };
 
     this.setHeartBeatInterval = function (interval) {
         WL.Validators.validateArguments(['number'], arguments, 'WL.Client.setHeartBeatInterval');
@@ -2906,8 +2904,39 @@ __WLClient = function() {
         }
     };
 
+    this.setDeviceDisplayName = function(deviceDisplayName, options) {
+        WL.Validators.validateArguments(['string', WL.Validators.validateObjectOrNull], arguments, 'WL.Client.setDeviceDisplayName');
 
-    this.removeGlobalHeader = function (headerName) {};
+        if ( typeof options !== "undefined") {
+            WL.Validators.validateOptions({
+                onSuccess : 'function',
+                onFailure : 'function'
+            }, options, 'WL.Client.setDeviceDisplayName');
+        } else {
+            options = {};
+            options.onSuccess = function(){};
+            options.onFailure = function(){};
+        }
+
+        WL.DeviceAuth.__setDeviceDisplayName(deviceDisplayName, options.onSuccess, options.onFailure);
+    };
+
+    this.getDeviceDisplayName = function(options) {
+
+        WL.Validators.validateArguments(['object'], arguments, 'WL.Client.getDeviceDisplayName');
+
+        WL.Validators.validateOptions({
+            onSuccess : 'function',
+            onFailure : 'function'
+        }, options, 'WL.Client.getDeviceDisplayName');
+
+        WL.DeviceAuth.__getDeviceDisplayName(options.onSuccess, options.onFailure);
+    };
+
+
+    this.removeGlobalHeader = function (headerName) {
+        delete this.__globalHeaders[headerName];
+    };
 
 
     this.getCookies = function () {};
@@ -2987,7 +3016,7 @@ __WLClient = function() {
             for (var processorRealm in WL.Client.__chMap) {
                 if (Object.prototype.hasOwnProperty.call(WL.Client.__chMap, processorRealm)) {
                     var handler = WL.Client.__chMap[processorRealm];
-                    if (!handler.isWLHandler && handler.isCustomResponse(response)) {
+                    if (!handler.isWLHandler && handler.canHandleResponse(response)) {
                         handler.startChallengeHandling(wlRequest, response);
                         containsChallenges = true;
                         break;
@@ -3005,7 +3034,7 @@ __WLClient = function() {
                     var cp = WL.Client.__chMap[securityCheck];
                     if ( typeof cp !== "undefined") {
                         if (cp.isWLHandler) {
-                            cp.processSuccess(successes[securityCheck]);
+                            cp.handleSuccess(successes[securityCheck]);
                             cp.releaseWaitingList();
                         }
                     }
@@ -3042,7 +3071,7 @@ __WLClient = function() {
                 var handler = WL.Client.__chMap[realm];
                 if (handler == null || typeof handler == 'undefined') {
                     var errorMsg = "unknown challenge arrived, cannot proccess challenge handler: "
-                        + realm + ". register challenge handler using WL.Client.createWLChallengeHandler()";
+                        + realm + ". register challenge handler using WL.Client.createSecurityCheckChallengeHandler()";
                     WL.Logger.error(errorMsg);
                     var transportFailure = {
                         status: -1,
@@ -3065,9 +3094,9 @@ __WLClient = function() {
 
 
 
-    this.createChallengeHandler = function(securityCheckName) {
+    this.createGatewayChallengeHandler = function(gatewayName) {
             // Creates abstract challenge handler
-            var challengeHandler = new AbstractChallengeHandler(securityCheckName);
+            var challengeHandler = new AbstractChallengeHandler(gatewayName);
             challengeHandler.isWLHandler = false;
 
             // Extends it by adding new methods (can also override methods)
@@ -3092,7 +3121,7 @@ __WLClient = function() {
              * It is responsible to detect whether server response contains data
              * that should be processed by this challenge handler.
              */
-            challengeHandler.isCustomResponse = function(transport) {
+            challengeHandler.canHandleResponse = function(transport) {
                 return false;
             };
 
@@ -3217,7 +3246,7 @@ __WLClient = function() {
     };
 
 
-    this.createWLChallengeHandler = function (securityCheckName) {
+    this.createSecurityCheckChallengeHandler = function (securityCheckName) {
             // Creates SUPER challenge processor
             var challengeHandler = new AbstractChallengeHandler(securityCheckName);
             challengeHandler.isWLHandler = true;
@@ -3237,7 +3266,7 @@ __WLClient = function() {
             };
 
             // when a WL success arrives, this user method is called.
-            challengeHandler.processSuccess = function(identity) {
+            challengeHandler.handleSuccess = function(identity) {
 
             };
 
@@ -3282,7 +3311,7 @@ __WLClient = function() {
          * Must be implemented by developer.
          *
          * This method is responsible for actual challenge handling.
-         * It will be invoked by the IBM MobileFirst Platform in case isCustomResponse() API has
+         * It will be invoked by the IBM MobileFirst Platform in case canHandleResponse() API has
          * returned true value
          *
          */
@@ -3319,10 +3348,7 @@ __WLClient = function() {
          * Because this is a failure to authenticate, the original message will be discarded
          * (i.e. will not be sent again, even if all other challenges are successfull)
          */
-        this.submitFailure = function(err) {
-            if ( typeof (err) === 'string') {
-                WL.Logger.error(err);
-            }
+        this.cancel = function() {
             isConnecting=false;
             // store active request before calling to clearWaitingList, because of later call on onFailure
             var request = this.activeRequest;
@@ -3330,17 +3356,16 @@ __WLClient = function() {
             this.clearWaitingList();
             if (request !== null && typeof(request.options) !== 'undefined' &&
                 typeof(request.options.onAuthRequestFailure) !== 'undefined') {
-                if (typeof(err) === 'undefined' || err === null) {
-                    var transport = {
-                        status : 0,
-                        responseJSON : {
-                            errorCode: WL.ErrorCode.CHALLENGE_HANDLING_CANCELED,
-                            errorMsg: 'Challenge handler operation was cancelled.'
-                        }
-                    };
+                var transport = {
+                    status : 0,
+                    responseJSON : {
+                        errorCode: WL.ErrorCode.CHALLENGE_HANDLING_CANCELED,
+                        errorMsg: 'Challenge handler operation was cancelled.'
+                    },
+                    responseText : 'Challenge handler operation was cancelled.'
+                };
 
-                    err = new WL.Response(transport, null);
-                }
+                var err = new WL.Response(transport, null);
                 request.options.onAuthRequestFailure(err);
             }
         };
@@ -3361,19 +3386,11 @@ __WLClient = function() {
         WL.Client.__chMap[securityCheckName] = this;
     }
 
-
-    this.getDeviceDisplayName = function(options) {};
-
-    this.setDeviceDisplayName = function(deviceDisplayName, options) {};
-
 };
 
 
 __WL.prototype.Client = new __WLClient;
 WL.Client = new __WLClient;
-
-
-
 
 
 /**
@@ -3616,6 +3633,7 @@ WL.Crypto = (function () {
 __WLBrowserManager = function() {
     /*jshint strict:false, maxparams:4*/
     var uniqueId;
+    var localDeviceDisplayName;
 
     /**
      * Unique ID taken from different parts of the browser information
@@ -3635,6 +3653,10 @@ __WLBrowserManager = function() {
         return uniqueId;
     };
 
+    this.__setLocalDeviceDisplayName = function(name) {
+        localDeviceDisplayName = name;
+    };
+
     /**
      * Browser Object that is used for registration
      * @returns {{}}
@@ -3644,6 +3666,7 @@ __WLBrowserManager = function() {
         data['id'] = this.getWLUniqueID();
         data['platform'] = getUserAgent();
         data['hardware'] = getPlatform();
+        data['deviceDisplayName'] = localDeviceDisplayName;
         return data;
     };
 
@@ -4206,10 +4229,64 @@ var __WLUtils = function () {
 
     // ........................Private methods........................
 
+    var IBMMFPF_SDK_NAME = 'ibmmfpf';
 
-    // @Deprecated
     function loadWLClientMessages(lang) {
+        var dfd = WLJQ.Deferred();
 
+        var url = 'lib/messages/' + lang + '/messages.json';
+        if (lang === null || typeof lang === 'undefined' || lang.indexOf('en') === 0) {
+            url = 'lib/messages/messages.json';
+        }
+        var sdkPath = findSDKPath();
+        loadJSON(sdkPath + url).then(function(data){
+            WL.ClientMessages = data;
+            dfd.resolve();
+        }, function(){
+            WL.Logger.error('error loading messages file: ' + url);
+            dfd.reject();
+        });
+        return dfd.promise();
+    }
+
+    var findSDKPath = (function () {
+        var path = null;
+
+        return function () {
+            //check if path is already found, if not search for it.
+            if (!path) {
+                // search mfp sdk path using script tag
+                var scripts = document.getElementsByTagName('script');
+                var term = '/' + IBMMFPF_SDK_NAME + '.js';
+                for (var n = scripts.length-1; n>-1; n--) {
+                    var src = scripts[n].src.replace(/\?.*$/, ''); // Strip any query param (CB-6007).
+                    if (src.indexOf(term) === (src.length - term.length)) {
+                        path = src.substring(0, src.length - term.length) + '/';
+                        break;
+                    }
+                }
+            }
+            return path;
+        }
+    }
+    )();
+
+    function loadJSON(path) {
+        var dfd = WLJQ.Deferred();
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', path, true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4) {
+                if(xobj.status == "200") {
+                    dfd.resolve(JSON.parse(xobj.responseText));
+                } else {
+                    dfd.reject();
+                }
+            }
+        };
+        xobj.send(null);
+        return dfd.promise();
     }
 
     this.wlReachableCallback = function () {};
@@ -4248,6 +4325,8 @@ var __WLUtils = function () {
 
     var __deviceLocale;
     this.setLocalization = function () {
+        var dfd = WLJQ.Deferred();
+
         var deviceLocale = WL.App.__getDeviceLocale();
         //The json containing user facing messages needs to be loaded and assigned only once.
         //Check if the object has already been assigned.Else re-use the existing object
@@ -4274,73 +4353,37 @@ var __WLUtils = function () {
             }
 
             try {
-                //Check if the languagePreferences has been populated
-                if (typeof WL.StaticAppProps.LANGUAGE_PREFERENCES !== 'undefined' &&
-                    WL.StaticAppProps.LANGUAGE_PREFERENCES !== null &&
-                    WL.StaticAppProps.LANGUAGE_PREFERENCES.trim().length > 0) {
-
-                    var wlLangPrefs = WL.StaticAppProps.LANGUAGE_PREFERENCES.split(',');
-
-                    /*jshint maxdepth:4*/
-                    for (var i = 0, len = wlLangPrefs.length; i < len; i++) {
-                        wlLangPrefs[i] = wlLangPrefs[i].trim();
-                        // special fallback for zh languages (see 41026)
-
-                        /*jshint maxdepth:5*/
-                        if (wlLangPrefs[i].indexOf('zh-Hans') !== -1) {
-                            wlLangPrefs[i] = 'zh';
-                        }
-                        if (wlLangPrefs[i].indexOf('zh-Hant') !== -1 || wlLangPrefs[i].indexOf('zh-HK') !== -1) {
-                            wlLangPrefs[i] = 'zh-TW';
-                        }
+                // Get the file from which to pickup the user visible messages.
+                if (typeof WL.ClientMessages === 'undefined') {
+                    // find sdk path first, because messages.json is relative to it.
+                    if (!findSDKPath()) {
+                        WL.Logger.error('could not find ' + IBMMFPF_SDK_NAME + '.js, please rename MobileFirst SDK name to: ' + IBMMFPF_SDK_NAME + '.js');
+                        return dfd.reject()
                     }
-
-                    // check if the deviceLocale is part of the preference list.If so load it and skip rest.
-                    if (wlLangPrefs.indexOf(deviceLocale) !== -1) {
-                        loadWLClientMessages(deviceLocale);
-                    }
-
-                    // deviceLocale will always have language and locale part
-                    if (typeof WL.ClientMessages === 'undefined' /* && deviceLocale.length > 2*/ ) {
-                        // deviceLocale is not part of wlLangPrefs,
-                        // check if the deviceLanguage is part of the preference list. If so, load it
-                        if (wlLangPrefs.indexOf(lang) !== -1) {
-                            loadWLClientMessages(lang);
-                        }
-                    }
-
-                    if (typeof WL.ClientMessages === 'undefined') {
-                        // Loop through wlLangPrefs to find the first valid language
-                        for (var j = 0, length = wlLangPrefs.length; j < length; j++) {
-                            loadWLClientMessages(wlLangPrefs[j]);
-                            /*jshint maxdepth:6*/
-                            if (typeof WL.ClientMessages !== 'undefined') {
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    // Get the file from which to pickup the user visible messages.
                     // prefer deviceLocale, then deviceLanguage, then English, in that order
-                    if (typeof WL.ClientMessages === 'undefined') {
-                        loadWLClientMessages(deviceLocale);
-                    }
-                    // we don't have a deviceLanguage translation file, try deviceLanguage
-                    if (typeof WL.ClientMessages === 'undefined') {
-                        loadWLClientMessages(lang);
-                    }
+                    loadWLClientMessages(deviceLocale).always(function() {
+                        // we don't have a deviceLanguage translation file, try deviceLanguage
+                        if (typeof WL.ClientMessages === 'undefined') {
+                            loadWLClientMessages(lang).always(function() {
+                                // fall back to English
+                                if (typeof WL.ClientMessages === 'undefined') {
+                                    loadWLClientMessages('en').always(function(){dfd.resolve()});
+                                } else {
+                                    dfd.resolve();
+                                }
+                            });
+                        } else {
+                            dfd.resolve();
+                        }
+                    });
+                } else {
+                    dfd.resolve();
                 }
             } catch (e) {
-                //TODO: log error
-            }
-
-            // fall back to English
-            if (typeof WL.ClientMessages === 'undefined') {
-                loadWLClientMessages('en');
-                // TODO: log and crash?  If WL.ClientMessages is still undefined here, we're dead (but this could be made safe by using a function in WL.ClientMessages to
-                // retrieve messages rather than referring to a (possibly undefined) value directly
+                WL.Logger.error(e);
             }
         }
+        return dfd.promise();
     };
 
     this.getLanguageDirectionality = function (lang) {
@@ -5191,6 +5234,7 @@ WL.AuthorizationManager = (function () {
     var LOGOUT_ERROR_MSG = 'Cannot logout while authorization request is in progress.';
     var LOGIN_ALREADY_IN_PROCESS = 'Login already in process.';
     var AZ_REDIRECT_URI = '/az/v1/authorization/redirect';
+    var JWT_ASSERTION_TYPE = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
 
     // Store the server clock to be synchronize with the server time
     var SERVER_RELATIVE_TIME = 0;
@@ -5763,9 +5807,13 @@ WL.AuthorizationManager = (function () {
         __setClientRegisteredData(null);
 
         // Remove keypair
-        WL.IndexDB.clearDB().then(function(){
+        WL.CertManager.deleteKeyPair().then(function(){
             dfd.resolve();
         });
+
+        // WL.IndexDB.clearDB().then(function(){
+        //     dfd.resolve();
+        // });
         return dfd.promise();
     };
 
@@ -5892,7 +5940,7 @@ WL.AuthorizationManager = (function () {
             WL.CertManager.signJWS(jwt, {'kid' : __getClientId()}).then(function(signedData){
                 var params = {
                     'client_assertion' : signedData,
-                    'client_assertion_type' : 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+                    'client_assertion_type' : JWT_ASSERTION_TYPE
                 };
                 var options = {
                     method: 'POST',
@@ -5906,8 +5954,46 @@ WL.AuthorizationManager = (function () {
                     }
                 };
                 makeRequest('preauth/v1/heartbeat', options, false);
+            },
+            function(error){
+                WL.Logger.debug('Failed to send heartbeat. Response:  ' + JSON.stringify(error));
             });
         }
+    };
+
+    var __invokeGetRegistrationData = function() {
+        var dfd = WLJQ.Deferred();
+
+        var id = __getClientId();
+        if (__isUndefinedOrNull(id)) {
+            WL.Logger.warn('Could not get registration data, client is not registered');
+            return dfd.reject();
+        }
+        else {
+            var jwt = new WL.JWT();
+            WL.CertManager.signJWS(jwt, {'kid' : id}).then(function(signedData){
+                    var params = {
+                        'client_assertion' : signedData,
+                        'client_assertion_type' : JWT_ASSERTION_TYPE
+                    };
+                    var options = {
+                        method: 'GET',
+                        contentType : 'application/x-www-form-urlencoded',
+                        parameters: params,
+                        onSuccess: function (response) {
+                            dfd.resolve(response);
+                        },
+                        onFailure: function (error) {
+                            dfd.reject(error);
+                        }
+                    };
+                    makeRequest('registration/v1/self/' + id, options, false);
+                },
+                function(error){
+                    WL.Logger.debug('Failed to send heartbeat. Response:  ' + JSON.stringify(error));
+                });
+        }
+        return dfd.promise();
     };
 
     var __isUndefinedOrNull = function (object) {
@@ -6107,7 +6193,7 @@ WL.AuthorizationManager = (function () {
             var params = {
                 'client_assertion' : signedData,
                 'security_check' : securityCheck,
-                'client_assertion_type' : 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+                'client_assertion_type' : JWT_ASSERTION_TYPE
             };
             dfd.resolve(params);
         });
@@ -6125,6 +6211,9 @@ WL.AuthorizationManager = (function () {
         WL.CertManager.signJWS(registrationData).then(function(signedData){
             params['signedRegistrationData'] = decomponentJWS(signedData);
             dfd.resolve(params);
+        },
+        function(error){
+            dfd.reject(error);
         });
         return dfd.promise();
     }
@@ -6138,9 +6227,12 @@ WL.AuthorizationManager = (function () {
                 'code' : code,
                 'grant_type' : 'authorization_code',
                 'redirect_uri' : buildRedirectURI(),
-                'client_assertion_type' : 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+                'client_assertion_type' : JWT_ASSERTION_TYPE
             };
             dfd.resolve(params);
+        },
+        function(error){
+            dfd.reject(error);
         });
         return dfd.promise();
     }
@@ -6179,6 +6271,8 @@ WL.AuthorizationManager = (function () {
         getAuthorizationServerUrl: getAuthorizationServerUrl,
         login: login,
         logout: logout,
+        __invokeGetRegistrationData : __invokeGetRegistrationData,
+        __invokeInstanceRegistration : __invokeInstanceRegistration,
         __logAndThrowError : __logAndThrowError,
         __getAuthorizationScope: __getAuthorizationScope,
         __getClientId: __getClientId,
@@ -6200,6 +6294,98 @@ WL.AuthorizationManager = (function () {
     };
 
 }());
+
+/**
+ * ================================================================= 
+ * Source file taken from :: deviceAuthentication.web.js
+ * ================================================================= 
+ */
+
+/**
+ * @license
+   Licensed Materials - Property of IBM
+
+   (C) Copyright 2015 IBM Corp.
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
+/**
+ * Object which handle the device authentication
+ */
+__WLDeviceAuth = function() {
+    this.__requestToResend = null, this.__deviceChallengeToken = null,
+
+    /**
+     * Default implementation for WL.Client.init's options
+     * onGetCustomDeviceProperties. Our default implementation actually does
+     * nothing. If overriding this method, the user must call
+     * resumeDeviceAuthProcess with the payload
+     * 
+     * @param resumeDeviceAuthProcess
+     *            function to call when done with getting extra data
+     */
+    this.__defaultOnGetCustomDeviceProperties = function(resumeDeviceAuthProcess) {
+        resumeDeviceAuthProcess({});
+    },
+
+    
+    /**
+     * get device friendly name
+     * 
+     * @param successCallback
+     * @param failureCallback
+     */
+    this.__getDeviceDisplayName = function(successCallback, failureCallback) {
+       WL.AuthorizationManager.__invokeGetRegistrationData().then(
+           function(response){
+               var responseJSON = response.responseJSON;
+               var regData = responseJSON['registration'];
+               var device = regData['device'];
+               var displayName = device['deviceDisplayName'];
+               if(!displayName) {
+                   displayName = null;
+               }
+               successCallback(displayName);
+       },
+           function(error){
+               failureCallback(error);
+           });
+    },
+    
+    /**
+     * set device friendly name
+     * 
+     * @param successCallback
+     * @param failureCallback
+     */
+    this.__setDeviceDisplayName = function(deviceDisplayName, successCallback, failureCallback) {
+        var id = WL.AuthorizationManager.__getClientId();
+        if(!id) {
+            failureCallback('Can not set display name until device is registered');
+        } else {
+            WL.BrowserManager.__setLocalDeviceDisplayName(deviceDisplayName);
+
+            // After we set the deviceDisplayName locally, we invoke re-registration to set the param in the server
+            WL.AuthorizationManager.__invokeInstanceRegistration().then(
+                function() {
+                    WL.BrowserManager.__setLocalDeviceDisplayName(null);
+                    successCallback(null);
+            },
+                function(error) {
+                    WL.BrowserManager.__setLocalDeviceDisplayName(null);
+                    failureCallback(error);
+            });
+        }
+    };
+};
+__WL.prototype.DeviceAuth = new __WLDeviceAuth;
+WL.DeviceAuth = new __WLDeviceAuth;
+
 
 /**
  * ================================================================= 
@@ -7269,6 +7455,7 @@ WL.ResourceRequest = function (_url, _method, _options) {
 
         __send(builtUrl, contentString, attempt, conflictAttemptCounter).then(
             function (response) {
+            	wlanalytics.processAutomaticTrigger();
                 dfd.resolve(response);
             },
             function (error) {
@@ -7526,12 +7713,13 @@ WL.ResourceRequest.CONNECT = 'CONNECT';
    limitations under the License.
  */
 
-var clockSyncChallengeHandler = WL.Client.createWLChallengeHandler("clockSynchronization");
+var clockSyncChallengeHandler = WL.Client.createSecurityCheckChallengeHandler("clockSynchronization");
 
-clockSyncChallengeHandler.processSuccess = function(identity) {
+clockSyncChallengeHandler.handleSuccess = function(identity) {
 	var date = new Date();
 	WL.Config.__setServerRelativeTime(identity.serverTimeStamp - date.getTime());
 };
+
 
 /**
  * ================================================================= 
@@ -7552,20 +7740,20 @@ clockSyncChallengeHandler.processSuccess = function(identity) {
    limitations under the License.
  */
 
-var wl_remoteDisableChallengeHandler = WL.Client.createWLChallengeHandler("wl_remoteDisableRealm");
+var wl_remoteDisableChallengeHandler = WL.Client.createSecurityCheckChallengeHandler("wl_remoteDisableRealm");
 
 wl_remoteDisableChallengeHandler.handleChallenge = function(obj) {
 
 	// get new message params
 	var message = obj.message;
-    var messageId = obj.messageId; 
+    var messageId = obj.messageId;
     var messageType = obj.messageType;
-   
+
     // get value of previously stored message id
 	var storedMessageId = __WL.LocalStorage.getValue(WL.Client.getMessageID());
-	
+
 	var challengeAnswer = { messageId : messageId };
-	
+
 	if (isDisplayMessageDialogue(storedMessageId, messageId, messageType))
 	{
 		WL.SimpleDialog.show(WL.ClientMessages.notificationTitle, message, [ {
@@ -7582,12 +7770,12 @@ wl_remoteDisableChallengeHandler.handleChallenge = function(obj) {
 		// don't show dialogue
 		wl_remoteDisableChallengeHandler.submitChallengeAnswer(challengeAnswer);
 	}
-	
+
 };
 
 
 /**
- * determine whether or not to display message dialogue 
+ * determine whether or not to display message dialogue
  * @param storedMessageId
  * @param messageId
  * @param messageType
@@ -7595,13 +7783,13 @@ wl_remoteDisableChallengeHandler.handleChallenge = function(obj) {
  */
 function isDisplayMessageDialogue(storedMessageId,messageId, messageType)
 {
-	// restrictions apply only to notify messages 
+	// restrictions apply only to notify messages
 	if (messageType != "NOTIFY")
 	{
 		return true;
 	}
 
-	// display only new messages - the first time they are received 
+	// display only new messages - the first time they are received
 	if (typeof storedMessageId == "undefined" || storedMessageId != messageId)
 	{
 		return true;
@@ -7609,7 +7797,7 @@ function isDisplayMessageDialogue(storedMessageId,messageId, messageType)
 	else
 	{
 		return false;
-	}	
+	}
 }
 
 function getEnv() {
@@ -7618,12 +7806,12 @@ function getEnv() {
 
 wl_remoteDisableChallengeHandler.__generateDialogueButtons = function(downloadLink)
 {
-	// start with an empty array 
+	// start with an empty array
 	var buttons = [];
-	
+
 	// show close button in two cases:
 	// 1) its the only button (no download link)
-	// 2) the flag to show it is on 
+	// 2) the flag to show it is on
 	if (!downloadLink || WL.Client.isShowCloseButtonOnRemoteDisable())
 	{
 		buttons = [ {
@@ -7645,14 +7833,14 @@ wl_remoteDisableChallengeHandler.__generateDialogueButtons = function(downloadLi
                 }
             });
         }
-			
+
 	return buttons;
 }
 
 
 wl_remoteDisableChallengeHandler.handleFailure = function(err) {
 	var message;
-	
+
 	if (typeof err == "undefined" || err == null)
 	{
 		message = "unknown error occurred."

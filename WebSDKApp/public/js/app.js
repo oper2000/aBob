@@ -1,7 +1,7 @@
 
 define([
   'ibmmfpfanalytics',
-  'worklight',
+  'ibmmfpf',
 ], function(ibmmfpfanalytics, WL){
   
 var wlInitOptions = {'mfpContextRoot' : '/mfp' , 'applicationId' : 'com.sampleone.bankApp'};
@@ -29,7 +29,7 @@ function obtainAccessToken() {
 function resourceRequestSecured() {
 	var request = new WL.ResourceRequest('adapters/account/balance', WL.ResourceRequest.GET);
 
-	var sampleAppRealmChallengeHandler = WL.Client.createWLChallengeHandler("UserLogin");
+	var sampleAppRealmChallengeHandler = WL.Client.createSecurityCheckChallengeHandler("UserLogin");
 
 	sampleAppRealmChallengeHandler.handleChallenge = function(challenge) {
 		console.log("handleChallenge :: authenticationRequired :: " + challenge.authenticationRequired);
@@ -82,7 +82,7 @@ function logout() {
 };
 
 function createChallengeHandler() {
-	var challengeHandler = WL.Client.createWLChallengeHandler('usernamePassword');
+	var challengeHandler = WL.Client.createSecurityCheckChallengeHandler('usernamePassword');
 
 	challengeHandler.handleChallenge = function(challenge) {
 		console.log("handleChallenge :: authenticationRequired :: " + challenge.authenticationRequired);
@@ -188,6 +188,14 @@ function crashMe(){
 	throw new Error("it's over 9000!!!");
 }
 
+function enableAutoSend() {
+    ibmmfpfanalytics.setAutoSendLogs(true);
+};
+
+function disableAutoSend() {
+    ibmmfpfanalytics.setAutoSendLogs(false);
+};
+
 return {
     obtainAccessToken: obtainAccessToken,
     login: login,
@@ -201,6 +209,8 @@ return {
     resetConfig:resetConfig,
     logWithPackage:logWithPackage,
     crashMe : crashMe,
-    capture:capture
+    capture:capture,
+    enableAutoSend:enableAutoSend,
+    disableAutoSend:disableAutoSend
   };
 });
